@@ -3,7 +3,7 @@
 Le groupe est composé de:
   - Bastien PELMARD / Baste95
   - Naushad-Ali SOOKUN / N-Ali
-  - Thierry WEN
+  - Thierry WEN / Yrrieth
   - Abdelrahim BOUCHIHA / anas0dev
 
 # Nouvelles Fonctionnalitées
