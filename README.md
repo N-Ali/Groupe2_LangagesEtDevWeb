@@ -51,3 +51,18 @@ Offrir a l'utilisateur de pouvoir changer la disposition des élements sur la pa
 > Option de tri sur **Exel**
 
 Ajouté une option de tri par ordre alphabétique sur les étudiants
+
+
+### Modifier un profil
+
+![](https://www.notuxedo.com/wp-content/uploads/2019/07/modifier-profil-instagram.jpg)
+> Option pour modifier un profil sur **Instagram**
+
+Ajouté une option pour modifier les informations d'un profil, par exemple modifier l'adresse mail d'un étudiant 
+
+### Supprimer un profil
+
+![](https://cdn.pixabay.com/photo/2013/07/13/12/32/forbidden-159816_960_720.png)
+> Croix pour illustrer la suppression 
+
+Ajouté une option pour supprimr un profil 
