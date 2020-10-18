@@ -65,4 +65,4 @@ Ajouté une option pour modifier les informations d'un profil, par exemple modif
 ![](https://cdn.pixabay.com/photo/2013/07/13/12/32/forbidden-159816_960_720.png)
 > Croix pour illustrer la suppression 
 
-Ajouté une option pour supprimr un profil 
+Ajouté une option dans le projet pour supprimer un profil 
