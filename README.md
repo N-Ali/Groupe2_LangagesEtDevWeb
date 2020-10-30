@@ -66,3 +66,10 @@ Ajouté une option pour modifier les informations d'un profil, par exemple modif
 > Croix pour illustrer la suppression 
 
 Ajouté une option dans le projet pour supprimer un profil 
+
+### Schémas de la base de données 
+
+![](bdd/bdd.png)
+> Model de base de données.
+
+Le model de la base de données de Trombino réalisé avec MySql Workbench 
