@@ -1,0 +1,5 @@
+table,colonne,lien LOD
+etudiant,"Name, Nickname, Language, Photo, Identification, Email",https://duraspace.org/wp-content/uploads/2020/02/vivo.owl#Student
+Réseaux,"facebook, twitter, youtube, instagram",https://opendata.aragon.es/def/ei2a/#d4e5786
+Connexion,WifiService,http://elite.polito.it/ontologies/eupont.owl#ConnectionToNetworkTrigger
+Langues,"fr, en, es, nl, ja, pt",http://linkedvocabs.org/vocab/lingvoj/lingvoj.rdf#LanguageResource
