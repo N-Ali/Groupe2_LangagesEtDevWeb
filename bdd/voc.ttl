@@ -1,0 +1,101 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix vs: <http://www.w3.org/2003/06/sw-vocab-status/ns#> .
+@prefix o: <http://omeka.org/s/vocabs/o#> .
+@prefix student: <https://duraspace.org/wp-content/uploads/2020/02/vivo.owl#Student> .
+@prefix teach: <http://linkedscience.org/teach/ns#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix schema: <http://schema.org/>.
+
+<https://duraspace.org/wp-content/uploads/2020/02/vivo.owl#Student> a owl:Ontology ;
+    dcterms:title "Student" .
+
+student:Student a rdfs:Class ;
+    rdfs:label "Student" ;
+    owl:sameAs foaf:Person ;    
+    vs:term_status "experimental" .
+
+student:name a rdf:Property ;
+    rdfs:label "prénom" ;
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
+
+student:lastname a rdf:Property ;
+    rdfs:label "nom" ;
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
+
+student:email a rdf:Property ;
+    rdfs:label "email" ;
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
+
+student:student_number a rdf:Property ;
+    rdfs:label "Numéro étudiant" ;
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
+
+student:github a rdf:Property ;
+    rdfs:label "Github" ;
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
+
+student:connexion a rdf:Property ;
+    rdfs:label "connexion" ;
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
+
+student:email a rdf:Property ;
+    rdfs:label "email" ;
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
+
+student:cms a rdf:Property ;
+    rdfs:label "cms" ;
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
+
+student:language a rdf:Property ;
+    rdfs:label "Langues" ;
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
+
+student:programming_language a rdf:Property ;
+    rdfs:label "Langages programmation" ;
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
+
+student:tools a rdf:Property ;
+    rdfs:label "Outils" ;
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
+
+student:specialities a rdf:Property ;
+    rdfs:label "Specialité" ;
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
+
+student:skills a rdf:Property ;
+    rdfs:label "Compétences" ;
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
+
+student:need a rdf:Property ;
+    rdfs:label "Besoins" ;
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
+
+student:network a rdf:Property ;
+    rdfs:label "Reseaux" ;
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
+
+student:informations a rdf:Property ;
+    rdfs:label "Information" ;
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
+
+
+
