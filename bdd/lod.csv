@@ -1,6 +1,5 @@
 Table,Colonne,Lien LOD
-,,
-,,https://duraspace.org/wp-content/uploads/2020/02/vivo.owl#Student
+etudiant,,https://duraspace.org/wp-content/uploads/2020/02/vivo.owl#Student
 etudiant,last_name,http://rdfs.org/sioc/ns#last_name
 etudiant,name,http://data.archiveshub.ac.uk/def/
 etudiant,email,http://rdfs.org/sioc/ns#email
