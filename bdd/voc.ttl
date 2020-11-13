@@ -37,6 +37,11 @@ student:student_number a rdf:Property ;
     rdfs:domain o:Resource ;
     vs:term_status "experimental" .
 
+student:student_class a rdf:Property ;
+    rdfs:label "Parcours scolaire" ;
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
+
 student:github a rdf:Property ;
     rdfs:label "Github" ;
     rdfs:domain o:Resource ;
@@ -47,8 +52,8 @@ student:connexion a rdf:Property ;
     rdfs:domain o:Resource ;
     vs:term_status "experimental" .
 
-student:email a rdf:Property ;
-    rdfs:label "email" ;
+student:image a rdf:Property ;
+    rdfs:label "image" ;
     rdfs:domain o:Resource ;
     vs:term_status "experimental" .
 
