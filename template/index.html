@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Mention Humanités Numériques : trombinoscope de la promotion 2020 - 2021</title>
+	    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		
+	    <!-- Bootstrap CSS -->
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <script src="https://d3js.org/d3.v6.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+		<script src="js/dimple.v2.3.0.min.js"></script>
+		<style type="text/css">
+		/*pour les initiales en majuscule*/
+		.card-title:first-letter{
+			text-transform: uppercase;
+        }
+        
+		/*pour le donuts merci à https://bl.ocks.org/mbhall88/b2504f8f3e384de4ff2b9dfa60f325e2 */
+		polyline{
+		    opacity: .3;
+		    stroke: black;
+		    stroke-width: 2px;
+		    fill: none;
+		}		
+		/* Make the percentage on the text labels bold*/
+		.labelName tspan {
+		    font-style: normal;
+		    font-weight: 700;
+		}		
+		/* In biology we generally italicise species names. */
+		.labelName {
+		    font-size: 0.9em;
+		    font-style: italic;
+		}
+		/*merci à https://www.codeply.com/go/rNFv5RJJqn/bootstrap-modal-full-screen */
+        .modal-full {
+            min-width: 100%;
+            margin: 0;
+        }
+
+        .modal-full .modal-content {
+            min-height: 100vh;
+        }		
+        .tab-pane{
+            height: 100%;
+        }
+        iframe{
+            height: 100%;
+            width:  100%;
+        }
+
+
+		/*merci à http://jsfiddle.net/TheSleepingEight/mAGNM/1/ */
+        .bs-docs-example {
+            position: relative;
+            margin: 15px 0;
+            padding: 39px 19px 14px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+        }
+        .scrollspy-example {
+            height: 200px;
+            overflow: auto;
+            position: relative;
+        }
+        div.tooltip {
+            position: absolute;
+            width: 200px;
+            padding: 6px;
+            font: 12px sans-serif;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
+        }
+
+        .sidebar {
+            min-width: 250px;
+            max-width: 250px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            /* top layer */
+            z-index: 9999;
+        }
+
+
+    	</style>
+	</head>
+
+    <body>
+
+        <div class="header container-fluid p-0" style="display: block; position: fixed;z-index: 9999;">
+            <nav class="navbar navbar-dark bg-dark">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+                <span class="text-white h4">Home</span>
+            </nav>
+        </div>
+        <div class="sidebar">
+            <nav class="navbar navbar-dark bg-dark">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+            </nav>
+            <div class="collapse dropright" id="navbarToggleExternalContent">
+                <div class="bg-white p-4">
+                    <ul class="nav flex-column" id="tabFacet">
+                    </ul>
+                </div>
+            </div>
+        </div>
+<div class="jumbotron mb-0" style="background-color:#A5DF00 !important">
+  <h1 class="display-3">Étudiant</h1>
+  <h2>Promotion  2020 - 2021</h2>
+  <!--<hr class="my-4">-->
+
+  <!--<ul class="nav nav-tabs" id="tabFacet" role="tablist">
+    </ul>-->
+  <!--<div class="tab-content" id="tabFacetContent">
+  </div>-->
+  
+</div>
+
+<div id="subNav">
+    <!--<ul class="nav" id="subNavFacet">
+    </ul>-->
+</div>
+
+<div id='student'></div>
+
+<script>
+
+    let url = "../data/api.csv";
+    let apiURLArray = [];
+    var jsonApiContent = [];
+
+    // Ouvre le fichier CSV
+    d3.csv(url).then(function(data){
+        console.log(data);
+        getApiContentUrl(data);
+        getJsonContent(apiURLArray);
+    })
+
+    // Obtient les url de chaque contenu
+    function getApiContentUrl (data) {
+        data.forEach(element => {
+            // Changer l'adresse en fonction d'où vous avez mis votre dossier omeka s
+            let apiUrl = "http://localhost/ldw/omeka-s/";
+            let fullUrl = apiUrl + element.Url;
+            apiURLArray.push(fullUrl);
+        });
+        console.log(apiURLArray);
+    }
+
+    function getJsonContent(apiURLArray) {
+        apiURLArray.forEach(element => {
+            d3.json(element).then(function(data){
+                console.log(data);
+                jsonApiContent.push(data);
+                var studentContent = d3.select("#student")
+                    .selectAll("div")
+                    .data(jsonApiContent)
+                    .enter()
+                    .append("div");
+
+                studentContent.append("p")
+                    .text(d => d["drsp:Studentname"][0]["@value"]);
+                
+                studentContent.append("p")
+                    .text(d => d["drsp:Studentlastname"][0]["@value"]);
+
+                studentContent.append("p")
+                    .text(d => d["drsp:Studentstudent_class"][0]["@value"]);
+                    
+                studentContent.append("p")
+                    .text(d => d["drsp:Studentstudent_number"][0]["@value"]);
+
+                studentContent.append("p")
+                    .text(d => d["drsp:Studentemail"][0]["@value"]);
+                
+                studentContent.append("p")
+                    .text(d => d["drsp:Studentconnexion"][0]["@value"]);
+                
+                studentContent.append("p")
+                    .text(d => d["drsp:Studentcms"][0]["@value"]);
+
+                studentContent.append("p")
+                    .text(d => d["drsp:Studentgithub"][0]["@value"]);
+
+                studentContent.append("p")
+                    .text(d => d["drsp:Studentlanguage"][0]["@value"]);
+
+                studentContent.append("p")
+                    .text(d => d["drsp:Studenttools"][0]["@value"]);
+
+                studentContent.append("p")
+                    .text(d => d["drsp:Studentnetwork"][0]["@value"]);
+            });
+
+        });
+        console.log(jsonApiContent);
+    }
+
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js" crossorigin="anonymous"></script>
+
+<script src="js/opml.js" ></script>
+
+</body>
+</html>
