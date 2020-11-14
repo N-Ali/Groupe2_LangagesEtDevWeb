@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>test1</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    
+    <style>
+    #vdataviz{
+        background-color: grey;
+    }
+    </style>
+<body>
+    <div id='student'></div>
+</body>
+
+<script>
+    /*
+    let urlData = "https://polemika.univ-paris8.fr/omk/api/items?item_set_id=2";
+
+    d3.json(urlData).then(function(data) {
+    console.log(data);
+    d3.select('#dataviz').selectAll('div').data(data).enter().append('div')
+        .html(d=>d["dcterms:title"][0]["@value"]);
+    });*/
+
+    let url = "../data/api.csv";
+    let apiURLArray = [];
+    var jsonApiContent = [];
+
+    // Ouvre le fichier CSV
+    d3.csv(url).then(function(data){
+        console.log(data);
+        getApiContentUrl(data);
+        getJsonContent(apiURLArray);
+    })
+
+    // Obtient les url de chaque contenu
+    function getApiContentUrl (data) {
+        data.forEach(element => {
+            // Changer l'adresse en fonction d'où vous avez mis votre dossier omeka s
+            let apiUrl = "http://localhost/ldw/omeka-s/";
+            let fullUrl = apiUrl + element.Url;
+            apiURLArray.push(fullUrl);
+        });
+        console.log(apiURLArray);
+    }
+
+    function getJsonContent(apiURLArray) {
+        apiURLArray.forEach(element => {
+            d3.json(element).then(function(data){
+                console.log(data);
+                jsonApiContent.push(data);
+                var studentContent = d3.select("#student")
+                    .selectAll("div")
+                    .data(jsonApiContent)
+                    .enter()
+                    .append("div");
+
+                studentContent.append("p")
+                    .text(d => d["drsp:Studentname"][0]["@value"]);
+                
+                studentContent.append("p")
+                    .text(d => d["drsp:Studentlastname"][0]["@value"]);
+
+                studentContent.append("p")
+                    .text(d => d["drsp:Studentstudent_class"][0]["@value"]);
+                    
+                studentContent.append("p")
+                    .text(d => d["drsp:Studentstudent_number"][0]["@value"]);
+
+                studentContent.append("p")
+                    .text(d => d["drsp:Studentemail"][0]["@value"]);
+                
+                studentContent.append("p")
+                    .text(d => d["drsp:Studentconnexion"][0]["@value"]);
+                
+                studentContent.append("p")
+                    .text(d => d["drsp:Studentcms"][0]["@value"]);
+
+                studentContent.append("p")
+                    .text(d => d["drsp:Studentgithub"][0]["@value"]);
+
+                studentContent.append("p")
+                    .text(d => d["drsp:Studentlanguage"][0]["@value"]);
+
+                studentContent.append("p")
+                    .text(d => d["drsp:Studenttools"][0]["@value"]);
+
+                studentContent.append("p")
+                    .text(d => d["drsp:Studentnetwork"][0]["@value"]);
+            });
+
+        });
+        console.log(jsonApiContent);
+    }
+
+</script>
+</html>
