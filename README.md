@@ -80,7 +80,7 @@ Le model de la base de données de Trombino réalisé avec MySql Workbench
 
 > Lien vers Google spreadsheet 
 
-https://docs.google.com/spreadsheets/d/1ca31EthCMGs7qUWM0bWkA11JtoK3GupV0tU6wvrsN5Q/edit?usp=sharing
+(https://docs.google.com/spreadsheets/d/1ca31EthCMGs7qUWM0bWkA11JtoK3GupV0tU6wvrsN5Q/edit?usp=sharing)
 
 
 google spreadsheet 
