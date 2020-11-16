@@ -6,7 +6,7 @@ Le groupe est composé de:
   - Thierry WEN / Yrrieth
   - Abdelrahim BOUCHIHA / anas0dev
   
-  #Lien
+  # Lien
   Lien du projet : https://n-ali.github.io/Groupe2_LangagesEtDevWeb/
   Lien du template : https://n-ali.github.io/Groupe2_LangagesEtDevWeb/template/
 
