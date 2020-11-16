@@ -7,7 +7,7 @@ Le groupe est composé de:
   - Abdelrahim BOUCHIHA / anas0dev
   
   # Lien
-  Lien du projet : https://n-ali.github.io/Groupe2_LangagesEtDevWeb/ \n
+  Lien du projet : https://n-ali.github.io/Groupe2_LangagesEtDevWeb  
   Lien du template : https://n-ali.github.io/Groupe2_LangagesEtDevWeb/template/
 
 # Nouvelles Fonctionnalitées
