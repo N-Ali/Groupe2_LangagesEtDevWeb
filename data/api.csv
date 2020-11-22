@@ -1,7 +1,8 @@
 Titre,Url
-Thierry,api/items/1
-Arseniia,api/items/18
-Elisa,api/items/19
-Abdelrahim,api/items/20
-Bastien,api/items/21
-Naushad-Ali,api/items/22
+GET liste etudiant,api/items?item_set_id=3
+GET etudiant (loïc),api/items/9
+GET etudiant (habib),api/items/8
+GET etudiant (theiry),api/items/7
+GET etudiant (baste),api/items/6
+GET etudiant (Ali),api/items/5
+GET etudiant (abdelrahim),api/items/4
