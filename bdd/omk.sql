@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 4.9.5deb2
 -- https://www.phpmyadmin.net/
 --
--- Hôte : 127.0.0.1:3306
--- Généré le : ven. 13 nov. 2020 à 16:56
--- Version du serveur :  5.7.31
--- Version de PHP : 7.3.21
+-- Hôte : localhost:3306
+-- Généré le : sam. 28 nov. 2020 à 21:55
+-- Version du serveur :  8.0.22
+-- Version de PHP : 7.4.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -18,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `omekas`
+-- Base de données : `tr_omeka`
 --
 
 -- --------------------------------------------------------
@@ -27,17 +28,14 @@ SET time_zone = "+00:00";
 -- Structure de la table `api_key`
 --
 
-DROP TABLE IF EXISTS `api_key`;
-CREATE TABLE IF NOT EXISTS `api_key` (
-  `id` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `owner_id` int(11) NOT NULL,
-  `label` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `credential_hash` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE `api_key` (
+  `id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `owner_id` int NOT NULL,
+  `label` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `credential_hash` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `last_ip` varbinary(16) DEFAULT NULL COMMENT '(DC2Type:ip_address)',
   `last_accessed` datetime DEFAULT NULL,
-  `created` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `IDX_C912ED9D7E3C61F9` (`owner_id`)
+  `created` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -46,53 +44,13 @@ CREATE TABLE IF NOT EXISTS `api_key` (
 -- Structure de la table `asset`
 --
 
-DROP TABLE IF EXISTS `asset`;
-CREATE TABLE IF NOT EXISTS `asset` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `owner_id` int(11) DEFAULT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `media_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `storage_id` varchar(190) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `extension` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UNIQ_2AF5A5C5CC5DB90` (`storage_id`),
-  KEY `IDX_2AF5A5C7E3C61F9` (`owner_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `csvimport_entity`
---
-
-DROP TABLE IF EXISTS `csvimport_entity`;
-CREATE TABLE IF NOT EXISTS `csvimport_entity` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `job_id` int(11) NOT NULL,
-  `entity_id` int(11) NOT NULL,
-  `resource_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `IDX_84D382F4BE04EA9` (`job_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `csvimport_import`
---
-
-DROP TABLE IF EXISTS `csvimport_import`;
-CREATE TABLE IF NOT EXISTS `csvimport_import` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `job_id` int(11) NOT NULL,
-  `undo_job_id` int(11) DEFAULT NULL,
-  `comment` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `resource_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `has_err` tinyint(1) NOT NULL,
-  `stats` longtext COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '(DC2Type:json_array)',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UNIQ_17B50881BE04EA9` (`job_id`),
-  UNIQUE KEY `UNIQ_17B508814C276F75` (`undo_job_id`)
+CREATE TABLE `asset` (
+  `id` int NOT NULL,
+  `owner_id` int DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `media_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `storage_id` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `extension` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -101,16 +59,13 @@ CREATE TABLE IF NOT EXISTS `csvimport_import` (
 -- Structure de la table `fulltext_search`
 --
 
-DROP TABLE IF EXISTS `fulltext_search`;
-CREATE TABLE IF NOT EXISTS `fulltext_search` (
-  `id` int(11) NOT NULL,
-  `resource` varchar(190) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `owner_id` int(11) DEFAULT NULL,
+CREATE TABLE `fulltext_search` (
+  `id` int NOT NULL,
+  `resource` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `owner_id` int DEFAULT NULL,
   `is_public` tinyint(1) NOT NULL,
-  `title` longtext COLLATE utf8mb4_unicode_ci,
-  `text` longtext COLLATE utf8mb4_unicode_ci,
-  PRIMARY KEY (`id`,`resource`),
-  KEY `IDX_AA31FE4A7E3C61F9` (`owner_id`)
+  `title` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `text` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -118,12 +73,54 @@ CREATE TABLE IF NOT EXISTS `fulltext_search` (
 --
 
 INSERT INTO `fulltext_search` (`id`, `resource`, `owner_id`, `is_public`, `title`, `text`) VALUES
-(1, 'items', 1, 1, 'Thierry', 'WEN\nThierry\n16701702\nthierry.wen@laposte.net\nM2 THYP\nYrrieth\nC\nJava\nC#\nHTML\nCSS\nJavascript\nFrançais\nPhotoshop\nDiscord\nYoutube\nThierry'),
-(18, 'items', 1, 1, 'Arseniia', 'Khoriushina\nArseniia\n20009013\nasya1isa@yahoo.com\nM1 CEN\nasyalisa\nFrançais, anglais\nPhotoshop\nIntragram, Youtube\nArseniia'),
-(19, 'items', 1, 1, 'Elisa', 'Elisa\nDILLMAN\n18904153\ndillmann.elisa@gmail.com\n\nPrestashop\nelisadlmn\nFrançais\nAnglais\nPhotoshop\nInstagram\nLinkedin\nYoutube\nElisa'),
-(20, 'items', 1, 1, 'Abdelrahim', 'Bouchiha\nAbdelrahim\n15608220\na.bouchiha@outlook.fr\nM2 THYP\nWordpress\nanas0dev\nC\nC++\nPHP\nJavascript\nPython\nHTML\nCSS\nFrançais\nArabe\nGimp\nInstagram\nFacebook\nWhatsapp\nAbdelrahim'),
-(21, 'items', 1, 1, 'Bastien', 'Bastien\nPelmard\n16702682\nbastien.pelmard@gmail.com\nM2 THYP\nWordpress\nJoomla\n4G\nWIFI\nEthernet\nBaste95\nC\nC++\nJavascript\nPHP\nHTML\nCSS\nFrançais\nAnglais\nEspagnol\nUnity\nInstagram\nYoutube\nWhatsapp\nBastien'),
-(22, 'items', 1, 1, 'Naushad-Ali', 'Naushad-Ali\nSOOKUN\n15602165\nnausha@hotmail.fr\nM2 THYP\n4G\nWIFI\nEthernet\nN-Ali\nFrançais\nAnglais\nJaponais\nEspagnol\nLinkedin\nGithub\nFacebook\nWhatsapp\nInstagram\nYoutube\nNaushad-Ali');
+(1, 'items', 1, 1, 'Wordpress', 'Wordpress\nje ne connais pas du tout'),
+(2, 'items', 1, 1, 'Alfresco', 'Alfresco'),
+(3, 'items', 1, 1, 'Drupal', 'Drupal'),
+(4, 'items', 1, 1, 'Joomla', 'Joomla'),
+(5, 'item_sets', 1, 1, 'Liste CMS', 'Liste CMS'),
+(6, 'items', 1, 1, 'LMS', 'LMS'),
+(7, 'items', 1, 1, 'Moodle', 'Moodle'),
+(8, 'items', 1, 1, 'Omeka S', 'Omeka S'),
+(9, 'items', 1, 1, 'Omeka Classique', 'Omeka Classique'),
+(10, 'items', 1, 1, 'Presta Shop', 'Presta Shop'),
+(11, 'items', 1, 1, 'SPIP', 'SPIP'),
+(12, 'items', 1, 1, 'Sharepoint', 'Sharepoint'),
+(13, 'item_sets', 1, 1, 'Liste d\'outils', 'Liste d\'outils'),
+(14, 'items', 1, 1, 'After Effect', 'After Effect\nje connais bien'),
+(15, 'items', 1, 1, 'Balsamique', 'Balsamique'),
+(16, 'items', 1, 1, 'Blender', 'Blender'),
+(17, 'items', 1, 1, 'Bracket', 'Bracket'),
+(18, 'items', 1, 1, 'CRM entreprise', 'CRM entreprise'),
+(19, 'items', 1, 1, 'Cordova', 'Cordova'),
+(20, 'items', 1, 1, 'Dreamweaver', 'Dreamweaver'),
+(21, 'items', 1, 1, 'FTP', 'FTP'),
+(22, 'item_sets', 1, 1, 'Liste roseaux sociaux', 'Liste roseaux sociaux'),
+(23, 'items', 1, 1, 'Blogs', 'Blogs'),
+(24, 'items', 1, 1, 'Facebook', 'Facebook'),
+(25, 'items', 1, 1, 'LinkedIn', 'LinkedIn'),
+(26, 'items', 1, 1, 'MSN', 'MSN'),
+(27, 'items', 1, 1, 'Twitter', 'Twitter'),
+(28, 'item_sets', 1, 1, 'Liste étudiant', 'Liste étudiant'),
+(29, 'items', 1, 1, 'Abdelrahim', 'Bouchiha\nAbdelrahim\nanas@gmail.com\nTHYP\n123456987\nOmeka S\nLMS\nWordpress\nFTP\nPresta Shop\nDreamweaver\nFacebook\nBlogs\nTwitter'),
+(30, 'items', 1, 1, 'Ali', 'Naushad\nAli\nali@gmail.com\nTHYP\n45896317\nMoodle\nDreamweaver\nFTP\nTwitter\nMSN\nLinkedIn'),
+(31, 'items', 1, 1, 'Baste', 'Pelmard\nBaste\nbaste@gmail.fr\nTHYP\n753698412\nCRM entreprise\nPresta Shop\nSPIP\nCordova\nBracket\nBlender\nBalsamique\nTwitter\nMSN'),
+(32, 'items', 1, 1, 'Theiry', 'Wen\nTheiry\nwen@gmail.com\nTHYP\n156324789\nOmeka S\nPresta Shop\nFTP\nDreamweaver\nTwitter\nFacebook'),
+(33, 'item_sets', 1, 1, 'Liste de Parcours', 'Liste de Parcours'),
+(34, 'items', 1, 1, 'THYP', 'THYP'),
+(35, 'items', 1, 1, 'NET', 'NET'),
+(36, 'items', 1, 1, 'CEN', 'CEN'),
+(37, 'items', 1, 1, 'SGI', 'SGI'),
+(38, 'item_sets', 1, 1, 'Liste de choix', 'Liste de choix'),
+(39, 'items', 1, 1, 'je connais un peu', 'je connais un peu'),
+(40, 'items', 1, 1, 'je suis expert(e)', 'je suis expert(e)'),
+(41, 'items', 1, 1, 'je ne connais pas du tout', 'je ne connais pas du tout'),
+(42, 'items', 1, 1, 'je connais bien', 'je connais bien'),
+(43, 'items', 1, 1, 'Wordpress', 'Wordpress\nje connais bien'),
+(44, 'items', 1, 1, 'Wordpress', 'Wordpress\nje suis expert(e)'),
+(45, 'items', 1, 1, 'Wordpress', 'Wordpress\nje connais un peu'),
+(46, 'items', 1, 1, 'LMS', 'LMS\nje connais bien'),
+(47, 'items', 1, 1, 'LMS', 'LMS\nje ne connais pas du tout'),
+(48, 'items', 1, 1, 'LMS', 'LMS\nje suis expert(e)');
 
 -- --------------------------------------------------------
 
@@ -131,10 +128,8 @@ INSERT INTO `fulltext_search` (`id`, `resource`, `owner_id`, `is_public`, `title
 -- Structure de la table `item`
 --
 
-DROP TABLE IF EXISTS `item`;
-CREATE TABLE IF NOT EXISTS `item` (
-  `id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+CREATE TABLE `item` (
+  `id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -143,11 +138,47 @@ CREATE TABLE IF NOT EXISTS `item` (
 
 INSERT INTO `item` (`id`) VALUES
 (1),
+(2),
+(3),
+(4),
+(6),
+(7),
+(8),
+(9),
+(10),
+(11),
+(12),
+(14),
+(15),
+(16),
+(17),
 (18),
 (19),
 (20),
 (21),
-(22);
+(23),
+(24),
+(25),
+(26),
+(27),
+(29),
+(30),
+(31),
+(32),
+(34),
+(35),
+(36),
+(37),
+(39),
+(40),
+(41),
+(42),
+(43),
+(44),
+(45),
+(46),
+(47),
+(48);
 
 -- --------------------------------------------------------
 
@@ -155,14 +186,58 @@ INSERT INTO `item` (`id`) VALUES
 -- Structure de la table `item_item_set`
 --
 
-DROP TABLE IF EXISTS `item_item_set`;
-CREATE TABLE IF NOT EXISTS `item_item_set` (
-  `item_id` int(11) NOT NULL,
-  `item_set_id` int(11) NOT NULL,
-  PRIMARY KEY (`item_id`,`item_set_id`),
-  KEY `IDX_6D0C9625126F525E` (`item_id`),
-  KEY `IDX_6D0C9625960278D7` (`item_set_id`)
+CREATE TABLE `item_item_set` (
+  `item_id` int NOT NULL,
+  `item_set_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `item_item_set`
+--
+
+INSERT INTO `item_item_set` (`item_id`, `item_set_id`) VALUES
+(1, 5),
+(2, 5),
+(3, 5),
+(4, 5),
+(6, 5),
+(7, 5),
+(8, 5),
+(9, 5),
+(10, 5),
+(11, 5),
+(12, 5),
+(14, 13),
+(15, 13),
+(16, 13),
+(17, 13),
+(18, 13),
+(19, 13),
+(20, 13),
+(21, 13),
+(23, 22),
+(24, 22),
+(25, 22),
+(26, 22),
+(27, 22),
+(29, 28),
+(30, 28),
+(31, 28),
+(32, 28),
+(34, 33),
+(35, 33),
+(36, 33),
+(37, 33),
+(39, 38),
+(40, 38),
+(41, 38),
+(42, 38),
+(43, 5),
+(44, 5),
+(45, 5),
+(46, 5),
+(47, 5),
+(48, 5);
 
 -- --------------------------------------------------------
 
@@ -170,12 +245,22 @@ CREATE TABLE IF NOT EXISTS `item_item_set` (
 -- Structure de la table `item_set`
 --
 
-DROP TABLE IF EXISTS `item_set`;
-CREATE TABLE IF NOT EXISTS `item_set` (
-  `id` int(11) NOT NULL,
-  `is_open` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
+CREATE TABLE `item_set` (
+  `id` int NOT NULL,
+  `is_open` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `item_set`
+--
+
+INSERT INTO `item_set` (`id`, `is_open`) VALUES
+(5, 0),
+(13, 0),
+(22, 0),
+(28, 0),
+(33, 0),
+(38, 0);
 
 -- --------------------------------------------------------
 
@@ -183,13 +268,9 @@ CREATE TABLE IF NOT EXISTS `item_set` (
 -- Structure de la table `item_site`
 --
 
-DROP TABLE IF EXISTS `item_site`;
-CREATE TABLE IF NOT EXISTS `item_site` (
-  `item_id` int(11) NOT NULL,
-  `site_id` int(11) NOT NULL,
-  PRIMARY KEY (`item_id`,`site_id`),
-  KEY `IDX_A1734D1F126F525E` (`item_id`),
-  KEY `IDX_A1734D1FF6BD1646` (`site_id`)
+CREATE TABLE `item_site` (
+  `item_id` int NOT NULL,
+  `site_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -197,12 +278,20 @@ CREATE TABLE IF NOT EXISTS `item_site` (
 --
 
 INSERT INTO `item_site` (`item_id`, `site_id`) VALUES
-(1, 1),
-(18, 1),
-(19, 1),
-(20, 1),
-(21, 1),
-(22, 1);
+(34, 1),
+(35, 1),
+(36, 1),
+(37, 1),
+(39, 1),
+(40, 1),
+(41, 1),
+(42, 1),
+(43, 1),
+(44, 1),
+(45, 1),
+(46, 1),
+(47, 1),
+(48, 1);
 
 -- --------------------------------------------------------
 
@@ -210,31 +299,17 @@ INSERT INTO `item_site` (`item_id`, `site_id`) VALUES
 -- Structure de la table `job`
 --
 
-DROP TABLE IF EXISTS `job`;
-CREATE TABLE IF NOT EXISTS `job` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `owner_id` int(11) DEFAULT NULL,
-  `pid` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `class` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `args` longtext COLLATE utf8mb4_unicode_ci COMMENT '(DC2Type:json_array)',
-  `log` longtext COLLATE utf8mb4_unicode_ci,
+CREATE TABLE `job` (
+  `id` int NOT NULL,
+  `owner_id` int DEFAULT NULL,
+  `pid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `class` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `args` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '(DC2Type:json_array)',
+  `log` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `started` datetime NOT NULL,
-  `ended` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `IDX_FBD8E0F87E3C61F9` (`owner_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Déchargement des données de la table `job`
---
-
-INSERT INTO `job` (`id`, `owner_id`, `pid`, `status`, `class`, `args`, `log`, `started`, `ended`) VALUES
-(1, 1, NULL, 'error', 'CSVImport\\Job\\Import', '{\"filename\":\"lod.csv\",\"filesize\":\"4253\",\"filepath\":\"C:\\\\Windows\\\\Temp\\\\omeAA1F.tmp\",\"media_type\":\"text\\/csv\",\"resource_type\":\"items\",\"comment\":\"\",\"automap_check_names_alone\":false,\"column\":[\"Table\",\"Colonne\",\"Lien LOD\"],\"column-data-type\":[\"literal\",\"literal\",\"literal\"],\"generic-data\":\"default\",\"media-source\":\"default\",\"o:resource_template\":\"\",\"o:resource_class\":\"\",\"o:owner\":{\"o:id\":1},\"o:is_public\":1,\"multivalue_separator\":\",\",\"global_language\":\"\",\"action\":\"create\",\"identifier_column\":0,\"identifier_property\":\"\",\"action_unidentified\":\"skip\",\"rows_by_batch\":20,\"column-multivalue\":[],\"delimiter\":\",\",\"enclosure\":\"\\\"\",\"escape\":\"\\\\\"}', '2020-11-10T11:00:10+00:00 ERR (3): Command \"command -v \"php\"\" failed with status code 1.\r\n2020-11-10T11:00:10+00:00 ERR (3): Omeka\\Job\\Exception\\RuntimeException: PHP-CLI error: cannot determine path to PHP. in C:\\wamp64\\www\\ldw\\omeka-s\\application\\src\\Job\\DispatchStrategy\\PhpCli.php:62\nStack trace:\n#0 C:\\wamp64\\www\\ldw\\omeka-s\\application\\src\\Job\\Dispatcher.php(105): Omeka\\Job\\DispatchStrategy\\PhpCli->send(Object(Omeka\\Entity\\Job))\n#1 C:\\wamp64\\www\\ldw\\omeka-s\\application\\src\\Job\\Dispatcher.php(91): Omeka\\Job\\Dispatcher->send(Object(Omeka\\Entity\\Job), Object(Omeka\\Job\\DispatchStrategy\\PhpCli))\n#2 C:\\wamp64\\www\\ldw\\omeka-s\\modules\\CSVImport\\src\\Controller\\IndexController.php(154): Omeka\\Job\\Dispatcher->dispatch(\'CSVImport\\\\Job\\\\I...\', Array)\n#3 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-mvc\\src\\Controller\\AbstractActionController.php(77): CSVImport\\Controller\\IndexController->mapAction()\n#4 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-eventmanager\\src\\EventManager.php(321): Laminas\\Mvc\\Controller\\AbstractActionController->onDispatch(Object(Laminas\\Mvc\\MvcEvent))\n#5 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-eventmanager\\src\\EventManager.php(178): Laminas\\EventManager\\EventManager->triggerListeners(Object(Laminas\\Mvc\\MvcEvent), Object(Closure))\n#6 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-mvc\\src\\Controller\\AbstractController.php(103): Laminas\\EventManager\\EventManager->triggerEventUntil(Object(Closure), Object(Laminas\\Mvc\\MvcEvent))\n#7 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-mvc\\src\\DispatchListener.php(139): Laminas\\Mvc\\Controller\\AbstractController->dispatch(Object(Laminas\\Http\\PhpEnvironment\\Request), Object(Laminas\\Http\\PhpEnvironment\\Response))\n#8 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-eventmanager\\src\\EventManager.php(321): Laminas\\Mvc\\DispatchListener->onDispatch(Object(Laminas\\Mvc\\MvcEvent))\n#9 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-eventmanager\\src\\EventManager.php(178): Laminas\\EventManager\\EventManager->triggerListeners(Object(Laminas\\Mvc\\MvcEvent), Object(Closure))\n#10 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-mvc\\src\\Application.php(331): Laminas\\EventManager\\EventManager->triggerEventUntil(Object(Closure), Object(Laminas\\Mvc\\MvcEvent))\n#11 C:\\wamp64\\www\\ldw\\omeka-s\\index.php(21): Laminas\\Mvc\\Application->run()\n#12 {main}\r\n', '2020-11-10 11:00:10', '2020-11-10 11:00:10'),
-(2, 1, NULL, 'error', 'CSVImport\\Job\\Import', '{\"filename\":\"lod.csv\",\"filesize\":\"4253\",\"filepath\":\"C:\\\\Windows\\\\Temp\\\\omeC1E4.tmp\",\"media_type\":\"text\\/csv\",\"resource_type\":\"items\",\"comment\":\"\",\"automap_check_names_alone\":false,\"column-data-type\":[\"literal\",\"literal\",\"literal\"],\"generic-data\":\"default\",\"media-source\":\"default\",\"o:resource_template\":{\"o:id\":2},\"o:resource_class\":{\"o:id\":106},\"o:owner\":{\"o:id\":1},\"o:is_public\":1,\"multivalue_separator\":\",\",\"global_language\":\"\",\"action\":\"create\",\"identifier_column\":0,\"identifier_property\":\"\",\"action_unidentified\":\"skip\",\"rows_by_batch\":20,\"column-multivalue\":[],\"delimiter\":\",\",\"enclosure\":\"\\\"\",\"escape\":\"\\\\\"}', '2020-11-10T11:35:35+00:00 ERR (3): Command \"command -v \"php\"\" failed with status code 1.\r\n2020-11-10T11:35:35+00:00 ERR (3): Omeka\\Job\\Exception\\RuntimeException: PHP-CLI error: cannot determine path to PHP. in C:\\wamp64\\www\\ldw\\omeka-s\\application\\src\\Job\\DispatchStrategy\\PhpCli.php:62\nStack trace:\n#0 C:\\wamp64\\www\\ldw\\omeka-s\\application\\src\\Job\\Dispatcher.php(105): Omeka\\Job\\DispatchStrategy\\PhpCli->send(Object(Omeka\\Entity\\Job))\n#1 C:\\wamp64\\www\\ldw\\omeka-s\\application\\src\\Job\\Dispatcher.php(91): Omeka\\Job\\Dispatcher->send(Object(Omeka\\Entity\\Job), Object(Omeka\\Job\\DispatchStrategy\\PhpCli))\n#2 C:\\wamp64\\www\\ldw\\omeka-s\\modules\\CSVImport\\src\\Controller\\IndexController.php(154): Omeka\\Job\\Dispatcher->dispatch(\'CSVImport\\\\Job\\\\I...\', Array)\n#3 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-mvc\\src\\Controller\\AbstractActionController.php(77): CSVImport\\Controller\\IndexController->mapAction()\n#4 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-eventmanager\\src\\EventManager.php(321): Laminas\\Mvc\\Controller\\AbstractActionController->onDispatch(Object(Laminas\\Mvc\\MvcEvent))\n#5 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-eventmanager\\src\\EventManager.php(178): Laminas\\EventManager\\EventManager->triggerListeners(Object(Laminas\\Mvc\\MvcEvent), Object(Closure))\n#6 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-mvc\\src\\Controller\\AbstractController.php(103): Laminas\\EventManager\\EventManager->triggerEventUntil(Object(Closure), Object(Laminas\\Mvc\\MvcEvent))\n#7 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-mvc\\src\\DispatchListener.php(139): Laminas\\Mvc\\Controller\\AbstractController->dispatch(Object(Laminas\\Http\\PhpEnvironment\\Request), Object(Laminas\\Http\\PhpEnvironment\\Response))\n#8 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-eventmanager\\src\\EventManager.php(321): Laminas\\Mvc\\DispatchListener->onDispatch(Object(Laminas\\Mvc\\MvcEvent))\n#9 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-eventmanager\\src\\EventManager.php(178): Laminas\\EventManager\\EventManager->triggerListeners(Object(Laminas\\Mvc\\MvcEvent), Object(Closure))\n#10 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-mvc\\src\\Application.php(331): Laminas\\EventManager\\EventManager->triggerEventUntil(Object(Closure), Object(Laminas\\Mvc\\MvcEvent))\n#11 C:\\wamp64\\www\\ldw\\omeka-s\\index.php(21): Laminas\\Mvc\\Application->run()\n#12 {main}\r\n', '2020-11-10 11:35:35', '2020-11-10 11:35:35'),
-(3, 1, NULL, 'error', 'CSVImport\\Job\\Import', '{\"filename\":\"lod.csv\",\"filesize\":\"4253\",\"filepath\":\"C:\\\\Windows\\\\Temp\\\\ome7A18.tmp\",\"media_type\":\"text\\/csv\",\"resource_type\":\"items\",\"comment\":\"\",\"automap_check_names_alone\":false,\"column-data-type\":[\"literal\",\"literal\",\"literal\"],\"generic-data\":\"default\",\"media-source\":\"default\",\"o:resource_template\":\"\",\"o:resource_class\":\"\",\"o:owner\":{\"o:id\":1},\"o:is_public\":1,\"multivalue_separator\":\",\",\"global_language\":\"\",\"action\":\"create\",\"identifier_column\":0,\"identifier_property\":\"\",\"action_unidentified\":\"skip\",\"rows_by_batch\":20,\"column-multivalue\":[],\"delimiter\":\",\",\"enclosure\":\"\\\"\",\"escape\":\"\\\\\"}', '2020-11-12T13:48:31+00:00 ERR (3): Command \"command -v \"php\"\" failed with status code 1.\r\n2020-11-12T13:48:31+00:00 ERR (3): Omeka\\Job\\Exception\\RuntimeException: PHP-CLI error: cannot determine path to PHP. in C:\\wamp64\\www\\ldw\\omeka-s\\application\\src\\Job\\DispatchStrategy\\PhpCli.php:62\nStack trace:\n#0 C:\\wamp64\\www\\ldw\\omeka-s\\application\\src\\Job\\Dispatcher.php(105): Omeka\\Job\\DispatchStrategy\\PhpCli->send(Object(Omeka\\Entity\\Job))\n#1 C:\\wamp64\\www\\ldw\\omeka-s\\application\\src\\Job\\Dispatcher.php(91): Omeka\\Job\\Dispatcher->send(Object(Omeka\\Entity\\Job), Object(Omeka\\Job\\DispatchStrategy\\PhpCli))\n#2 C:\\wamp64\\www\\ldw\\omeka-s\\modules\\CSVImport\\src\\Controller\\IndexController.php(154): Omeka\\Job\\Dispatcher->dispatch(\'CSVImport\\\\Job\\\\I...\', Array)\n#3 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-mvc\\src\\Controller\\AbstractActionController.php(77): CSVImport\\Controller\\IndexController->mapAction()\n#4 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-eventmanager\\src\\EventManager.php(321): Laminas\\Mvc\\Controller\\AbstractActionController->onDispatch(Object(Laminas\\Mvc\\MvcEvent))\n#5 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-eventmanager\\src\\EventManager.php(178): Laminas\\EventManager\\EventManager->triggerListeners(Object(Laminas\\Mvc\\MvcEvent), Object(Closure))\n#6 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-mvc\\src\\Controller\\AbstractController.php(103): Laminas\\EventManager\\EventManager->triggerEventUntil(Object(Closure), Object(Laminas\\Mvc\\MvcEvent))\n#7 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-mvc\\src\\DispatchListener.php(139): Laminas\\Mvc\\Controller\\AbstractController->dispatch(Object(Laminas\\Http\\PhpEnvironment\\Request), Object(Laminas\\Http\\PhpEnvironment\\Response))\n#8 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-eventmanager\\src\\EventManager.php(321): Laminas\\Mvc\\DispatchListener->onDispatch(Object(Laminas\\Mvc\\MvcEvent))\n#9 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-eventmanager\\src\\EventManager.php(178): Laminas\\EventManager\\EventManager->triggerListeners(Object(Laminas\\Mvc\\MvcEvent), Object(Closure))\n#10 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-mvc\\src\\Application.php(331): Laminas\\EventManager\\EventManager->triggerEventUntil(Object(Closure), Object(Laminas\\Mvc\\MvcEvent))\n#11 C:\\wamp64\\www\\ldw\\omeka-s\\index.php(21): Laminas\\Mvc\\Application->run()\n#12 {main}\r\n', '2020-11-12 13:48:30', '2020-11-12 13:48:31'),
-(4, 1, NULL, 'error', 'CSVImport\\Job\\Import', '{\"filename\":\"lod.csv\",\"filesize\":\"4253\",\"filepath\":\"C:\\\\Windows\\\\Temp\\\\ome6E85.tmp\",\"media_type\":\"text\\/csv\",\"resource_type\":\"items\",\"comment\":\"\",\"automap_check_names_alone\":false,\"column-data-type\":[\"literal\",\"literal\",\"literal\"],\"generic-data\":\"default\",\"media-source\":\"default\",\"o:resource_template\":\"\",\"o:resource_class\":\"\",\"o:owner\":{\"o:id\":1},\"o:is_public\":1,\"multivalue_separator\":\",\",\"global_language\":\"\",\"action\":\"create\",\"identifier_column\":0,\"identifier_property\":\"\",\"action_unidentified\":\"skip\",\"rows_by_batch\":20,\"column-multivalue\":[],\"delimiter\":\",\",\"enclosure\":\"\\\"\",\"escape\":\"\\\\\"}', '2020-11-12T14:22:11+00:00 ERR (3): Omeka\\Job\\Exception\\RuntimeException: PHP-CLI error: invalid PHP path. in C:\\wamp64\\www\\ldw\\omeka-s\\application\\src\\Job\\DispatchStrategy\\PhpCli.php:57\nStack trace:\n#0 C:\\wamp64\\www\\ldw\\omeka-s\\application\\src\\Job\\Dispatcher.php(105): Omeka\\Job\\DispatchStrategy\\PhpCli->send(Object(Omeka\\Entity\\Job))\n#1 C:\\wamp64\\www\\ldw\\omeka-s\\application\\src\\Job\\Dispatcher.php(91): Omeka\\Job\\Dispatcher->send(Object(Omeka\\Entity\\Job), Object(Omeka\\Job\\DispatchStrategy\\PhpCli))\n#2 C:\\wamp64\\www\\ldw\\omeka-s\\modules\\CSVImport\\src\\Controller\\IndexController.php(154): Omeka\\Job\\Dispatcher->dispatch(\'CSVImport\\\\Job\\\\I...\', Array)\n#3 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-mvc\\src\\Controller\\AbstractActionController.php(77): CSVImport\\Controller\\IndexController->mapAction()\n#4 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-eventmanager\\src\\EventManager.php(321): Laminas\\Mvc\\Controller\\AbstractActionController->onDispatch(Object(Laminas\\Mvc\\MvcEvent))\n#5 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-eventmanager\\src\\EventManager.php(178): Laminas\\EventManager\\EventManager->triggerListeners(Object(Laminas\\Mvc\\MvcEvent), Object(Closure))\n#6 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-mvc\\src\\Controller\\AbstractController.php(103): Laminas\\EventManager\\EventManager->triggerEventUntil(Object(Closure), Object(Laminas\\Mvc\\MvcEvent))\n#7 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-mvc\\src\\DispatchListener.php(139): Laminas\\Mvc\\Controller\\AbstractController->dispatch(Object(Laminas\\Http\\PhpEnvironment\\Request), Object(Laminas\\Http\\PhpEnvironment\\Response))\n#8 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-eventmanager\\src\\EventManager.php(321): Laminas\\Mvc\\DispatchListener->onDispatch(Object(Laminas\\Mvc\\MvcEvent))\n#9 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-eventmanager\\src\\EventManager.php(178): Laminas\\EventManager\\EventManager->triggerListeners(Object(Laminas\\Mvc\\MvcEvent), Object(Closure))\n#10 C:\\wamp64\\www\\ldw\\omeka-s\\vendor\\laminas\\laminas-mvc\\src\\Application.php(331): Laminas\\EventManager\\EventManager->triggerEventUntil(Object(Closure), Object(Laminas\\Mvc\\MvcEvent))\n#11 C:\\wamp64\\www\\ldw\\omeka-s\\index.php(21): Laminas\\Mvc\\Application->run()\n#12 {main}\r\n', '2020-11-12 14:22:11', '2020-11-12 14:22:11'),
-(5, 1, NULL, 'starting', 'CSVImport\\Job\\Import', '{\"filename\":\"lod.csv\",\"filesize\":\"4253\",\"filepath\":\"C:\\\\Windows\\\\Temp\\\\omeC240.tmp\",\"media_type\":\"text\\/csv\",\"resource_type\":\"items\",\"comment\":\"\",\"automap_check_names_alone\":false,\"column-data-type\":[\"literal\",\"literal\",\"literal\"],\"generic-data\":\"default\",\"media-source\":\"default\",\"o:resource_template\":\"\",\"o:resource_class\":\"\",\"o:owner\":{\"o:id\":1},\"o:is_public\":1,\"multivalue_separator\":\",\",\"global_language\":\"\",\"action\":\"create\",\"identifier_column\":0,\"identifier_property\":\"\",\"action_unidentified\":\"skip\",\"rows_by_batch\":20,\"column-multivalue\":[],\"delimiter\":\",\",\"enclosure\":\"\\\"\",\"escape\":\"\\\\\"}', NULL, '2020-11-12 14:23:37', NULL);
+  `ended` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -242,27 +317,22 @@ INSERT INTO `job` (`id`, `owner_id`, `pid`, `status`, `class`, `args`, `log`, `s
 -- Structure de la table `media`
 --
 
-DROP TABLE IF EXISTS `media`;
-CREATE TABLE IF NOT EXISTS `media` (
-  `id` int(11) NOT NULL,
-  `item_id` int(11) NOT NULL,
-  `ingester` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `renderer` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `data` longtext COLLATE utf8mb4_unicode_ci COMMENT '(DC2Type:json_array)',
-  `source` longtext COLLATE utf8mb4_unicode_ci,
-  `media_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `storage_id` varchar(190) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `extension` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `sha256` char(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `size` bigint(20) DEFAULT NULL,
+CREATE TABLE `media` (
+  `id` int NOT NULL,
+  `item_id` int NOT NULL,
+  `ingester` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `renderer` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '(DC2Type:json_array)',
+  `source` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `media_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `storage_id` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `extension` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sha256` char(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `size` bigint DEFAULT NULL,
   `has_original` tinyint(1) NOT NULL,
   `has_thumbnails` tinyint(1) NOT NULL,
-  `position` int(11) DEFAULT NULL,
-  `lang` varchar(190) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UNIQ_6A2CA10C5CC5DB90` (`storage_id`),
-  KEY `IDX_6A2CA10C126F525E` (`item_id`),
-  KEY `item_position` (`item_id`,`position`)
+  `position` int DEFAULT NULL,
+  `lang` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -271,10 +341,8 @@ CREATE TABLE IF NOT EXISTS `media` (
 -- Structure de la table `migration`
 --
 
-DROP TABLE IF EXISTS `migration`;
-CREATE TABLE IF NOT EXISTS `migration` (
-  `version` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`version`)
+CREATE TABLE `migration` (
+  `version` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -312,20 +380,11 @@ INSERT INTO `migration` (`version`) VALUES
 -- Structure de la table `module`
 --
 
-DROP TABLE IF EXISTS `module`;
-CREATE TABLE IF NOT EXISTS `module` (
-  `id` varchar(190) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE `module` (
+  `id` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `is_active` tinyint(1) NOT NULL,
-  `version` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
+  `version` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Déchargement des données de la table `module`
---
-
-INSERT INTO `module` (`id`, `is_active`, `version`) VALUES
-('CSVImport', 1, '2.2.0');
 
 -- --------------------------------------------------------
 
@@ -333,22 +392,12 @@ INSERT INTO `module` (`id`, `is_active`, `version`) VALUES
 -- Structure de la table `password_creation`
 --
 
-DROP TABLE IF EXISTS `password_creation`;
-CREATE TABLE IF NOT EXISTS `password_creation` (
+CREATE TABLE `password_creation` (
   `id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `user_id` int NOT NULL,
   `created` datetime NOT NULL,
-  `activate` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UNIQ_C77917B4A76ED395` (`user_id`)
+  `activate` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Déchargement des données de la table `password_creation`
---
-
-INSERT INTO `password_creation` (`id`, `user_id`, `created`, `activate`) VALUES
-('cCulbW2RZK9lroPncZ4A7Nsameyarncm', 1, '2020-11-09 09:17:06', 0);
 
 -- --------------------------------------------------------
 
@@ -356,19 +405,14 @@ INSERT INTO `password_creation` (`id`, `user_id`, `created`, `activate`) VALUES
 -- Structure de la table `property`
 --
 
-DROP TABLE IF EXISTS `property`;
-CREATE TABLE IF NOT EXISTS `property` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `owner_id` int(11) DEFAULT NULL,
-  `vocabulary_id` int(11) NOT NULL,
+CREATE TABLE `property` (
+  `id` int NOT NULL,
+  `owner_id` int DEFAULT NULL,
+  `vocabulary_id` int NOT NULL,
   `local_name` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `label` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `comment` longtext COLLATE utf8mb4_unicode_ci,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UNIQ_8BF21CDEAD0E05F6623C14D5` (`vocabulary_id`,`local_name`),
-  KEY `IDX_8BF21CDE7E3C61F9` (`owner_id`),
-  KEY `IDX_8BF21CDEAD0E05F6` (`vocabulary_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=202 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `label` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `comment` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `property`
@@ -559,23 +603,132 @@ INSERT INTO `property` (`id`, `owner_id`, `vocabulary_id`, `local_name`, `label`
 (182, NULL, 4, 'birthday', 'birthday', 'The birthday of this Agent, represented in mm-dd string form, eg. \'12-31\'.'),
 (183, NULL, 4, 'age', 'age', 'The age in years of some agent.'),
 (184, NULL, 4, 'status', 'status', 'A string expressing what the user is happy for the general public (normally) to know about their current activity.'),
-(185, 1, 5, 'Studentname', 'prénom', NULL),
-(186, 1, 5, 'Studentlastname', 'nom', NULL),
-(187, 1, 5, 'Studentemail', 'email', NULL),
-(188, 1, 5, 'Studentstudent_number', 'Numéro étudiant', NULL),
-(189, 1, 5, 'Studentgithub', 'Github', NULL),
-(190, 1, 5, 'Studentconnexion', 'connexion', NULL),
-(191, 1, 5, 'Studentimage', 'image', NULL),
-(192, 1, 5, 'Studentcms', 'cms', NULL),
-(193, 1, 5, 'Studentlanguage', 'Langues', NULL),
-(194, 1, 5, 'Studentprogramming_language', 'Langages programmation', NULL),
-(195, 1, 5, 'Studenttools', 'Outils', NULL),
-(196, 1, 5, 'Studentspecialities', 'Specialité', NULL),
-(197, 1, 5, 'Studentskills', 'Compétences', NULL),
-(198, 1, 5, 'Studentneed', 'Besoins', NULL),
-(199, 1, 5, 'Studentnetwork', 'Reseaux', NULL),
-(200, 1, 5, 'Studentinformations', 'Information', NULL),
-(201, NULL, 5, 'Studentstudent_class', 'Parcours scolaire', NULL);
+(185, 1, 5, 'affiliatedOrganization', 'has affiliated organization', NULL),
+(186, 1, 5, 'assignedBy', 'assigned by', NULL),
+(187, 1, 5, 'assignee', 'assignee', NULL),
+(188, 1, 5, 'assigneeFor', 'assignee for patent', NULL),
+(189, 1, 5, 'assigns', 'assigns', NULL),
+(190, 1, 5, 'conceptAssociatedWith', 'concept for', NULL),
+(191, 1, 5, 'confirmedOrcidId', 'Orcid ID confirmation', 'Indicates that the Orcid ID has been confirmed by this Person'),
+(192, 1, 5, 'contributingRole', 'contributor', NULL),
+(193, 1, 5, 'dateFiled', 'date filed', NULL),
+(194, 1, 5, 'dateIssued', 'date issued', NULL),
+(195, 1, 5, 'dateTimeInterval', 'date/time interval', NULL),
+(196, 1, 5, 'dateTimePrecision', 'date/time precision', NULL),
+(197, 1, 5, 'dateTimeValue', 'date/time value', NULL),
+(198, 1, 5, 'degreeCandidacy', 'degree candidacy', NULL),
+(199, 1, 5, 'distributes', 'distributes', NULL),
+(200, 1, 5, 'distributesFundingFrom', 'distributes funding from', NULL),
+(201, 1, 5, 'eligibleFor', 'credential eligibility attained', NULL),
+(202, 1, 5, 'end', 'end', NULL),
+(203, 1, 5, 'equipmentFor', 'equipment for', NULL),
+(204, 1, 5, 'expirationDate', 'expiration date', NULL),
+(205, 1, 5, 'facilityFor', 'facilityFor', NULL),
+(206, 1, 5, 'featuredIn', 'featured in', NULL),
+(207, 1, 5, 'features', 'features', NULL),
+(208, 1, 5, 'fundingVehicleFor', 'provides funding for', NULL),
+(209, 1, 5, 'geographicFocus', 'geographic focus', NULL),
+(210, 1, 5, 'geographicFocusOf', 'geographic focus of', NULL),
+(211, 1, 5, 'governingAuthorityFor', 'governing authority for', NULL),
+(212, 1, 5, 'grantSubcontractedThrough', 'subcontracted through', NULL),
+(213, 1, 5, 'hasAssociatedConcept', 'associated concept', NULL),
+(214, 1, 5, 'hasCollaborator', 'has collaborator', NULL),
+(215, 1, 5, 'hasEquipment', 'has equipment', NULL),
+(216, 1, 5, 'hasFacility', 'has facility', NULL),
+(217, 1, 5, 'hasFundingVehicle', 'funding provided via', NULL),
+(218, 1, 5, 'hasGoverningAuthority', 'governing authority', NULL),
+(219, 1, 5, 'hasPredecessorOrganization', 'predecessor organization', NULL),
+(220, 1, 5, 'hasPrerequisite', 'has prerequisite', NULL),
+(221, 1, 5, 'hasProceedings', 'proceedings', NULL),
+(222, 1, 5, 'hasPublicationVenue', 'published in', NULL),
+(223, 1, 5, 'hasResearchArea', 'research areas', NULL),
+(224, 1, 5, 'hasSubjectArea', 'has subject area', NULL),
+(225, 1, 5, 'hasSuccessorOrganization', 'successor organization', NULL),
+(226, 1, 5, 'hasTranslation', 'has translation', NULL),
+(227, 1, 5, 'informationResourceSupportedBy', 'supported by', NULL),
+(228, 1, 5, 'offeredBy', 'offered by', NULL),
+(229, 1, 5, 'offers', 'offers', NULL),
+(230, 1, 5, 'orcidId', 'ORCID iD', NULL),
+(231, 1, 5, 'prerequisiteFor', 'prerequisite for', NULL),
+(232, 1, 5, 'proceedingsOf', 'proceedings of', NULL),
+(233, 1, 5, 'providesFundingThrough', 'provides funding through', NULL),
+(234, 1, 5, 'publicationVenueFor', 'publication venue for', NULL),
+(235, 1, 5, 'publisher', 'publisher', NULL),
+(236, 1, 5, 'publisherOf', 'publisher of', NULL),
+(237, 1, 5, 'relatedBy', 'related by', NULL),
+(238, 1, 5, 'relates', 'relates', NULL),
+(239, 1, 5, 'reproduces', 'reproduces', NULL),
+(240, 1, 5, 'researchAreaOf', 'research area of', NULL),
+(241, 1, 5, 'reviewedIn', 'reviewed in', NULL),
+(242, 1, 5, 'roleContributesTo', 'contributes to', NULL),
+(243, 1, 5, 'sponsoredBy', 'award sponsored by', NULL),
+(244, 1, 5, 'sponsors', 'sponsors award or honor', NULL),
+(245, 1, 5, 'start', 'start', NULL),
+(246, 1, 5, 'subcontractsGrant', 'subcontracts grant', NULL),
+(247, 1, 5, 'subjectAreaOf', 'subject area of', NULL),
+(248, 1, 5, 'supportedBy', 'supported by', NULL),
+(249, 1, 5, 'supportedInformationResource', 'supported publications or other works', NULL),
+(250, 1, 5, 'supports', 'supports', NULL),
+(251, 1, 5, 'translatorOf', 'translator of', NULL),
+(252, 1, 5, 'validIn', 'valid in', NULL),
+(253, 1, 5, 'abbreviation', 'abbreviation', NULL),
+(254, 1, 5, 'cclCode', 'published US Classification Class/subclass (CCL) code', NULL),
+(255, 1, 5, 'contactInformation', 'contact information', NULL),
+(256, 1, 5, 'courseCredits', 'credits', NULL),
+(257, 1, 5, 'dateTime', 'date/time', NULL),
+(258, 1, 5, 'departmentOrSchool', 'department or school name within institution', NULL),
+(259, 1, 5, 'description', 'description', NULL),
+(260, 1, 5, 'eRACommonsId', 'eRA Commons ID', NULL),
+(261, 1, 5, 'entryTerm', 'entry term', NULL),
+(262, 1, 5, 'freetextKeyword', 'keywords', NULL),
+(263, 1, 5, 'grantDirectCosts', 'direct costs', NULL),
+(264, 1, 5, 'hasMonetaryAmount', 'has monetary amount', NULL),
+(265, 1, 5, 'hasValue', 'has value', NULL),
+(266, 1, 5, 'hideFromDisplay', 'hide from display', NULL),
+(267, 1, 5, 'hrJobTitle', 'HR job title', NULL),
+(268, 1, 5, 'iclCode', 'International Classification (ICL) code', NULL),
+(269, 1, 5, 'identifier', 'identifier', NULL),
+(270, 1, 5, 'isCorrespondingAuthor', 'Is this person a corresponding author?', NULL),
+(271, 1, 5, 'licenseNumber', 'license number', NULL),
+(272, 1, 5, 'localAwardId', 'local award ID', NULL),
+(273, 1, 5, 'majorField', 'major field of degree', NULL),
+(274, 1, 5, 'middleName', 'middle name or initial', NULL),
+(275, 1, 5, 'nihmsid', 'NIH Manuscript Submission System ID', NULL),
+(276, 1, 5, 'outreachOverview', 'outreach overview', NULL),
+(277, 1, 5, 'overview', 'overview', NULL),
+(278, 1, 5, 'patentNumber', 'patent number', NULL),
+(279, 1, 5, 'placeOfPublication', 'place of publication', NULL),
+(280, 1, 5, 'pmcid', 'PubMed Central ID', NULL),
+(281, 1, 5, 'preferredDisplayOrder', 'preferred display order', NULL),
+(282, 1, 5, 'rank', 'rank', NULL),
+(283, 1, 5, 'reportId', 'report identifier', NULL),
+(284, 1, 5, 'researchOverview', 'research overview', NULL),
+(285, 1, 5, 'researcherId', 'ISI Researcher ID', NULL),
+(286, 1, 5, 'scopusId', 'Scopus ID', NULL),
+(287, 1, 5, 'seatingCapacity', 'seating capacity', NULL),
+(288, 1, 5, 'sponsorAwardId', 'sponsor award ID', NULL),
+(289, 1, 5, 'supplementalInformation', 'supplemental information', NULL),
+(290, 1, 5, 'teachingOverview', 'teaching overview', NULL),
+(291, 1, 5, 'termLabel', 'term label', NULL),
+(292, 1, 5, 'termType', 'term type', NULL),
+(293, 1, 5, 'totalAwardAmount', 'total award amount', NULL),
+(294, 1, 6, 'Studentname', 'prénom', NULL),
+(295, 1, 6, 'Studentlastname', 'nom', NULL),
+(296, 1, 6, 'Studentemail', 'email', NULL),
+(297, 1, 6, 'Studentstudent_number', 'Numéro étudiant', NULL),
+(298, 1, 6, 'Studentstudent_class', 'Parcours scolaire', NULL),
+(299, 1, 6, 'Studentgithub', 'Github', NULL),
+(300, 1, 6, 'Studentconnexion', 'connexion', NULL),
+(301, 1, 6, 'Studentimage', 'image', NULL),
+(302, 1, 6, 'Studentcms', 'cms', NULL),
+(303, 1, 6, 'Studentlanguage', 'Langues', NULL),
+(304, 1, 6, 'Studentprogramming_language', 'Langages programmation', NULL),
+(305, 1, 6, 'Studenttools', 'Outils', NULL),
+(306, 1, 6, 'Studentspecialities', 'Specialité', NULL),
+(307, 1, 6, 'Studentskills', 'Compétences', NULL),
+(308, 1, 6, 'Studentneed', 'Besoins', NULL),
+(309, 1, 6, 'Studentnetwork', 'Reseaux', NULL),
+(310, 1, 6, 'Studentinformations', 'Information', NULL);
 
 -- --------------------------------------------------------
 
@@ -583,36 +736,72 @@ INSERT INTO `property` (`id`, `owner_id`, `vocabulary_id`, `local_name`, `label`
 -- Structure de la table `resource`
 --
 
-DROP TABLE IF EXISTS `resource`;
-CREATE TABLE IF NOT EXISTS `resource` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `owner_id` int(11) DEFAULT NULL,
-  `resource_class_id` int(11) DEFAULT NULL,
-  `resource_template_id` int(11) DEFAULT NULL,
-  `thumbnail_id` int(11) DEFAULT NULL,
-  `title` longtext COLLATE utf8mb4_unicode_ci,
+CREATE TABLE `resource` (
+  `id` int NOT NULL,
+  `owner_id` int DEFAULT NULL,
+  `resource_class_id` int DEFAULT NULL,
+  `resource_template_id` int DEFAULT NULL,
+  `thumbnail_id` int DEFAULT NULL,
+  `title` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `is_public` tinyint(1) NOT NULL,
   `created` datetime NOT NULL,
   `modified` datetime DEFAULT NULL,
-  `resource_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `IDX_BC91F4167E3C61F9` (`owner_id`),
-  KEY `IDX_BC91F416448CC1BD` (`resource_class_id`),
-  KEY `IDX_BC91F41616131EA` (`resource_template_id`),
-  KEY `IDX_BC91F416FDFF2E92` (`thumbnail_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `resource_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `resource`
 --
 
 INSERT INTO `resource` (`id`, `owner_id`, `resource_class_id`, `resource_template_id`, `thumbnail_id`, `title`, `is_public`, `created`, `modified`, `resource_type`) VALUES
-(1, 1, 106, 2, NULL, 'Thierry', 1, '2020-11-12 15:06:35', '2020-11-13 16:18:44', 'Omeka\\Entity\\Item'),
-(18, 1, 106, 2, NULL, 'Arseniia', 1, '2020-11-13 15:45:29', '2020-11-13 15:50:20', 'Omeka\\Entity\\Item'),
-(19, 1, 106, 2, NULL, 'Elisa', 1, '2020-11-13 15:53:31', '2020-11-13 16:03:15', 'Omeka\\Entity\\Item'),
-(20, 1, 106, 2, NULL, 'Abdelrahim', 1, '2020-11-13 15:58:54', '2020-11-13 15:58:54', 'Omeka\\Entity\\Item'),
-(21, 1, 106, 2, NULL, 'Bastien', 1, '2020-11-13 16:02:42', '2020-11-13 16:17:08', 'Omeka\\Entity\\Item'),
-(22, 1, 106, 2, NULL, 'Naushad-Ali', 1, '2020-11-13 16:16:51', '2020-11-13 16:16:51', 'Omeka\\Entity\\Item');
+(1, 1, NULL, 3, NULL, 'Wordpress', 1, '2020-11-28 16:17:15', '2020-11-28 20:46:16', 'Omeka\\Entity\\Item'),
+(2, 1, NULL, 3, NULL, 'Alfresco', 1, '2020-11-28 16:18:17', '2020-11-28 16:21:33', 'Omeka\\Entity\\Item'),
+(3, 1, NULL, 3, NULL, 'Drupal', 1, '2020-11-28 16:18:36', '2020-11-28 16:21:17', 'Omeka\\Entity\\Item'),
+(4, 1, NULL, 3, NULL, 'Joomla', 1, '2020-11-28 16:18:51', '2020-11-28 16:20:52', 'Omeka\\Entity\\Item'),
+(5, 1, 23, NULL, NULL, 'Liste CMS', 1, '2020-11-28 16:20:07', '2020-11-28 16:20:07', 'Omeka\\Entity\\ItemSet'),
+(6, 1, NULL, 3, NULL, 'LMS', 1, '2020-11-28 16:22:17', '2020-11-28 16:22:17', 'Omeka\\Entity\\Item'),
+(7, 1, NULL, 3, NULL, 'Moodle', 1, '2020-11-28 16:22:36', '2020-11-28 16:22:36', 'Omeka\\Entity\\Item'),
+(8, 1, NULL, 3, NULL, 'Omeka S', 1, '2020-11-28 16:22:53', '2020-11-28 16:22:53', 'Omeka\\Entity\\Item'),
+(9, 1, NULL, 3, NULL, 'Omeka Classique', 1, '2020-11-28 16:23:20', '2020-11-28 16:23:20', 'Omeka\\Entity\\Item'),
+(10, 1, NULL, 3, NULL, 'Presta Shop', 1, '2020-11-28 16:24:04', '2020-11-28 16:24:04', 'Omeka\\Entity\\Item'),
+(11, 1, NULL, 3, NULL, 'SPIP', 1, '2020-11-28 16:24:31', '2020-11-28 16:24:31', 'Omeka\\Entity\\Item'),
+(12, 1, NULL, 3, NULL, 'Sharepoint', 1, '2020-11-28 16:24:58', '2020-11-28 16:24:58', 'Omeka\\Entity\\Item'),
+(13, 1, 23, NULL, NULL, 'Liste d\'outils', 1, '2020-11-28 16:27:02', '2020-11-28 16:55:52', 'Omeka\\Entity\\ItemSet'),
+(14, 1, NULL, 6, NULL, 'After Effect', 1, '2020-11-28 16:27:44', '2020-11-28 20:42:40', 'Omeka\\Entity\\Item'),
+(15, 1, NULL, 6, NULL, 'Balsamique', 1, '2020-11-28 16:28:46', '2020-11-28 16:28:46', 'Omeka\\Entity\\Item'),
+(16, 1, NULL, 6, NULL, 'Blender', 1, '2020-11-28 16:29:16', '2020-11-28 16:29:16', 'Omeka\\Entity\\Item'),
+(17, 1, NULL, 6, NULL, 'Bracket', 1, '2020-11-28 16:32:28', '2020-11-28 16:32:28', 'Omeka\\Entity\\Item'),
+(18, 1, NULL, 6, NULL, 'CRM entreprise', 1, '2020-11-28 16:32:55', '2020-11-28 16:33:01', 'Omeka\\Entity\\Item'),
+(19, 1, NULL, 6, NULL, 'Cordova', 1, '2020-11-28 16:33:39', '2020-11-28 16:33:39', 'Omeka\\Entity\\Item'),
+(20, 1, NULL, 6, NULL, 'Dreamweaver', 1, '2020-11-28 16:34:08', '2020-11-28 16:34:08', 'Omeka\\Entity\\Item'),
+(21, 1, NULL, 6, NULL, 'FTP', 1, '2020-11-28 16:34:26', '2020-11-28 16:34:26', 'Omeka\\Entity\\Item'),
+(22, 1, 23, NULL, NULL, 'Liste roseaux sociaux', 1, '2020-11-28 16:36:53', '2020-11-28 16:36:53', 'Omeka\\Entity\\ItemSet'),
+(23, 1, NULL, 5, NULL, 'Blogs', 1, '2020-11-28 16:38:18', '2020-11-28 16:38:18', 'Omeka\\Entity\\Item'),
+(24, 1, NULL, 5, NULL, 'Facebook', 1, '2020-11-28 16:38:44', '2020-11-28 16:38:44', 'Omeka\\Entity\\Item'),
+(25, 1, NULL, 5, NULL, 'LinkedIn', 1, '2020-11-28 16:39:12', '2020-11-28 16:39:12', 'Omeka\\Entity\\Item'),
+(26, 1, NULL, 5, NULL, 'MSN', 1, '2020-11-28 16:39:31', '2020-11-28 16:39:31', 'Omeka\\Entity\\Item'),
+(27, 1, NULL, 5, NULL, 'Twitter', 1, '2020-11-28 16:39:56', '2020-11-28 16:39:56', 'Omeka\\Entity\\Item'),
+(28, 1, 23, NULL, NULL, 'Liste étudiant', 1, '2020-11-28 16:41:43', '2020-11-28 16:41:43', 'Omeka\\Entity\\ItemSet'),
+(29, 1, 240, 2, NULL, 'Abdelrahim', 1, '2020-11-28 16:46:59', '2020-11-28 20:52:15', 'Omeka\\Entity\\Item'),
+(30, 1, 240, 2, NULL, 'Ali', 1, '2020-11-28 16:51:07', '2020-11-28 20:36:27', 'Omeka\\Entity\\Item'),
+(31, 1, 240, 2, NULL, 'Baste', 1, '2020-11-28 16:53:16', '2020-11-28 20:35:47', 'Omeka\\Entity\\Item'),
+(32, 1, 240, 2, NULL, 'Theiry', 1, '2020-11-28 16:55:12', '2020-11-28 20:35:23', 'Omeka\\Entity\\Item'),
+(33, 1, 23, NULL, NULL, 'Liste de Parcours', 1, '2020-11-28 20:32:10', '2020-11-28 20:32:10', 'Omeka\\Entity\\ItemSet'),
+(34, 1, NULL, 7, NULL, 'THYP', 1, '2020-11-28 20:33:03', '2020-11-28 20:33:03', 'Omeka\\Entity\\Item'),
+(35, 1, NULL, 7, NULL, 'NET', 1, '2020-11-28 20:33:20', '2020-11-28 20:33:20', 'Omeka\\Entity\\Item'),
+(36, 1, NULL, 7, NULL, 'CEN', 1, '2020-11-28 20:33:41', '2020-11-28 20:33:41', 'Omeka\\Entity\\Item'),
+(37, 1, NULL, 7, NULL, 'SGI', 1, '2020-11-28 20:34:05', '2020-11-28 20:34:05', 'Omeka\\Entity\\Item'),
+(38, 1, 23, NULL, NULL, 'Liste de choix', 1, '2020-11-28 20:38:58', '2020-11-28 20:38:58', 'Omeka\\Entity\\ItemSet'),
+(39, 1, NULL, 8, NULL, 'je connais un peu', 1, '2020-11-28 20:39:32', '2020-11-28 20:39:32', 'Omeka\\Entity\\Item'),
+(40, 1, NULL, 8, NULL, 'je suis expert(e)', 1, '2020-11-28 20:39:48', '2020-11-28 20:39:48', 'Omeka\\Entity\\Item'),
+(41, 1, NULL, 8, NULL, 'je ne connais pas du tout', 1, '2020-11-28 20:40:05', '2020-11-28 20:40:05', 'Omeka\\Entity\\Item'),
+(42, 1, NULL, 8, NULL, 'je connais bien', 1, '2020-11-28 20:40:37', '2020-11-28 20:40:37', 'Omeka\\Entity\\Item'),
+(43, 1, NULL, 3, NULL, 'Wordpress', 1, '2020-11-28 20:47:50', '2020-11-28 20:51:15', 'Omeka\\Entity\\Item'),
+(44, 1, NULL, 3, NULL, 'Wordpress', 1, '2020-11-28 20:48:06', '2020-11-28 20:51:15', 'Omeka\\Entity\\Item'),
+(45, 1, NULL, 3, NULL, 'Wordpress', 1, '2020-11-28 20:48:26', '2020-11-28 20:51:15', 'Omeka\\Entity\\Item'),
+(46, 1, NULL, 3, NULL, 'LMS', 1, '2020-11-28 20:48:57', '2020-11-28 20:51:15', 'Omeka\\Entity\\Item'),
+(47, 1, NULL, 3, NULL, 'LMS', 1, '2020-11-28 20:49:13', '2020-11-28 20:51:15', 'Omeka\\Entity\\Item'),
+(48, 1, NULL, 3, NULL, 'LMS', 1, '2020-11-28 20:50:01', '2020-11-28 20:51:15', 'Omeka\\Entity\\Item');
 
 -- --------------------------------------------------------
 
@@ -620,19 +809,14 @@ INSERT INTO `resource` (`id`, `owner_id`, `resource_class_id`, `resource_templat
 -- Structure de la table `resource_class`
 --
 
-DROP TABLE IF EXISTS `resource_class`;
-CREATE TABLE IF NOT EXISTS `resource_class` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `owner_id` int(11) DEFAULT NULL,
-  `vocabulary_id` int(11) NOT NULL,
+CREATE TABLE `resource_class` (
+  `id` int NOT NULL,
+  `owner_id` int DEFAULT NULL,
+  `vocabulary_id` int NOT NULL,
   `local_name` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `label` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `comment` longtext COLLATE utf8mb4_unicode_ci,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UNIQ_C6F063ADAD0E05F6623C14D5` (`vocabulary_id`,`local_name`),
-  KEY `IDX_C6F063AD7E3C61F9` (`owner_id`),
-  KEY `IDX_C6F063ADAD0E05F6` (`vocabulary_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=108 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `label` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `comment` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `resource_class`
@@ -744,7 +928,153 @@ INSERT INTO `resource_class` (`id`, `owner_id`, `vocabulary_id`, `local_name`, `
 (103, NULL, 4, 'OnlineGamingAccount', 'Online Gaming Account', 'An online gaming account.'),
 (104, NULL, 4, 'OnlineEcommerceAccount', 'Online E-commerce Account', 'An online e-commerce account.'),
 (105, NULL, 4, 'OnlineChatAccount', 'Online Chat Account', 'An online chat account.'),
-(106, 1, 5, 'StudentStudent', 'Student', NULL);
+(106, 1, 5, 'Abstract', 'Abstract', NULL),
+(107, 1, 5, 'AcademicDegree', 'Academic Degree', NULL),
+(108, 1, 5, 'AcademicDepartment', 'Academic Department', NULL),
+(109, 1, 5, 'AcademicTerm', 'Academic Term', NULL),
+(110, 1, 5, 'AcademicYear', 'Academic Year', NULL),
+(111, 1, 5, 'AdministratorRole', 'Administrator Role', NULL),
+(112, 1, 5, 'AdviseeRole', 'Advisee Role', NULL),
+(113, 1, 5, 'AdvisingProcess', 'Advising Process', NULL),
+(114, 1, 5, 'AdvisingRelationship', 'Advising Relationship', NULL),
+(115, 1, 5, 'AdvisorRole', 'Advisor Role', NULL),
+(116, 1, 5, 'Association', 'Association', NULL),
+(117, 1, 5, 'AttendeeRole', 'Attendee Role', NULL),
+(118, 1, 5, 'AttendingProcess', 'Attending Process', NULL),
+(119, 1, 5, 'Authorship', 'Authorship', ''),
+(120, 1, 5, 'Award', 'Award or Honor', NULL),
+(121, 1, 5, 'AwardReceipt', 'Award or Honor Receipt', NULL),
+(122, 1, 5, 'AwardedDegree', 'Awarded Degree', NULL),
+(123, 1, 5, 'Blog', 'Blog', NULL),
+(124, 1, 5, 'BlogPosting', 'Blog Posting', NULL),
+(125, 1, 5, 'Building', 'Building', NULL),
+(126, 1, 5, 'Campus', 'Campus', NULL),
+(127, 1, 5, 'CaseStudy', 'Case Study', NULL),
+(128, 1, 5, 'Catalog', 'Catalog', NULL),
+(129, 1, 5, 'Center', 'Center', NULL),
+(130, 1, 5, 'Certificate', 'Certificate', NULL),
+(131, 1, 5, 'Certification', 'Certification', NULL),
+(132, 1, 5, 'ClinicalOrganization', 'Clinical Organization', NULL),
+(133, 1, 5, 'ClinicalRole', 'Clinical Role', NULL),
+(134, 1, 5, 'CoPrincipalInvestigatorRole', 'Co-Principal Investigator Role', NULL),
+(135, 1, 5, 'College', 'College', NULL),
+(136, 1, 5, 'Committee', 'Committee', NULL),
+(137, 1, 5, 'Company', 'Company', NULL),
+(138, 1, 5, 'Competition', 'Competition', NULL),
+(139, 1, 5, 'ConferencePaper', 'Conference Paper', NULL),
+(140, 1, 5, 'ConferencePoster', 'Conference Poster', NULL),
+(141, 1, 5, 'ConferenceSeries', 'Conference Series', NULL),
+(142, 1, 5, 'Consortium', 'Consortium', NULL),
+(143, 1, 5, 'Continent', 'Continent', NULL),
+(144, 1, 5, 'Contract', 'Contract', NULL),
+(145, 1, 5, 'CoreLaboratory', 'Core Laboratory', NULL),
+(146, 1, 5, 'Country', 'Country', NULL),
+(147, 1, 5, 'County', 'County', NULL),
+(148, 1, 5, 'Course', 'Course', NULL),
+(149, 1, 5, 'Credential', 'Credential', NULL),
+(150, 1, 5, 'Database', 'Database', NULL),
+(151, 1, 5, 'Dataset', 'Dataset', NULL),
+(152, 1, 5, 'DateTimeInterval', 'Date/Time Interval', NULL),
+(153, 1, 5, 'DateTimeValue', 'Date/Time Value', NULL),
+(154, 1, 5, 'DateTimeValuePrecision', 'DateTime Value Precision', NULL),
+(155, 1, 5, 'Department', 'Department', NULL),
+(156, 1, 5, 'Division', 'Division', NULL),
+(157, 1, 5, 'EditorRole', 'Editor Role', NULL),
+(158, 1, 5, 'EditorialArticle', 'Editorial Article', NULL),
+(159, 1, 5, 'Editorship', 'Editorship', NULL),
+(160, 1, 5, 'EducationalProcess', 'Educational Process', NULL),
+(161, 1, 5, 'EmeritusFaculty', 'Faculty Member Emeritus', NULL),
+(162, 1, 5, 'EmeritusLibrarian', 'Librarian Emeritus', NULL),
+(163, 1, 5, 'EmeritusProfessor', 'Professor Emeritus', NULL),
+(164, 1, 5, 'Equipment', 'Equipment', NULL),
+(165, 1, 5, 'EventSeries', 'Event Series', NULL),
+(166, 1, 5, 'Exhibit', 'Exhibit', NULL),
+(167, 1, 5, 'ExtensionUnit', 'Extension Unit', NULL),
+(168, 1, 5, 'F1000Link', 'F1000 Link', NULL),
+(169, 1, 5, 'Facility', 'Facility', NULL),
+(170, 1, 5, 'FacultyAdministrativePosition', 'Faculty Administrative Position', NULL),
+(171, 1, 5, 'FacultyMember', 'Faculty Member', NULL),
+(172, 1, 5, 'FacultyMentoringRelationship', 'Faculty Mentoring Relationship', NULL),
+(173, 1, 5, 'FacultyPosition', 'Faculty Position', NULL),
+(174, 1, 5, 'Foundation', 'Foundation', NULL),
+(175, 1, 5, 'FundingOrganization', 'Funding Organization', NULL),
+(176, 1, 5, 'GeographicLocation', 'Geographic Location', NULL),
+(177, 1, 5, 'GeographicRegion', 'Geographic Region', NULL),
+(178, 1, 5, 'GeopoliticalEntity', 'Geopolitical Entity', NULL),
+(179, 1, 5, 'GovernmentAgency', 'Government Agency', NULL),
+(180, 1, 5, 'GraduateAdvisingRelationship', 'Graduate Advising Relationship', NULL),
+(181, 1, 5, 'GraduateStudent', 'Graduate Student', NULL),
+(182, 1, 5, 'Grant', 'Grant', NULL),
+(183, 1, 5, 'Hospital', 'Hospital', NULL),
+(184, 1, 5, 'Institute', 'Institute', NULL),
+(185, 1, 5, 'Internship', 'Internship', NULL),
+(186, 1, 5, 'InvestigatorRole', 'Investigator Role', NULL),
+(187, 1, 5, 'InvitedTalk', 'Invited Talk', NULL),
+(188, 1, 5, 'IssuedCredential', 'Issued Credential', NULL),
+(189, 1, 5, 'Laboratory', 'Laboratory', NULL),
+(190, 1, 5, 'LeaderRole', 'Leader Role', NULL),
+(191, 1, 5, 'Librarian', 'Librarian', NULL),
+(192, 1, 5, 'LibrarianPosition', 'Librarian Position', NULL),
+(193, 1, 5, 'Library', 'Library', NULL),
+(194, 1, 5, 'License', 'License', NULL),
+(195, 1, 5, 'Licensure', 'Licensure', NULL),
+(196, 1, 5, 'Location', 'Location', NULL),
+(197, 1, 5, 'MedicalResidency', 'Medical Residency', NULL),
+(198, 1, 5, 'Meeting', 'Meeting', NULL),
+(199, 1, 5, 'MemberRole', 'Member Role', NULL),
+(200, 1, 5, 'Museum', 'Museum', NULL),
+(201, 1, 5, 'NewsRelease', 'News Release', NULL),
+(202, 1, 5, 'Newsletter', 'Newsletter', NULL),
+(203, 1, 5, 'NonAcademic', 'Non-Academic', NULL),
+(204, 1, 5, 'NonAcademicPosition', 'Non-Academic Position', NULL),
+(205, 1, 5, 'NonFacultyAcademic', 'Non-Faculty Academic', NULL),
+(206, 1, 5, 'NonFacultyAcademicPosition', 'Non-Faculty Academic Position', NULL),
+(207, 1, 5, 'OrganizerRole', 'Organizer Role', NULL),
+(208, 1, 5, 'OrganizingProcess', 'Organizing Process', NULL),
+(209, 1, 5, 'OutreachProviderRole', 'Outreach Provider Role', NULL),
+(210, 1, 5, 'PeerReviewerRole', 'Peer Reviewer Role', NULL),
+(211, 1, 5, 'PopulatedPlace', 'Populated Place', NULL),
+(212, 1, 5, 'Position', 'Position', NULL),
+(213, 1, 5, 'Postdoc', 'Postdoc', NULL),
+(214, 1, 5, 'PostdocOrFellowAdvisingRelationship', 'Postdoc or Fellow Advising Relationship', NULL),
+(215, 1, 5, 'PostdocPosition', 'Postdoctoral Position', NULL),
+(216, 1, 5, 'PostdoctoralTraining', 'Postdoctoral Training', NULL),
+(217, 1, 5, 'Presentation', 'Presentation', NULL),
+(218, 1, 5, 'PresenterRole', 'Presenter Role', NULL),
+(219, 1, 5, 'PresentingProcess', 'Presenting Process', NULL),
+(220, 1, 5, 'PrimaryPosition', 'Primary Position', NULL),
+(221, 1, 5, 'PrincipalInvestigatorRole', 'Principal Investigator Role', NULL),
+(222, 1, 5, 'PrivateCompany', 'Private Company', NULL),
+(223, 1, 5, 'Program', 'Program', NULL),
+(224, 1, 5, 'Project', 'Project', NULL),
+(225, 1, 5, 'Publisher', 'Publisher', NULL),
+(226, 1, 5, 'Relationship', 'Relationship', NULL),
+(227, 1, 5, 'ResearchOrganization', 'Research Organization', NULL),
+(228, 1, 5, 'ResearchProposal', 'Research Proposal', NULL),
+(229, 1, 5, 'ResearcherRole', 'Researcher Role', NULL),
+(230, 1, 5, 'Review', 'Review', NULL),
+(231, 1, 5, 'ReviewerRole', 'Reviewer Role', NULL),
+(232, 1, 5, 'Room', 'Room', NULL),
+(233, 1, 5, 'School', 'School', NULL),
+(234, 1, 5, 'Score', 'Score', NULL),
+(235, 1, 5, 'Screenplay', 'Screenplay', NULL),
+(236, 1, 5, 'SeminarSeries', 'Seminar Series', NULL),
+(237, 1, 5, 'ServiceProvidingLaboratory', 'Service Providing Lab', NULL),
+(238, 1, 5, 'Speech', 'Speech', NULL),
+(239, 1, 5, 'StateOrProvince', 'State or Province', NULL),
+(240, 1, 5, 'Student', 'Student', NULL),
+(241, 1, 5, 'StudentOrganization', 'Student Organization', NULL),
+(242, 1, 5, 'SubnationalRegion', 'Subnational Region', 'For example, the Midwest, northeast U.S.'),
+(243, 1, 5, 'TeacherRole', 'Teacher Role', NULL),
+(244, 1, 5, 'Team', 'Team', NULL),
+(245, 1, 5, 'Translation', 'Translation', NULL),
+(246, 1, 5, 'UndergraduateAdvisingRelationship', 'Undergraduate Advising Relationship', NULL),
+(247, 1, 5, 'UndergraduateStudent', 'Undergraduate Student', NULL),
+(248, 1, 5, 'University', 'University', NULL),
+(249, 1, 5, 'Video', 'Video', NULL),
+(250, 1, 5, 'WorkingPaper', 'Working Paper', NULL),
+(251, 1, 5, 'WorkshopSeries', 'Workshop Series', NULL),
+(252, 1, 6, 'StudentStudent', 'Student', NULL);
 
 -- --------------------------------------------------------
 
@@ -752,21 +1082,14 @@ INSERT INTO `resource_class` (`id`, `owner_id`, `vocabulary_id`, `local_name`, `
 -- Structure de la table `resource_template`
 --
 
-DROP TABLE IF EXISTS `resource_template`;
-CREATE TABLE IF NOT EXISTS `resource_template` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `owner_id` int(11) DEFAULT NULL,
-  `resource_class_id` int(11) DEFAULT NULL,
-  `title_property_id` int(11) DEFAULT NULL,
-  `description_property_id` int(11) DEFAULT NULL,
-  `label` varchar(190) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UNIQ_39ECD52EEA750E8` (`label`),
-  KEY `IDX_39ECD52E7E3C61F9` (`owner_id`),
-  KEY `IDX_39ECD52E448CC1BD` (`resource_class_id`),
-  KEY `IDX_39ECD52E724734A3` (`title_property_id`),
-  KEY `IDX_39ECD52EB84E0D1D` (`description_property_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE `resource_template` (
+  `id` int NOT NULL,
+  `owner_id` int DEFAULT NULL,
+  `resource_class_id` int DEFAULT NULL,
+  `title_property_id` int DEFAULT NULL,
+  `description_property_id` int DEFAULT NULL,
+  `label` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `resource_template`
@@ -774,7 +1097,13 @@ CREATE TABLE IF NOT EXISTS `resource_template` (
 
 INSERT INTO `resource_template` (`id`, `owner_id`, `resource_class_id`, `title_property_id`, `description_property_id`, `label`) VALUES
 (1, NULL, NULL, NULL, NULL, 'Base Resource'),
-(2, 1, 106, NULL, NULL, 'Etudiant');
+(2, 1, 240, 139, 298, 'Etudiant'),
+(3, 1, NULL, 1, 4, 'CMS'),
+(4, 1, NULL, NULL, NULL, 'Besoin'),
+(5, 1, NULL, NULL, NULL, 'Reseaux'),
+(6, 1, NULL, NULL, NULL, 'Outils'),
+(7, 1, NULL, 1, NULL, 'Parcours'),
+(8, 1, NULL, 1, NULL, 'Choix');
 
 -- --------------------------------------------------------
 
@@ -782,22 +1111,17 @@ INSERT INTO `resource_template` (`id`, `owner_id`, `resource_class_id`, `title_p
 -- Structure de la table `resource_template_property`
 --
 
-DROP TABLE IF EXISTS `resource_template_property`;
-CREATE TABLE IF NOT EXISTS `resource_template_property` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `resource_template_id` int(11) NOT NULL,
-  `property_id` int(11) NOT NULL,
-  `alternate_label` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `alternate_comment` longtext COLLATE utf8mb4_unicode_ci,
-  `position` int(11) DEFAULT NULL,
-  `data_type` longtext COLLATE utf8mb4_unicode_ci COMMENT '(DC2Type:json_array)',
+CREATE TABLE `resource_template_property` (
+  `id` int NOT NULL,
+  `resource_template_id` int NOT NULL,
+  `property_id` int NOT NULL,
+  `alternate_label` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `alternate_comment` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `position` int DEFAULT NULL,
+  `data_type` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '(DC2Type:json_array)',
   `is_required` tinyint(1) NOT NULL,
-  `is_private` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UNIQ_4689E2F116131EA549213EC` (`resource_template_id`,`property_id`),
-  KEY `IDX_4689E2F116131EA` (`resource_template_id`),
-  KEY `IDX_4689E2F1549213EC` (`property_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `is_private` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `resource_template_property`
@@ -824,25 +1148,33 @@ INSERT INTO `resource_template_property` (`id`, `resource_template_id`, `propert
 (18, 1, 50, NULL, NULL, 18, NULL, 0, 0),
 (19, 1, 3, NULL, NULL, 19, NULL, 0, 0),
 (20, 1, 41, NULL, NULL, 20, NULL, 0, 0),
-(26, 2, 186, NULL, NULL, 2, NULL, 0, 0),
-(27, 2, 185, NULL, NULL, 1, NULL, 0, 0),
-(28, 2, 188, NULL, NULL, 3, NULL, 0, 0),
-(29, 2, 187, NULL, NULL, 4, NULL, 0, 0),
-(30, 2, 198, NULL, NULL, 6, NULL, 0, 0),
-(31, 2, 192, NULL, NULL, 7, NULL, 0, 0),
-(32, 2, 197, NULL, NULL, 8, NULL, 0, 0),
-(33, 2, 190, NULL, NULL, 9, NULL, 0, 0),
-(34, 2, 189, NULL, NULL, 10, NULL, 0, 0),
-(35, 2, 191, NULL, NULL, 11, NULL, 0, 0),
-(36, 2, 200, NULL, NULL, 12, NULL, 0, 0),
-(37, 2, 194, NULL, NULL, 13, NULL, 0, 0),
-(38, 2, 193, NULL, NULL, 14, NULL, 0, 0),
-(39, 2, 195, NULL, NULL, 15, NULL, 0, 0),
-(40, 2, 199, NULL, NULL, 16, NULL, 0, 0),
-(41, 2, 196, NULL, NULL, 17, NULL, 0, 0),
-(42, 2, 1, NULL, NULL, 18, NULL, 0, 0),
-(43, 2, 4, NULL, NULL, 19, NULL, 0, 0),
-(47, 2, 201, NULL, NULL, 5, NULL, 0, 0);
+(21, 2, 138, NULL, NULL, 1, '[\"literal\"]', 1, 0),
+(22, 2, 139, NULL, NULL, 2, '[\"literal\"]', 1, 0),
+(23, 2, 296, NULL, NULL, 3, NULL, 1, 0),
+(24, 2, 298, NULL, NULL, 4, '[\"resource:item\"]', 1, 0),
+(25, 2, 297, NULL, NULL, 5, NULL, 1, 0),
+(26, 2, 154, NULL, NULL, 6, NULL, 0, 0),
+(27, 2, 310, NULL, NULL, 7, NULL, 0, 0),
+(28, 2, 299, NULL, NULL, 8, NULL, 0, 0),
+(29, 2, 303, NULL, NULL, 9, NULL, 0, 0),
+(30, 2, 308, NULL, NULL, 10, NULL, 0, 0),
+(31, 2, 302, NULL, NULL, 11, '[\"resource:item\"]', 0, 0),
+(32, 2, 307, NULL, NULL, 12, NULL, 0, 0),
+(33, 2, 304, NULL, NULL, 13, NULL, 0, 0),
+(34, 2, 305, NULL, NULL, 14, '[\"resource:item\"]', 0, 0),
+(35, 2, 309, NULL, NULL, 15, '[\"resource:item\"]', 0, 0),
+(36, 2, 306, NULL, NULL, 16, NULL, 0, 0),
+(37, 3, 1, NULL, NULL, 1, '[\"literal\"]', 1, 0),
+(38, 3, 4, NULL, NULL, 2, '[\"resource:item\"]', 1, 0),
+(39, 4, 1, NULL, NULL, 1, NULL, 0, 0),
+(40, 4, 4, NULL, NULL, 2, NULL, 0, 0),
+(41, 5, 1, NULL, NULL, 1, NULL, 0, 0),
+(42, 5, 4, NULL, NULL, 2, NULL, 0, 0),
+(43, 6, 1, NULL, NULL, 1, NULL, 0, 0),
+(44, 6, 4, NULL, NULL, 2, NULL, 0, 0),
+(45, 7, 1, NULL, NULL, 1, '[\"literal\"]', 1, 0),
+(46, 8, 1, NULL, NULL, 1, '[\"literal\"]', 1, 0),
+(47, 8, 4, NULL, NULL, 2, NULL, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -850,12 +1182,10 @@ INSERT INTO `resource_template_property` (`id`, `resource_template_id`, `propert
 -- Structure de la table `session`
 --
 
-DROP TABLE IF EXISTS `session`;
-CREATE TABLE IF NOT EXISTS `session` (
-  `id` varchar(190) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE `session` (
+  `id` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `data` longblob NOT NULL,
-  `modified` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  `modified` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -863,16 +1193,7 @@ CREATE TABLE IF NOT EXISTS `session` (
 --
 
 INSERT INTO `session` (`id`, `data`, `modified`) VALUES
-('7fpmqvt2mra9rmilt4vplcvedp', 0x5f5f4c616d696e61737c613a353a7b733a32303a225f524551554553545f4143434553535f54494d45223b643a313630353139383033372e3139303737353b733a363a225f56414c4944223b613a313a7b733a32383a224c616d696e61735c53657373696f6e5c56616c696461746f725c4964223b733a32363a223764346f3734693237366f74746c39736469656b356838616a36223b7d733a34323a224c616d696e61735f56616c696461746f725f437372665f73616c745f6c6f67696e666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630353230313535303b7d733a33323a224c616d696e61735f56616c696461746f725f437372665f73616c745f63737266223b613a313a7b733a363a22455850495245223b693a313630353230313631303b7d733a34343a224c616d696e61735f56616c696461746f725f437372665f73616c745f636f6e6669726d666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630353230313633373b7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f6c6f67696e666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3339313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a313a7b733a33323a223635396661663331306363346564626234303038333936333066656362613763223b733a33323a226433363164343865646439383333383065383737376565643630613165333465223b7d733a343a2268617368223b733a36353a2264333631643438656464393833333830653837373765656436306131653334652d3635396661663331306363346564626234303038333936333066656362613763223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f417574687c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3232333a7b613a343a7b733a373a2273746f72616765223b613a313a7b733a373a2273746f72616765223b693a313b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4f6d656b614d657373656e6765727c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3230353a7b613a343a7b733a373a2273746f72616765223b613a303a7b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d72656469726563745f75726c7c4e3b4c616d696e61735f56616c696461746f725f437372665f73616c745f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3437313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a323a7b733a33323a223534396235383239666633383263316666383539353132363863626565393564223b733a33323a223635616361643664353238396633373262313462333438366635636633633965223b733a33323a223766383831373830323664653933653137633164643161656466363234383430223b733a33323a223036306234356537643034626262333063306239303033653765333637303161223b7d733a343a2268617368223b733a36353a2230363062343565376430346262623330633062393030336537653336373031612d3766383831373830323664653933653137633164643161656466363234383430223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f636f6e6669726d666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a313833323a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a31393a7b733a33323a223630333034366464396634373662306466653163303735396536303633663362223b733a33323a223733386639373132303063653830656530666535656136323132373966333165223b733a33323a226332383035396130623939306166636331346338346530643332373261643531223b733a33323a226230326534353063633430316535366334653164626531313438333161346366223b733a33323a223064363465383733393239653834643164366363626637613531336235643166223b733a33323a223965323362343339373032353632623232646430626134643033343335623831223b733a33323a223433316433653763323034646363386665303139663939623135663866616565223b733a33323a223065373835346461646263383830356463386336343031396666363533646330223b733a33323a223463613164326663656265613839656434616131643730653631393131623132223b733a33323a223936366264623232653830623466626364313163613636376430353236363531223b733a33323a226164383761303237646233373866636633356431336139653261393866363063223b733a33323a226263373766653533646265656637373465383530346662356633343266363264223b733a33323a223131303265356633383435373561643636393536636564393531313439343231223b733a33323a223162353737333133336632626161303030666234376664343331636232343465223b733a33323a223065643234373862383835666363353638613031333332303039316664646563223b733a33323a223430393438303165613831323636393132316466643530626534396361313762223b733a33323a223738356364613434383935353235613061366538333531386331356134646136223b733a33323a226462323632623837616431616239663936356662316466306337346564326438223b733a33323a226536613730643066326264663030393662383131666565393863356430643932223b733a33323a223630373566623737343937386562343563353566396162343166376639323138223b733a33323a223261363464656564636665636464363666653135386665393337333363613535223b733a33323a226561383132383036346530393763643665626334383834396232323666356535223b733a33323a223262363861643134383138393564386535373737376637303635633034663962223b733a33323a223937356266323262316630333831656138633865333630623333643262333431223b733a33323a223237386136616137656338333832373037663964356630303131386338303664223b733a33323a226438393339636638333335393066383761623236313861316262656137353833223b733a33323a223030323165386137323438366639363735366431326163393465333635323133223b733a33323a223930386230393936333264316362306633663163656136663365353934653537223b733a33323a223030306534363435326232346434636264336535363030643034633831353334223b733a33323a226630373163366138656662306333313866306137393564303937396337623139223b733a33323a223336336564346563303236656566646461333630346465383032346433313065223b733a33323a223730643461376338346131646661336136333063663365326333303761343234223b733a33323a223734343335363139636131373931623964626433303438373163633336343533223b733a33323a226464323062636665396235346166386263656463373163356337336561313964223b733a33323a223330373462663836653461383933323938353435636333343264666439343938223b733a33323a223962363361383036616666656232386437306331613564313866653133633162223b733a33323a223536633533386638373437363334393139333263326635396666613137303736223b733a33323a223138393066333833623937363834646233626661363230666434393338666431223b7d733a343a2268617368223b733a36353a2231383930663338336239373638346462336266613632306664343933386664312d3536633533386638373437363334393139333263326635396666613137303736223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d, 1605198037),
-('aqg06ajf16h9qvcmh5e31l5bf6', 0x5f5f4c616d696e61737c613a363a7b733a32303a225f524551554553545f4143434553535f54494d45223b643a313630343331343036342e3734343838343b733a363a225f56414c4944223b613a313a7b733a32383a224c616d696e61735c53657373696f6e5c56616c696461746f725c4964223b733a32363a2275306e657370386733726d6e66703465626f6265736d736b616d223b7d733a34323a224c616d696e61735f56616c696461746f725f437372665f73616c745f6c6f67696e666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630343331363338323b7d733a33323a224c616d696e61735f56616c696461746f725f437372665f73616c745f63737266223b613a313a7b733a363a22455850495245223b693a313630343331373634313b7d733a34373a224c616d696e61735f56616c696461746f725f437372665f73616c745f766f636162756c617279666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630343331363937353b7d733a34343a224c616d696e61735f56616c696461746f725f437372665f73616c745f636f6e6669726d666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630343331373634313b7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f6c6f67696e666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3339313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a313a7b733a33323a223836653437313739636231383138316535323139306638316362643164333463223b733a33323a226633616630653964643565323335313035363866373235613331666161336539223b7d733a343a2268617368223b733a36353a2266336166306539646435653233353130353638663732356133316661613365392d3836653437313739636231383138316535323139306638316362643164333463223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f417574687c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3232333a7b613a343a7b733a373a2273746f72616765223b613a313a7b733a373a2273746f72616765223b693a313b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4f6d656b614d657373656e6765727c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3230353a7b613a343a7b733a373a2273746f72616765223b613a303a7b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d72656469726563745f75726c7c4e3b4c616d696e61735f56616c696461746f725f437372665f73616c745f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3731313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a353a7b733a33323a223833323566646338356231373665326232636230353362643265363737336338223b733a33323a226636663861653237396364356335386666376632386235333131616130646266223b733a33323a223233303532313438353533316563386663653762616531363461353561633363223b733a33323a226335613939303932333864353739666330393836386565383635373463306465223b733a33323a223139623733623561343431363536333538376661656438643338666332653262223b733a33323a226161623233383037646563396633623930663165613739643139613534643935223b733a33323a226630336132613862353464613139363335376134336530623964653938636333223b733a33323a226338636361326530316265383233386663393663396161333332373933313836223b733a33323a223662616162396564633862626335323936306538656264666532653634363933223b733a33323a223565363538343339386665316130356563353966376635343864313737356638223b7d733a343a2268617368223b733a36353a2235653635383433393866653161303565633539663766353438643137373566382d3662616162396564633862626335323936306538656264666532653634363933223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f766f636162756c617279666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3437313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a323a7b733a33323a226134333335373163663335326561633833363763653934353161646633366565223b733a33323a226239373561666437396164323333636561303532313034393134326239393532223b733a33323a226564383031306231326630636332376631666430363264333131303837643036223b733a33323a223265336339363663373633306230376232656339323662623434356363343330223b7d733a343a2268617368223b733a36353a2232653363393636633736333062303762326563393236626234343563633433302d6564383031306231326630636332376631666430363264333131303837643036223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f636f6e6669726d666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3437313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a323a7b733a33323a226565303337663664353164626165663037383235376263326139343763666661223b733a33323a223637343064616638623064303538663362356564356330373132623934656232223b733a33323a226261336363663732663865353463393435653632393463653737343539366337223b733a33323a223066356531376136396231346239333664623065363861346265366162343865223b7d733a343a2268617368223b733a36353a2230663565313761363962313462393336646230653638613462653661623438652d6261336363663732663865353463393435653632393463653737343539366337223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d, 1604314065),
-('bs1cgmfvcc5pj7oi7ip4s6kk3e', 0x5f5f4c616d696e61737c613a393a7b733a32303a225f524551554553545f4143434553535f54494d45223b643a313630343931393532322e3430313734313b733a363a225f56414c4944223b613a313a7b733a32383a224c616d696e61735c53657373696f6e5c56616c696461746f725c4964223b733a32363a226a7031746f72376937326633666c76306c386d386a6264326d66223b7d733a34323a224c616d696e61735f56616c696461746f725f437372665f73616c745f6c6f67696e666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630343931373133343b7d733a35313a224c616d696e61735f56616c696461746f725f437372665f73616c745f666f72676f7470617373776f7264666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630343931373033323b7d733a35393a224c616d696e61735f56616c696461746f725f437372665f73616c745f7265736f7572636574656d706c617465696d706f7274666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630343931383138333b7d733a34373a224c616d696e61735f56616c696461746f725f437372665f73616c745f766f636162756c617279666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630343932323435343b7d733a34343a224c616d696e61735f56616c696461746f725f437372665f73616c745f636f6e6669726d666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630343932333038373b7d733a33323a224c616d696e61735f56616c696461746f725f437372665f73616c745f63737266223b613a313a7b733a363a22455850495245223b693a313630343931393833383b7d733a35333a224c616d696e61735f56616c696461746f725f437372665f73616c745f7265736f7572636574656d706c617465666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630343932333038373b7d7d72656469726563745f75726c7c733a33343a22687474703a2f2f6c6f63616c686f73742f6c64772f6f6d656b612d732f61646d696e223b4c616d696e61735f56616c696461746f725f437372665f73616c745f6c6f67696e666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a313033313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a393a7b733a33323a223634326233656631656665663030663266643130356664663964663561353938223b733a33323a223834646234613039623765653531316664313533303630343864393661613935223b733a33323a223035643531336239616265616235336137383933633166366339383633323061223b733a33323a226165323437343737643234656331366231353735386138666135346531356563223b733a33323a223761623432373364626666373932356361386462366333613966393835653266223b733a33323a223166663138613736363936336265373533343335363664663063333064663934223b733a33323a223062623938353561363137333937323465633633323336623930393930376564223b733a33323a223631363661623864653764306662393739346133656633366330343931646336223b733a33323a223030383930363833353166356565616532366264386139313932306465616136223b733a33323a223364633034363339333733386464333366343135653935343636353430303264223b733a33323a223265363136323036313235663030366237333464613930396461316264663261223b733a33323a226136666263313336653538623037633262613433366363313135346566636465223b733a33323a223966386633633338653764323962656532346230303233316332326339376461223b733a33323a223434393863643365343066343336343239343835343930303665656663333161223b733a33323a226463333830363038313064386433383138613336656638313731316339303430223b733a33323a226333613463323664306364356538663533356366633566303532613835393934223b733a33323a223461376266623965316264333033373466646537633730656435386239346533223b733a33323a223765343439613837373430623736323233353766323837666633636566353264223b7d733a343a2268617368223b733a36353a2237653434396138373734306237363232333537663238376666336365663532642d3461376266623965316264333033373466646537633730656435386239346533223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4f6d656b614d657373656e6765727c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3230353a7b613a343a7b733a373a2273746f72616765223b613a303a7b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f666f72676f7470617373776f7264666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3437313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a323a7b733a33323a223366363561316635323836666666343764383832653661623030313031613337223b733a33323a226566373134396165333837306663306162613961303661386333393562653437223b733a33323a226235336263356163346366616365666531386239356638646166396634663565223b733a33323a223263653131373130396664656534323266326132353931316436653962306338223b7d733a343a2268617368223b733a36353a2232636531313731303966646565343232663261323539313164366539623063382d6235336263356163346366616365666531386239356638646166396634663565223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f417574687c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3232333a7b613a343a7b733a373a2273746f72616765223b613a313a7b733a373a2273746f72616765223b693a313b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f7265736f7572636574656d706c617465696d706f7274666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3633313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a343a7b733a33323a226363373831616331353965333036633333626237333066663937626165326639223b733a33323a226438613265393666613565663866353430363863643763376265323364333062223b733a33323a223262393862613031363261303565633265303333333162363233303031626535223b733a33323a226534303737623834366138656430663934336139633461356662666561386462223b733a33323a223130633963396137323231623832313837383566613466326533343933363161223b733a33323a223638343335656230393663316432373633333034356231326431336436376138223b733a33323a223930306265666535383061333866636637376130383864646532643965623632223b733a33323a226561353563343030626663343664386266613963653062653734313338343038223b7d733a343a2268617368223b733a36353a2265613535633430306266633436643862666139636530626537343133383430382d3930306265666535383061333866636637376130383864646532643965623632223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f766f636162756c617279666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a313139323a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a31313a7b733a33323a223164623730303333643231643530383635633233343261303136366130313765223b733a33323a226365336436643434323736623063336639626435646537663630353364366339223b733a33323a223036616162393531623638626339376561313830643164346366386664373331223b733a33323a223833636637353336643564313562313165346463346137626466376134376566223b733a33323a223335363261356662306533623336613563393034333161313466663938386331223b733a33323a223435393161623762356238386564306539386561336339333466653237393238223b733a33323a226265633762643236396235653334326264316261626362663239643432323036223b733a33323a226239653362313238656431366635643262383533653334653365643935376537223b733a33323a226336613061363738326636653264346564663139316536623039623431616539223b733a33323a223334383230353933326565393236313237313939313437376430653632393430223b733a33323a223761666233316466343133323565653038386663393736346534356137633066223b733a33323a223665316134386438643631343831323364343735616133323166313134336534223b733a33323a226231346136353232363364643738396139663837306239393135303238343462223b733a33323a223437373131653665643236313363653334326131613465396664383730346538223b733a33323a226235396136393538616536363461386231646333366465383135383134636635223b733a33323a226531326330323235326631323632306233633564323635663364366338646139223b733a33323a223363646461303532613537316535613632326437316262633430393032353233223b733a33323a223839363630666439356433393964613037393635356263656336336162653237223b733a33323a226439333339623938333538343632656436616339303562336238383637313030223b733a33323a223735643666633034356438386537333638653930643466356537326631326432223b733a33323a223637326561623839316562336135383535366539613633633231623132343437223b733a33323a223030363164653831623837373666363931376231343032333830353030303534223b7d733a343a2268617368223b733a36353a2230303631646538316238373736663639313762313430323338303530303035342d3637326561623839316562336135383535366539613633633231623132343437223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f636f6e6669726d666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3935313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a383a7b733a33323a223363333131353464353664363438393465646338333566393861346330623539223b733a33323a226239326334366139363266343035616363333865393364353030633663313264223b733a33323a226337386236613830363262333633633038353732363261633330636438303166223b733a33323a223430386136643639623139333130626539383864366333313539666334636337223b733a33323a223464363165353663386664636566323965663838383839636335323234623162223b733a33323a223366353565343838383030636161386563326338303566386562316331396133223b733a33323a223438353230646530663831623930373831623139373065313034623934316163223b733a33323a226262633133653466663261653363323038363836663966396265653531323938223b733a33323a226135303336396433363639363731383539623662363737303135663939353132223b733a33323a226665623462383839393661613335313835653238393864343730653963333435223b733a33323a226335323834336633343561626535386133653137636461336636326564663962223b733a33323a223163666438346361663562353138333266306661323534643733356238646466223b733a33323a223162383433313762303231633766613663303439353365313364326365343436223b733a33323a223434643763653237363831373231386139336433373135323762396437343266223b733a33323a223964656330396334633834623961653461383631313632626239343834326139223b733a33323a226463633161336234646265366334383764336164393264643637366265623864223b7d733a343a2268617368223b733a36353a2264636331613362346462653663343837643361643932646436373662656238642d3964656330396334633834623961653461383631313632626239343834326139223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3437313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a323a7b733a33323a226130353863383562363835323338646538663334643337316235666465636230223b733a33323a223439666335303064633766383265613533646138356537303264303932376666223b733a33323a226233343831373136333035353130396635656664663366343330636464663330223b733a33323a223335643638633065353065366461333737323065653230616138363332323265223b7d733a343a2268617368223b733a36353a2233356436386330653530653664613337373230656532306161383633323232652d6233343831373136333035353130396635656664663366343330636464663330223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f7265736f7572636574656d706c617465666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3633313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a343a7b733a33323a226633343734373937363039363962323534396561623964383666316430663364223b733a33323a223963306664633939343865303432613138633939653265373430353061643330223b733a33323a226338313832396563613630343962663436353766386463343134346634386636223b733a33323a223866623661333661363030666537653061616464626336643064343163636531223b733a33323a223335393539653935663035326530333534303430303331303635336131346630223b733a33323a223432353934333165626537386664333565393330333262333635646638393066223b733a33323a226236633464383962636638636462633363653730636261386439353839613834223b733a33323a226639383061353530373936316230643239626263323735626133336265326337223b7d733a343a2268617368223b733a36353a2266393830613535303739363162306432396262633237356261333362653263372d6236633464383962636638636462633363653730636261386439353839613834223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d, 1604919522);
-INSERT INTO `session` (`id`, `data`, `modified`) VALUES
-('ektnvapnr1fspe1quh1o85mjfg', 0x5f5f4c616d696e61737c613a383a7b733a32303a225f524551554553545f4143434553535f54494d45223b643a313630353238363235302e38313933383b733a363a225f56414c4944223b613a313a7b733a32383a224c616d696e61735c53657373696f6e5c56616c696461746f725c4964223b733a32363a223567766f31396e75387163396731636672306d32397565703973223b7d733a34323a224c616d696e61735f56616c696461746f725f437372665f73616c745f6c6f67696e666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630353237313836363b7d733a34373a224c616d696e61735f56616c696461746f725f437372665f73616c745f766f636162756c617279666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630353238353935373b7d733a34343a224c616d696e61735f56616c696461746f725f437372665f73616c745f636f6e6669726d666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630353238393835313b7d733a35333a224c616d696e61735f56616c696461746f725f437372665f73616c745f7265736f7572636574656d706c617465666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630353238363832313b7d733a33323a224c616d696e61735f56616c696461746f725f437372665f73616c745f63737266223b613a313a7b733a363a22455850495245223b693a313630353238373838313b7d733a35333a224c616d696e61735f56616c696461746f725f437372665f73616c745f766f636162756c617279757064617465666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630353238353938333b7d7d72656469726563745f75726c7c733a33343a22687474703a2f2f6c6f63616c686f73742f6c64772f6f6d656b612d732f61646d696e223b4c616d696e61735f56616c696461746f725f437372665f73616c745f6c6f67696e666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3339313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a313a7b733a33323a223238663238353035336130313665646339333062616538313935306563393936223b733a33323a223635306561643562633038616137646563356333376237353438366538653663223b7d733a343a2268617368223b733a36353a2236353065616435626330386161376465633563333762373534383665386536632d3238663238353035336130313665646339333062616538313935306563393936223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f417574687c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3232333a7b613a343a7b733a373a2273746f72616765223b613a313a7b733a373a2273746f72616765223b693a313b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4f6d656b614d657373656e6765727c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3230353a7b613a343a7b733a373a2273746f72616765223b613a303a7b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f766f636162756c617279666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a313531323a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a31353a7b733a33323a226335316532626665376666386262663332366263663265643962386564616635223b733a33323a226133663433613139613263643832303032656132653331376533346234343230223b733a33323a226234383664356465663131363336356131366366303032633864636162323163223b733a33323a223738656135323263373263363037326262646462306230366130653435633331223b733a33323a223264303331326631376336346138303161326635633531363038323862313362223b733a33323a223233316633636136323837623461336634626561626338643861373330306562223b733a33323a223835363439353465323632353863633538616532313831663531656266626332223b733a33323a226265623439656661373837656134633436633035333363633735366237346261223b733a33323a223139346533333439356538356339336430363938383737663132343239386331223b733a33323a226636353562656339383666303964376361363538383663373931346332363431223b733a33323a223965346263613135396131623766396238643662633230396337616639393338223b733a33323a226536313861616561653733363063336464353939313830336635303262313637223b733a33323a223664373636643235373439346166356330303364356166313566316134306332223b733a33323a223063636638343162653236383963376265303238336266663965353236346333223b733a33323a223834343562393835623438646265383332333562613463373964383238306537223b733a33323a226566613639336639366361653032303266396632656361396437313365366236223b733a33323a223165376435323035313235376162393030626239323565636334343833323532223b733a33323a226635656139373565353464316562613565626630306238363666613763393964223b733a33323a223963623366633931316239303334383461626334383637626136383063653738223b733a33323a223864643039323236626337393161626437336162633262643235666165303463223b733a33323a223731623239626237346466363538313936616234633732333235386639373032223b733a33323a223961303261363532373131646133666666396235653230353766626132663766223b733a33323a223239376561623934343034393736666563376434386235393266333433633333223b733a33323a226466663261643336333563386337636435323138396631633063343237316361223b733a33323a223462613136386365646135646234636266316336386433366534303039656432223b733a33323a223962333061613232303835616538396662346134653465323831316333373032223b733a33323a226561383163623565623662656338643538353936376136343639653564393636223b733a33323a226639346266373033376635383734633162316130616137666636666132643664223b733a33323a223536613163343866333630316637623764616161316261306235303561373165223b733a33323a226634643038363236633636396363633033616466306461626630346537623039223b7d733a343a2268617368223b733a36353a2266346430383632366336363963636330336164663064616266303465376230392d3536613163343866333630316637623764616161316261306235303561373165223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f636f6e6669726d666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a31313139333a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a3133363a7b733a33323a223133383938383866396537623435373463333634373935323564373031366663223b733a33323a223331393162343662636264626330663037373634333563346362633534366636223b733a33323a223966623336323031613665616564326431613662653165366332373264336164223b733a33323a223862326666363539313639373933343938366166303838313033326561303730223b733a33323a223138623662333335626131396431373566626662383732303466333563303436223b733a33323a223764643333303231303663373534316533666230323832656366626333386665223b733a33323a226566653263383337653564316161383331633563393464306631363230636263223b733a33323a223665386131353034313732623438316366613834666536623036643738613733223b733a33323a223861633264643535643465353434363038653932663862343564336534336633223b733a33323a223462613230626466643936393638306666353436313138363632333161313334223b733a33323a223330383661306335356661383735333963663639643338353066386466303830223b733a33323a223834353134616132646561356339623230333633303364313239333965626137223b733a33323a223161306435356534303662303137653665613737376539303666653931646461223b733a33323a226161646164343938663737316364636138633934643562373731383062666434223b733a33323a226165633037633239313230623832656130643131343738623764343962343238223b733a33323a226231353836313437326363636538666336323534636137363836366239386336223b733a33323a223234386230646363303238393936363536633134653365623961383865663330223b733a33323a223966396430303934373133393035306139353164646339623030616239313231223b733a33323a226434356430333430353263653732323134643863343564313239633364633438223b733a33323a223361303330396135393463353165333131356461666166336535343561626239223b733a33323a226563636561313162393233663661386463323633643366323935626435366336223b733a33323a223533336432373664616562646166393230643131313231316334656435383637223b733a33323a223934326337343834386639343137613535656335643162376266623032613238223b733a33323a226237613438313036616366383834643334653665326237326632366338323765223b733a33323a223032646436373966363537376438303435613966623036353438333638353731223b733a33323a223863396536353030636161633436626637323031613261646437373334636462223b733a33323a223032343134653339653037643762393733396633666161353432333937666137223b733a33323a226665353162353738396562613966626461663763326264643239393836396536223b733a33323a226532633430643633356535373463663866356162616264313730666461656565223b733a33323a223230643166386565633538363932353134323636326638383666383866323961223b733a33323a223265336338653534353439626534306234663033303031316534396336613066223b733a33323a223433626263623030653730633865613466363262653564623835303139643236223b733a33323a223939326662386538633734316331343131646363663761646230613833343161223b733a33323a223930386262396632363163653533396335386536353965316533306266363631223b733a33323a223834656636336532313237373237303832366438316133333437303062326664223b733a33323a223561306430386238613231323332313537373332333363393363613964633435223b733a33323a226238643764626538363866643765623939396337383637373334383734626337223b733a33323a226334303837633335366464643534663363633637633033383235373631393336223b733a33323a226261313765633661353965393531303064373536306361326431393539636236223b733a33323a223030313838343862633064373861393661323837363164633633626661356337223b733a33323a223864393830373339313034366134316238653365393461343766616335623964223b733a33323a226561396361623135316261393232323833626138346534613139346238633362223b733a33323a226663383361383037646239353330326266393334333864313436633766343130223b733a33323a226633633361343535343666666436653465313934383766653634376565303764223b733a33323a223135326630623336356332633635636630643964363337396438343064346434223b733a33323a223933663431396563646236326235353139656461613830343733613161303533223b733a33323a223561313961383333323432663561343938343431373038323165666463323131223b733a33323a223832633637386166303838363037613238393339363332613239346237366537223b733a33323a223764316236366161336338373562373161616164613734633631373034323165223b733a33323a223233326461373133306134616666336232653034653635623664316566343735223b733a33323a223165316162316239373337653063626434326237376231343931336530386635223b733a33323a223435356635613934366661323036633762343130656237333133303437643937223b733a33323a226661323761393035643665306532343239356165346237303337353332363530223b733a33323a226234613031393137373433613965366365356331356664373535396663363835223b733a33323a223634613532386337346263653139353936343862616335353364316333306638223b733a33323a223433313261663531643335636639633536653264333939626466383635343038223b733a33323a223636393038666138386664633538383133613839656461306261363065636536223b733a33323a226133643361656461313537346339323561653565363862303633393536626264223b733a33323a226131366362613361336231373837323634616637303432636664666237663435223b733a33323a223465386132343837343630393163623961353837353764363663633237613833223b733a33323a226365306432303264306566306165336233643761626462346662616136383534223b733a33323a223332396534633732333939653237313137303534316266663036376536373834223b733a33323a226239653666373537393262616265353533613162366536646461313363633739223b733a33323a223830656566353836333261333134323237383831626135643564343533353862223b733a33323a223966353163363938626634323435393132383936326565396435633237386537223b733a33323a226464363038346633623139386634366162346231333532626166336232353335223b733a33323a223361653335393364393831666531306337376465316463653963336532383233223b733a33323a223161386366353238373238323362623635623136373964313932356239636462223b733a33323a226438386464353339613864346362336435323832633231386466303735333637223b733a33323a223131623836353066326236383235393633373538656532313031623430356465223b733a33323a223061626236633438623637666531326536653931343262633239376134633062223b733a33323a223439363763396163323861646131613262333434643363353332393362666536223b733a33323a223263653039616437353035646131636635333830363734613237633830323930223b733a33323a226635303861666636343532333762306262323032616334363833373731626333223b733a33323a223730396164303634316536313432623130663061313064323165376166386564223b733a33323a226133343237353038336165373264376632306461646532396139636238353131223b733a33323a223466633430303033366537663262373231303737653165306638303837643230223b733a33323a223561333235383666663237346433333936623966653062306162303863383762223b733a33323a223736363265353762383666373735356261303937323439313663323965366331223b733a33323a223166633733386636663966393037316138653932386438353861653038303133223b733a33323a226430353834376165346266616461343234386461393564666431646634653261223b733a33323a226361636433633135626165393937653961653365656262323564663166646633223b733a33323a226237366662663437646238386631646338636638373066353361643166336431223b733a33323a223139653037316438326164396332623863336234373865626339326666306461223b733a33323a223332306465356638313334636330653235353436303539633262303535393163223b733a33323a223439323466346166303839333034313537386564323933333035663037366234223b733a33323a226662316238613464386666633133383362633431353633656365373735626130223b733a33323a223239613432323434383134373365636537653835306130643436316431323539223b733a33323a226633633662616464623165376639613730306436613531613237303632633762223b733a33323a226631376463313736613461613732656234396164396262623438313034393737223b733a33323a223835313564386633616637646537626562396433366137356238383539303635223b733a33323a226632343337633338663164626437343538316662663136336532316563613263223b733a33323a223632323966366535626339386563376634303534316635336362343835326166223b733a33323a223732323236336465393765333531353666363933303934346238313938643636223b733a33323a223362323436666131663839663530666665663334613432646131663638326434223b733a33323a226533323764323239363935666264643765663766663931306436623266346436223b733a33323a226330363366363966633635653530323062303135303265336565383765653835223b733a33323a226535323864383365663634393733653438396464323735376132613639346630223b733a33323a223132313066633866616535306164626339313236383532383636623034343332223b733a33323a223662646563386339623861643437376262373630386163316535363834313631223b733a33323a226138663564613665323165386236386536633565613234303931323039333461223b733a33323a226237333961353139373538373464623139373039643634306632656463396534223b733a33323a223939326133353865346664306462386338656336656438323039666539643637223b733a33323a226530343863316535336264303739316263646530383639346366313337343461223b733a33323a226630336536356434366435363932393239613765646161383632306565333034223b733a33323a223931386339333835306564323564643135623133646332353737653032366664223b733a33323a226132643064643231396238393261323931363963626538356536353630343731223b733a33323a223331376664373162323339313837316337313430666361303531353631343161223b733a33323a223839376333376265343237666337646666326231343439613134333163633036223b733a33323a226566383766653561303339363439663866373361396562653630393535643734223b733a33323a223738353065343535613737323031613834343866326632343332663231653362223b733a33323a223232333034346236326435613163626161323532646261316333356534303465223b733a33323a223936316239363063656337383139313666636338393137326531356163326336223b733a33323a226166363165666334366630353833613235386330353565306665373664623739223b733a33323a223431313432353465383732343539353866636437663035386436666437663366223b733a33323a223365323237333765393932353335326664333634363437326231386239366130223b733a33323a223833613134306535303066393865623831316161333065636430353165303130223b733a33323a223537386338663366323665653133343934396561653130323236353937396139223b733a33323a226437356136383838363364653262373363356631366333333265323930643437223b733a33323a223664373530653438373630356236393064653433373466316630313534366537223b733a33323a223839356137393261396338303639656635636438313166346639356135313064223b733a33323a223832366365613231396137333465626433393534353338396331373330653865223b733a33323a223161623433633633306432303932663164383533356661633238666163313062223b733a33323a226262393633666136383038626563333563376563643137376238653563386235223b733a33323a223463343066623135343835363437626161303762376332656631346463303430223b733a33323a223237373837633730343363333133396237623732656239316436333065313663223b733a33323a223537646137626638663134376536323139616536396161363536363531343866223b733a33323a223139653234393065643935386266623230336664333763313937396166643233223b733a33323a223361643662623165643438663032623339396131366163383339356239613661223b733a33323a223665353663353130613739393532613638643664366364373466643930306235223b733a33323a223539313961343733303332323666393936383961313236376634613961336363223b733a33323a223334373234303433333762366537363863393164343665656231386132663932223b733a33323a223738303039613038386530323936363231643934656666333462373538333837223b733a33323a223833666539376434316164343730373936633939333132396564353365653339223b733a33323a223535386666356265626332363861613132663036626637353163633662383663223b733a33323a223230343863653264346236626333393531303662376362303930636465326562223b733a33323a223433333535353763613733386632386166323835623135316133613036653035223b733a33323a226262313334323136663936306137356438393631333665633564373266373462223b733a33323a226439656635666238623163353362353336336630633664386134383862316565223b733a33323a223639393563663333666163633166663461323362626563636265363964336435223b733a33323a223933343662643634323034616137633130353965636265316634313538626166223b733a33323a226661633238306661616666646232386261323937666464386137306531356235223b733a33323a223136633731633137323536306139363630396465323664616365653865623439223b733a33323a226161323537643065333261376137363866653132393230616262633961643464223b733a33323a226532356661373738376531656237396138333737343664366265636165303538223b733a33323a223239393231303564653562303533623565663738646661616539323036633766223b733a33323a223733633539323866643230666562626235356139613130313732313532656664223b733a33323a226664313833653032656430323332303639393338373631333966626265623362223b733a33323a223635363839363265393638623430346338373866626662636163373633306637223b733a33323a226237303634646132643433393432343934383061386236366634613765316637223b733a33323a223837363532353234366237356131313263346434323834363662633137613739223b733a33323a226263633762663063633761636264396465623535656133633963396139346539223b733a33323a223461646338363539633233313663393963333831336165373439623136333263223b733a33323a223836616664633236626466333739383633646134363961376565653536333265223b733a33323a223366363930316163356330353334346161356534653933383233363462316263223b733a33323a226361666464353638343465373766303962626565633630363339616564646565223b733a33323a226464323336633064316361393066376633393736303666626535656338636337223b733a33323a223165343862303731643462373966396662656237643735336364313963393738223b733a33323a226234653862323164643636343030396533663633303838313530623339386337223b733a33323a223335343462616363666337663663636434386637306236366139383162653166223b733a33323a223732306564646466343539656462326339346136656332353237626439613338223b733a33323a226337363562376662356263396639336364346537346637393034636461656261223b733a33323a223832376239636164343930363632636538633131646438636537393761613363223b733a33323a226265306161363938326165346630323063653637333736353337343933643862223b733a33323a226432636261353663393239613362633037623231313134306565626164383632223b733a33323a223465333333653861663632396638313064633536303933393439393535643863223b733a33323a223963616634623930326234616631393165386432316531613330636435633462223b733a33323a226261323065323066356335616631623163396537353634343839366233363866223b733a33323a223263663963633938653762326339396366343761366163613839363437656366223b733a33323a226138663333373433353865663836616638303431353033653765646335376130223b733a33323a223634376131656165663032333564333432646261383839353632616539346632223b733a33323a223035326361393564333331323263386536313836643731643266613533306134223b733a33323a223163663234613030336538376165646130323230303433376239386133656664223b733a33323a223434663431386663376664363335363730613532646638643839373633306636223b733a33323a223637383434663732613339646536313538303537386632643035356461666364223b733a33323a223965633232663932356266336166316430616430373134383235663662346434223b733a33323a223164353062366536613530333261653030666138303562616661316166663936223b733a33323a223063316337316638323233633136316435303732623535376639346635646534223b733a33323a223165616434623737353930353931373430366332613134353663636631383036223b733a33323a223238366539646164633464323864326235326564633937346338333136393733223b733a33323a223133323263656332366236366662313334333138636432636534633330393863223b733a33323a223435376161626631633035313464313066303434633030373036323539376538223b733a33323a223536373931306261363539633062366165346335333339353435613236386463223b733a33323a223130623133386437313530666564343037373730366537663366366435643938223b733a33323a223966666639666663653365383839326231386363376438396338636361393163223b733a33323a226162626261393533366566303931353566636330386662383738393361386331223b733a33323a223538363636653839393035323164376666633431656461613464333065343734223b733a33323a223930353864353631313333373630356530343537303461363364356133646231223b733a33323a223664376239633363653735366536363665306332396464373435633534663137223b733a33323a223136343538343533373439323530306334323533316635653265303137346435223b733a33323a223830636664346263653630613038363031653363666261336666396165313032223b733a33323a223632633763343463613562383231646536623339323135353735326336656166223b733a33323a223336343033653663346362643430663661336638626563343239643963313732223b733a33323a223062623233316536386233616164396535626362376261333864353765346631223b733a33323a226563613639613734313064623537613938626362633265623562336234323766223b733a33323a223533643739393165373662663835353434393138323365613535363835393437223b733a33323a226239303539363662386333373932646535336164646334346531363530643262223b733a33323a226536646164663265653361626639636538353433303265613036353438306633223b733a33323a226665653865613633663831316362613937353336326365346461376636636336223b733a33323a223938383465616661646464656666323663646631613961313663663632316332223b733a33323a223034396536313165323762346132346663353039366332373939303739383535223b733a33323a226334366634393838623338306664653465373562633935623366323330386530223b733a33323a223838383438353633373534666365303731393334396230393262633164366635223b733a33323a223061376235356662666539383239613839666638336438643730636332303631223b733a33323a223339643935663232323965396431356362363238303630333430396164376336223b733a33323a223565663539643630643239326563646465323531386230353835363465393835223b733a33323a223231323530643237303432663930613238363436643833393932363563393562223b733a33323a223563393136373361373936653637313834616133356266613165313965343263223b733a33323a223730333065623136323038376466366539636665303333346132313033366166223b733a33323a223730373033653633356131623333613765343361623164326330626163656534223b733a33323a226365393165356238633761336662303265636463613239353639326536623664223b733a33323a226232373230326262343363326237653530313036646634393433623137646665223b733a33323a223638663536616630306164386664663061383637633838373937383161343466223b733a33323a223731386161636161613934386165636134646238353364333333303430626231223b733a33323a226462306163373962373761326566333964393763363432643734383866363936223b733a33323a226138366235383564366635653136643331666566383138626365313464306131223b733a33323a223336326338363062363763366433326339366637303562663166323066343938223b733a33323a226538656334333132316634366266366533323664303939653964373665653031223b733a33323a226334393939653035353634383563343136656537303132316330363839626565223b733a33323a223964666233623361386264373430613933336136343563623630373532323439223b733a33323a223031383961353632646333613330303365623236383264343133653937623161223b733a33323a223333653931616539336234643739643537313661653735336531656363326336223b733a33323a226334613861353737383035353636303962616561383435616231386236663030223b733a33323a226339353831306263363064643764623939626634643064613435656337303761223b733a33323a226233386663303239663231613738383430373435393066613936376461623636223b733a33323a223861633033613363646361653930316533346332373438343238343431626565223b733a33323a226661656531613865313766666165623530653062356562323063303935633937223b733a33323a226162353732663731376239666539663761383833653338663239643133393837223b733a33323a223837633834636536366438313638623030663732323661306537636530306333223b733a33323a223033623466613433656364366330373761356339633938326531363936303634223b733a33323a226662633831653532373337356139353765333062303038356334306139663039223b733a33323a226632383366363766373933333162356538383064366466616333666633613230223b733a33323a223034303766306230383939326334666431386432613336636430623530323963223b733a33323a223038333830623863326366373239633062333366633665376162363035613166223b733a33323a223037366137323235323865653736353233656461646237343863343039333836223b733a33323a226335316562343664366239653336313931343938316634333534313137343632223b733a33323a223434333461376261643234353636316661646234363233363534623763393161223b733a33323a226333373137313035663964316664303061653633643633313237386161383434223b733a33323a223132306530343438323730336132366261656330626164623132623464323661223b733a33323a223338643663646231313162393738396166613937653163326631613339363638223b733a33323a223832336337316162363833323732623932646537333463353235636534646232223b733a33323a223638396235343830616264326230393939643063656535616364343362366330223b733a33323a223438626365303631396531323639306532323338313761313934356336323430223b733a33323a226135396664376463616162616365363762653639366366326665636366373830223b733a33323a226362663765386236383935363732353764363961383236656330343335646538223b733a33323a223662353634356661613262643338386665653735333830386130383636663433223b733a33323a223165303461653166626437333130613833626166326130303566323863316665223b733a33323a226332663437346663383537333030313738306635663136656531373166353930223b733a33323a223631313839323664313136663332646130313065663864653166656335393732223b733a33323a226461303836343338623036333062363932373531396564333236346537323432223b733a33323a223132643734326336363461306435326161663162393937653538336663643030223b733a33323a223733373736336265353631303639633638663363663766656664633464373337223b733a33323a223235663636663333323062663064303832393538656562613131346431353738223b733a33323a223866313836643336613133663163353637326131376436656539633434616337223b733a33323a226539373232383133326361653036383965346539656332343165653965353066223b733a33323a226462356266663739336334373039366564613039383832393038386561633634223b733a33323a223338373530353238636437623735363439393430386133306265376334653162223b733a33323a223039393736383161393535323665366634656630656461663030306661333530223b733a33323a223536346331353563633935613566316566353832393766643431373439323862223b733a33323a223137316233316662613031613632306361636539303731323733343036663637223b733a33323a223537653663303862663130623537613537366666353864356638613636343733223b733a33323a223330366265666236376132333530396337343665613866613831343135333535223b733a33323a226639356664336166346563333433666231386532393637653930626338616263223b733a33323a223936386437663432313362363464653433646435616435333331623339396566223b733a33323a223961643739663862636335636366623666313663626338353130636539633237223b733a33323a226661663937643662343531373538653464303133353234646130393139316464223b733a33323a226632366364616262666534663035313637346333633964373937363366623436223b733a33323a223636303762336164356532656232653535623837653364383162623362393963223b733a33323a226639363330656235643930616138633830626535303939653762396138353231223b733a33323a226637306262333561356463386331303364613837653837656366316635303564223b733a33323a226564626662323661323337636137616161383963633363343630646366313661223b733a33323a226138386236613934393338393732303566303865666465363165653930383463223b7d733a343a2268617368223b733a36353a2261383862366139343933383937323035663038656664653631656539303834632d6564626662323661323337636137616161383963633363343630646366313661223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f7265736f7572636574656d706c617465666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a313033313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a393a7b733a33323a226662393562666536323935616338303930356362303139623166613138303238223b733a33323a223566323662626439616261633130656634366337653536356533636162653332223b733a33323a226230356538613936303134366139623363376133323036316139376438626334223b733a33323a226431393265346433636563333864633937376639363533383664646238393462223b733a33323a223335383539343664636135646461306435316566383431393439343532343831223b733a33323a223331626335306339343761363535616465373233633032393034646134303836223b733a33323a226439613137363461393735343636313464646139303132323335346230383631223b733a33323a223631626234616630386165383632643736623262303939653462653236393530223b733a33323a223236646638373038646330363838363137666231646466353235363939343131223b733a33323a223331303139663064616133646234373133623330643066303833346331623965223b733a33323a226164346535623562616331616162303163316662616132386338633335623237223b733a33323a226433656532346434666431633733633139333362373662346432613839616538223b733a33323a223734613236343335303638653531633831313233623638356635616638633662223b733a33323a226635316334613339633339383236663930636661343061396337623665363532223b733a33323a223231323932396365616462386139316237313332666238626562666433326238223b733a33323a223761323965353136343138366137336362366232623833356461666533623463223b733a33323a223165616230363630633135343032326232623062376338383837333637363033223b733a33323a223263656236333037616334613462653436653134323361353533633866366237223b7d733a343a2268617368223b733a36353a2232636562363330376163346134626534366531343233613535336338663662372d3165616230363630633135343032326232623062376338383837333637363033223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a313931323a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a32303a7b733a33323a223231643666326438636564633963663363313465333430346563313530373366223b733a33323a226134303933363739353064646166613234636536313334313034353564376335223b733a33323a226234366235326334653937623261386434383562616137333262353835663363223b733a33323a226334646438383333343639306135346637346234636466366437303438656364223b733a33323a223335316132653637613262326434356335653735373930613137386532343638223b733a33323a223136633233653762363530313163333361623065366365353632643138326231223b733a33323a226533633263353463383463393733326630323830356366633230363430396664223b733a33323a226134353666313164393635396239356265333838343039636663336338623362223b733a33323a223564303439633231656132396233303531346361613664633865656431623066223b733a33323a223662623938353932633962393435303734633265316132393662323038356266223b733a33323a226131353733326466666335393863633264353562636531363434663161373839223b733a33323a226366343966313361663836666265373836633830336430616231343530623661223b733a33323a223233346332363333356630373166356261613238623837643631303935326231223b733a33323a226539643466643539336261303839323838323235646165616630636361653233223b733a33323a223430346439363261343836363935643339323631323338626238393430343664223b733a33323a226466616331333366363430313062653331626538613638333339373136383066223b733a33323a223462306437373535336139306335653936656232323331633363663631333364223b733a33323a226136316432343766316534353365373435326631346561363662663234383033223b733a33323a226563623462373762326462323566373431346531346462636165623335626130223b733a33323a226336353037343465363633616165653435663563346232303961636133656364223b733a33323a223662363137303365333361613630653334363064366666613733663035316161223b733a33323a223835643065616665373661383266336465346132386436646434626437353263223b733a33323a223139366536313162386134366636646364616638393861323437333638386363223b733a33323a226332313965336664333131303334633733623030343065356464313265653939223b733a33323a226263353835363537363634306336373538613930333735643130326236613866223b733a33323a226364356138626333656335343464323563616561613930326162356630646566223b733a33323a223866653131653035373836613866306336656434643939613232363739303565223b733a33323a223165313834326463373566643538383362306134313430633236323432316463223b733a33323a223430376261346664323034343438383132336565646566396635326337633065223b733a33323a226532633665643831393634333862303537363361643138663736663462656537223b733a33323a226266656536656338633762363035333139653236643237616638636531363732223b733a33323a223835346263336136623237323131396137383461383531333536643363636236223b733a33323a226466383232333166323736333166336164316433646433633032633033376532223b733a33323a223230373164366565373266613133356333363932316630336533353431646662223b733a33323a223938623834313538633666343930343461643062366163306438656132623639223b733a33323a223037323438386663316530313433653433356633363661373637656236363237223b733a33323a223861616630353637643331626564383839333935643536653837313431663738223b733a33323a226665353634666564373833653130633030373331323066373137613836373764223b733a33323a223763313633613533333862336162656536386263356337303236653430383634223b733a33323a223063663436346430383962356631643766623938373339323663303731346539223b7d733a343a2268617368223b733a36353a2230636634363464303839623566316437666239383733393236633037313465392d3763313633613533333862336162656536386263356337303236653430383634223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f766f636162756c617279757064617465666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3339313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a313a7b733a33323a223236396663326439383333373962373736346336666237653034613432303937223b733a33323a223466663763323165393865613332663962656161633366633632643238636164223b7d733a343a2268617368223b733a36353a2234666637633231653938656133326639626561616333666336326432386361642d3236396663326439383333373962373736346336666237653034613432303937223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d, 1605286251),
-('eob7htpctvgp263b2bdj14qrgp', 0x5f5f4c616d696e61737c613a363a7b733a32303a225f524551554553545f4143434553535f54494d45223b643a313630353139363736332e3635373035333b733a363a225f56414c4944223b613a313a7b733a32383a224c616d696e61735c53657373696f6e5c56616c696461746f725c4964223b733a32363a22647062396770767072386231316a6e373768623273333474666e223b7d733a34323a224c616d696e61735f56616c696461746f725f437372665f73616c745f6c6f67696e666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630353139323234383b7d733a33323a224c616d696e61735f56616c696461746f725f437372665f73616c745f63737266223b613a313a7b733a363a22455850495245223b693a313630353139393135393b7d733a35333a224c616d696e61735f56616c696461746f725f437372665f73616c745f7265736f7572636574656d706c617465666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630353139363236303b7d733a34343a224c616d696e61735f56616c696461746f725f437372665f73616c745f636f6e6669726d666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630353230303336333b7d7d72656469726563745f75726c7c733a33343a22687474703a2f2f6c6f63616c686f73742f6c64772f6f6d656b612d732f61646d696e223b4c616d696e61735f56616c696461746f725f437372665f73616c745f6c6f67696e666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3339313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a313a7b733a33323a223632346638613937653262366666356264653036323433393737326264363435223b733a33323a223661616633343731393738373664343162643864376462613562643264623464223b7d733a343a2268617368223b733a36353a2236616166333437313937383736643431626438643764626135626432646234642d3632346638613937653262366666356264653036323433393737326264363435223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f417574687c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3232333a7b613a343a7b733a373a2273746f72616765223b613a313a7b733a373a2273746f72616765223b693a313b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4f6d656b614d657373656e6765727c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3230353a7b613a343a7b733a373a2273746f72616765223b613a303a7b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a313637323a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a31373a7b733a33323a223137656236643463343436386130303833623939666231326336613563353534223b733a33323a223231613566363763656636326236343463636431353266613465306261643462223b733a33323a226433333231393036386233366663393936396664383563376331303164323163223b733a33323a226361306231386435386164306535326632366566303732316564373338633336223b733a33323a223739396137626564353161613532363333373831303631643761333534663161223b733a33323a223965656565336166626639343137373265633338633361326138626562306232223b733a33323a223861636636376161666466376438613332393834333136393961653462363065223b733a33323a223638633066613238303561626162353335643261333764343664643964306336223b733a33323a223035383134363062323737386133393666363433326232643962663164343863223b733a33323a223237613235343134313065386263383631346231313939663039353935656232223b733a33323a223635346634623930313835346436383461376265343665323932643561386566223b733a33323a223164643761383664646466663066323138376538656332613963386633356438223b733a33323a226135666633396636363731393236303837343236366162643462363932633939223b733a33323a223065303736613065363262663735646237336230313065316537636561323335223b733a33323a223030393133393336386461636233666263646166363333353336393431636162223b733a33323a223334343830613162646239663939613537626435646630383734326261653164223b733a33323a226331396663316537316635393761363239343238326161653261306639613739223b733a33323a226530383736643363333530353131613030353463393439303363656634353634223b733a33323a223466373737623433356337306531663063363731386465336464346338643466223b733a33323a226230353764366462316235356336666563316438313436643065393136653464223b733a33323a226664386265303134633636656563633036633866343338383830616633386335223b733a33323a223866656161366261353462333133383633643832643133623763356361613461223b733a33323a226134656663656364636332386632303763616331613737383264313934343430223b733a33323a223134346636653566633338386232383865626164633335623938623439353435223b733a33323a226532323332316438636336353539346638643865383935303533363464313766223b733a33323a226532646439653632633238303866303834333035316136306335393364363061223b733a33323a226531626638386436383935633637313363353730303266306462393766636533223b733a33323a226662373835326336383633623332373135313330363364643234643637373735223b733a33323a226238343639623538616537623037653263396430376638376462343037626361223b733a33323a223665306232613366336536353966343966636339646531376336356234626533223b733a33323a223332343031303830636233303034343261356435353834396330313130343461223b733a33323a223761356462386533356637346564333137366161643133613534393064306162223b733a33323a226235306432653037656535363764336338353538656435326336353666653966223b733a33323a226263343466303938333862353030393364646330303466646236336137616637223b7d733a343a2268617368223b733a36353a2262633434663039383338623530303933646463303034666462363361376166372d6235306432653037656535363764336338353538656435326336353666653966223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f7265736f7572636574656d706c617465666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3437313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a323a7b733a33323a223161643733663430633531623865343065356633643838643330316135363863223b733a33323a223339623463616134356334313736623763373261633933306431353663356437223b733a33323a223965356531303036343266323130626464303633333063616533333764383463223b733a33323a223933313135376263313561393064623732616165616236326536306238633831223b7d733a343a2268617368223b733a36353a2239333131353762633135613930646237326161656162363265363062386338312d3965356531303036343266323130626464303633333063616533333764383463223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f636f6e6669726d666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a313931323a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a32303a7b733a33323a223930303736386534303838383764336665326234616531643564383538656330223b733a33323a226536353738643834343230306235663961396238316631643737366632353339223b733a33323a226539653762323965303537356462383835356239303662333537623263633339223b733a33323a223263663034633262326235376531343438626333343232663062653830333361223b733a33323a223065313237356436623133623131323837323830303161636662386164373733223b733a33323a226333393336323461613338373337386231653632616231373537636237356136223b733a33323a223334383130386237343665306334313931356539303965373261353937363430223b733a33323a223937326330356166393932646563383763623661346237663562323962306435223b733a33323a226338363935393266323134636531393033373163626663303435363765346561223b733a33323a223239636564613936386239656333396136303161663134353137626433656536223b733a33323a223536623530666331663239653535373361616662623965373330643637663865223b733a33323a223063643233626230366162663066653266393464623562623963393037373932223b733a33323a223661613939373639623835343837393562613633313063643234366533363738223b733a33323a223830643133383163623835383734613733343736656632383435613563353633223b733a33323a226430353338653438373037306666383634306263333030336131373930666661223b733a33323a226662653636306462653133343666376439646463613038303130353334343333223b733a33323a226136313766663864653266623862643439386535356565636532343039666537223b733a33323a223061663138653564313366316163383166333733383432333230376131666535223b733a33323a223934666338353034616630386335303933623364663365623138363537336363223b733a33323a223834393838666334663635643461663035383136376133333466656135326633223b733a33323a223231616665363438396663616530363330393932376562386561393039363462223b733a33323a223130663031643764343339656365376265306132636639303731376530313835223b733a33323a223832373834393434333463376363326537376466636232303036323732313233223b733a33323a223532656665636438303939353335363532306565323866343131633662613137223b733a33323a226232616564373765366433646532653631323038323939626536343465643736223b733a33323a226539383939393764343036343633383438323062363565333532346232333261223b733a33323a223464376335363135613532373164646335333261326666306662383230656538223b733a33323a223365666136656664373639373839363736333365616461376361313731353839223b733a33323a223432333063616432393936313062633464303035366338303163303737393331223b733a33323a223264313430303665343765663463643339316161653130346430656537313138223b733a33323a226261623635663461356135663564663064623630663338393931623631336236223b733a33323a223061393538343739653633393232353366333331316163306636613438613665223b733a33323a226538326338323265626166646665646232356637316335626237333061383364223b733a33323a223233616265666430626262383930616562303039333930656663326638336131223b733a33323a223165366538313039363636633834376530323566623936376439656265313331223b733a33323a226439333535313737616562396636343734663834363336313864313365633634223b733a33323a226362626365346235336165623631626439383263356634626332353236333930223b733a33323a226464356238636432666333663837383361663966396439363736316364303033223b733a33323a223363303836633334303730326437373131653063656134666664666432393434223b733a33323a223537306462386638346562383530363033383731643635326561316165333565223b7d733a343a2268617368223b733a36353a2235373064623866383465623835303630333837316436353265613161653335652d3363303836633334303730326437373131653063656134666664666432393434223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d, 1605196763);
-INSERT INTO `session` (`id`, `data`, `modified`) VALUES
-('fkp7ogkckjci1uoi4oq8h5je6n', 0x5f5f4c616d696e61737c613a373a7b733a32303a225f524551554553545f4143434553535f54494d45223b643a313630343836363637362e3636313132333b733a363a225f56414c4944223b613a313a7b733a32383a224c616d696e61735c53657373696f6e5c56616c696461746f725c4964223b733a32363a22386f303373656a6669646873376473633966356d6f3637357575223b7d733a34323a224c616d696e61735f56616c696461746f725f437372665f73616c745f6c6f67696e666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630343739353836393b7d733a33323a224c616d696e61735f56616c696461746f725f437372665f73616c745f63737266223b613a313a7b733a363a22455850495245223b693a313630343837303132393b7d733a34373a224c616d696e61735f56616c696461746f725f437372665f73616c745f766f636162756c617279666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630343836333032323b7d733a34343a224c616d696e61735f56616c696461746f725f437372665f73616c745f636f6e6669726d666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630343837303132303b7d733a35333a224c616d696e61735f56616c696461746f725f437372665f73616c745f7265736f7572636574656d706c617465666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630343835393933313b7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f6c6f67696e666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3339313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a313a7b733a33323a223937323131353235393062626530383530656539373665646432613061303337223b733a33323a223135313863343839353238653834303765313966356262633066633863663538223b7d733a343a2268617368223b733a36353a2231353138633438393532386538343037653139663562626330666338636635382d3937323131353235393062626530383530656539373665646432613061303337223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f417574687c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3232333a7b613a343a7b733a373a2273746f72616765223b613a313a7b733a373a2273746f72616765223b693a313b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4f6d656b614d657373656e6765727c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3230353a7b613a343a7b733a373a2273746f72616765223b613a303a7b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d72656469726563745f75726c7c4e3b4c616d696e61735f56616c696461746f725f437372665f73616c745f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a313139323a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a31313a7b733a33323a226562366632383864343665613731323332346263323965656530616566323235223b733a33323a223463383665383062373137343238653332643632333964366536396266626435223b733a33323a223435363061633764323865376262643266396435346539393036316635626661223b733a33323a223364636666653766333337316135613538303738366438656465646136316565223b733a33323a223037333433313665323136386439663761336564653938353733616436666631223b733a33323a223636353337333531313861313061633537643963663261313761333262326535223b733a33323a226232636239383735636235353038333839353234316438383762613138346665223b733a33323a223434326639383930373233353936316532336638303736333733316439623930223b733a33323a223763363663343138623534656337366338363633303933373635333334333438223b733a33323a223164336531663130656564313365656661333330363638366561316165333264223b733a33323a223839386533313639393139353433333038383837316365333333333563323839223b733a33323a223634323234646439626465393939383564663838626437653935613536383139223b733a33323a223632616561613437363431386130373865643338663534306161396637663032223b733a33323a223536393137663637613632613136353135396430626266623861653830343933223b733a33323a223735313763343130623661623133333438646339366261303632303362306236223b733a33323a226433346563316639333933323132613732623239666137353637363933383734223b733a33323a226634353637633332323836386536613533333464383235393234666634343361223b733a33323a223762363335393761343333643261386439623664383461656437383862323061223b733a33323a226265376263353137633035343932356532653765353364366338666136363561223b733a33323a226638623264643733353062386339393834623332376235343434636666663564223b733a33323a223236616465313337666131346464386230343932346661323734326132323835223b733a33323a223834306639656334396434613335363830303161626432383334613233323661223b7d733a343a2268617368223b733a36353a2238343066396563343964346133353638303031616264323833346132333236612d3236616465313337666131346464386230343932346661323734326132323835223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f766f636162756c617279666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a323837323a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a33323a7b733a33323a223235306663333532333333366231333136343162653665626238373466623231223b733a33323a226231393437343663326462616636383338383132653761353439346336653565223b733a33323a226235323663333530633761616163316466393132366534363538646466323564223b733a33323a223162393031393633323438646335316434636436393466353639313864313764223b733a33323a226166363830393236613162346437353866623333393333643131333138393531223b733a33323a223764653637646131653764396431336530623364326638623436323266376365223b733a33323a226363643763633762376664313462623063626661653166323431313430626235223b733a33323a226635373033383131333136336136346665346131393139313063643438326431223b733a33323a223938353535376466316264643864623738323934366636313563313932373831223b733a33323a223134393937613931663266663335633764356636623361346562643533376134223b733a33323a223264643536363966366335343339366163363134393338613636393762393030223b733a33323a223438373532306531393831613266386463633934613134326166393133366639223b733a33323a223432303464626135306133373039383363666330383636346138323635343338223b733a33323a226266616166396139383737643661393662343865336638373036663863626662223b733a33323a223064303739353734393964393362653031373730323165393066323035383036223b733a33323a226164316264373838376530656636373264383531616631646130386135313433223b733a33323a223734323239626235336564313738353339356136616531643838343436663161223b733a33323a223835383464623732323831353135303136623731376361303365666165366432223b733a33323a223232653163346365636363393939383333306332323064343033383437323332223b733a33323a226132613236636165323936333636313934333032616639383133356461643834223b733a33323a223538336639666362383863353561633963376234323037343335663266396533223b733a33323a223766333734303061653133386263643535336163663634323032613066313236223b733a33323a226264313738303938306237613736333437373237646335373961333061616433223b733a33323a226462653031326537623533613633663831356165313361656561313834363361223b733a33323a223361376466313263303432393534623332396564323536353561613931353664223b733a33323a223963303933646462396361616137303165363330363965663737363136326637223b733a33323a226535643335383639373832326333666164366232653337323938326266353461223b733a33323a223835626165326435356233613263623435303634366239623162663835363261223b733a33323a226565633261373037353133666133323837353236626532646437366262656235223b733a33323a223461396634636237306564396562313436333563346263663635626334363764223b733a33323a223862396537643264613963623761393331323037613633643137656233356661223b733a33323a223166633834386635633437323463633664313837356164303038646263646230223b733a33323a223130613331333661373866386266643563663761316331323161326234353336223b733a33323a226463393931373639636439303437316230663530383833303136613464383964223b733a33323a223562363737633933353030643834653134396238613163323831306536386630223b733a33323a223562623133346439643065373032366230653032633630373664336263666665223b733a33323a223332656339656633366261366165626430623763303464353861666564363766223b733a33323a223430396661356439613964393635346566313265393536643836636361373933223b733a33323a226462663039333037303631396337303262326234396333336339323132323233223b733a33323a226638666638376130666639633330323032326232616663383334303536663939223b733a33323a226163353261386230306562353265323431613661366534636564303037636138223b733a33323a223839653336303738663632323332613865313963306136353564376230666164223b733a33323a226464303830616534383638343835646632396261346434636332613838346464223b733a33323a223330383264323138343261386336316262376439646461313666356265356564223b733a33323a223936636662646330616239356531663464633563653336333630373166643434223b733a33323a223939383637653638623662613132623363353138323365643466346533616337223b733a33323a226261663332663563666264316139373662666133396334623861353539373037223b733a33323a223832636663393137666136633239373634623037336333373735323837353461223b733a33323a223965626462323730393761633563306662323166323766373064306663386266223b733a33323a223231643836323130343564373336383235616362383438373938366135313139223b733a33323a223261376166383165626364376336303232373064393038656162306565333661223b733a33323a226461343033633933666261653663303762313736376564333233323862656333223b733a33323a223830616332656564363233613831623231373462663964356139626139316332223b733a33323a223634363831633935313165656261623630333835666139636662303033373866223b733a33323a223765316534643437646330336338306664316132616435663964663366383361223b733a33323a226638633030626462623432363636346563623964663332613633343034373961223b733a33323a223735653139343739383132383735366130656462303030336239333462373263223b733a33323a226236376131356532303665653337363563643763396530653433316332623130223b733a33323a223563663333623734633235396234366566346666343165373861636431653532223b733a33323a223230316263393534623930643334333830353162383334633164303261653363223b733a33323a226232623761386364613837313366393861393438316632373565616563656665223b733a33323a223634303030333832383762613766376365343963343235663833613561623439223b733a33323a226239663164626434373036326566333639373762346239316164613434633535223b733a33323a223730386463653132643036353164646239663263393262666262383738353137223b7d733a343a2268617368223b733a36353a2237303864636531326430363531646462396632633932626662623837383531372d6239663164626434373036326566333639373762346239316164613434633535223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f636f6e6669726d666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a343037323a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a34373a7b733a33323a223738343730333738396465376531363233366466656164656333633937316336223b733a33323a223265366566333633643334613534346132333966306563386665353637636331223b733a33323a226164613432333438643834336531363439623935323432643937616166333864223b733a33323a223334303933396164313639363735616562373235653161663437333562313535223b733a33323a223831353032663839396336353035613762633164376236376430353866373436223b733a33323a226362396466633831616262303263383636626163346138666539303432376133223b733a33323a226133663436303931313436613962666533303634316131366534616334613733223b733a33323a226432653639633034353432663163393135313362653261646331636165343135223b733a33323a223037663233323962666638636662383866653965343361373763646535666431223b733a33323a223064643334613063396538306363366632386664663736303361353738316335223b733a33323a226230633535323130393536353734386363643566326136313663653963353862223b733a33323a226338366133643737373363313534313532343665663138326532623537346638223b733a33323a223262373261313831646431323534353034666466313832306464626663643261223b733a33323a223234333737336464626637376438343231613364326632643233346661656565223b733a33323a223064666531656466333134383937383466333838316534636238623037643230223b733a33323a223261396164643034323032306437333963396463313663343863613530363133223b733a33323a223962663565666237656265666262313163336538346265643164613465623562223b733a33323a223730643139346663333363386436393264383964613439623331663735633330223b733a33323a223939663536303939376530393739353765353261356338353232643762616536223b733a33323a226561666138323161363461303366363864383136636438353531663366366335223b733a33323a223532313837353639356533363534373938353138336634383538626130633135223b733a33323a226433663463386662333739343535326162666333643362666464633234646535223b733a33323a223965396461623733633034303635333961353332303862636262613834353233223b733a33323a226235343961333465633663336362646335383633386434323532333263656366223b733a33323a223831393061323739313839366366396562323532313964306432353934316233223b733a33323a223564303432663563643466636166366230616130653962316435646431616530223b733a33323a223063623435363965383666313432626362396235326235613936326136666530223b733a33323a226233343339613931386531313736313835656235613639346135656237626430223b733a33323a223538623436396136353063636164633861306165623563346632373564353862223b733a33323a226333363833356530613264383764633830656466323235376164343539626636223b733a33323a223236373266386232363832316337636430666630366661666463393865613430223b733a33323a226338376338646564666361313139393364333932613161616338643462626132223b733a33323a223431616431336161386530653265366237393739626163656662646430333031223b733a33323a223736363039666234646262333232626638306336656333323966366533366637223b733a33323a223335313039363939643936336235356534663665613535646635656539363932223b733a33323a226363353965636332323366373464363234663037363938306336376661666634223b733a33323a223336356235393865653636333138383465333937396430336661633238336238223b733a33323a223030656465353461323739653234346161613262633036316462376138313139223b733a33323a223331383463663462343737353765333131366438373365613637333533663634223b733a33323a226462626564656630333761323336313132623234306365663266356237343365223b733a33323a223935643233313031353330636639376164346330393430353230643163653934223b733a33323a223937353739366439653662326263383266313834326430386464333263643961223b733a33323a226430383663383335386662383938356335663266393466666632353730396634223b733a33323a226262363736613962346262366230306438343633383261343831336665373434223b733a33323a223436336361326163326361323736343234396335313434633761303664323037223b733a33323a223766633135333762663331636461356135343631346562656535313638613539223b733a33323a223336633633333661616563646239666433396466343532386264626630366531223b733a33323a223862353635353661333731336263623533663765316161316230313732653362223b733a33323a223738316432653065303366656463613261626531366532613835356430346436223b733a33323a226337616333633734623965373333353637306536613866366438323461366563223b733a33323a226334376234363939336232386130623561313762346432623739386463396661223b733a33323a223764393936616662366536383135363430356634663761383233663962333833223b733a33323a223238373936376330306262393332636337343734653964656561343064623566223b733a33323a223366343664633937336231626162633239343965393436393635653264336433223b733a33323a226266393763323561623764363361396536383862326362646432373038666332223b733a33323a226333613638363464613139656165373733623333356232656664323262343664223b733a33323a223530306561393631653439346535373162343031356166656266353462616434223b733a33323a223230633534663565626461393766633637616634613930333666306466313064223b733a33323a223534343336383937303632336262616637643064366338646639393665366364223b733a33323a223436396137376532366366633863346131333833383730393036653765623439223b733a33323a223061623964306164646365643736323739373034363263303530373531313835223b733a33323a223066383034383539636337356632376337623364396531383361303036346665223b733a33323a223862383835626262623033326638393962376238313035313434643735386130223b733a33323a223432396462666664386462363339363463663939363039393866353764316335223b733a33323a226262656233316666353534643262353766613966303366626435633464356161223b733a33323a226134616235393737336665326532313639326361656361343333633932656562223b733a33323a226365323337366630346262316435313939343333383338643261376362626439223b733a33323a226631646265346632613863313631663536333335653339356432633238373338223b733a33323a223965303831653534303131303930636435313134326664636163653932356262223b733a33323a223736653564333064333261653630633864366261346131633235346565326433223b733a33323a223339383936633063653365623962303638326263663761663239376636373865223b733a33323a226663636632326136643235383233316333303664653862343362316632336333223b733a33323a226564303037326138353433623437313331306638306565376634343436663838223b733a33323a223563376435633832656133326636663932616462323836623335633833626464223b733a33323a226166373339343234353266333431313162376134646230323032393636306239223b733a33323a223234386435393439666331383462643864663438396631333037356133616266223b733a33323a223964303133346333393662613439303030633533613765643664653832323561223b733a33323a226665343466616164343534383932613239396462323939313135613164316234223b733a33323a223533306331306661316231343761353935313133366539333765313532356566223b733a33323a226464313739636131363435326165323136663632303235323930333463393538223b733a33323a223064373731393631636434363230313136643638646634643365323638326637223b733a33323a223839346565626633633730646361333239363366313764316131363539366566223b733a33323a223934343233646264663664313036313062626539393035383336623537343263223b733a33323a223030303438306334643131373362396137323538353930343461383339633239223b733a33323a223634636133386334303930313738396665356533373038366134396536356666223b733a33323a223561643063393131323863353031333833383735616161643531326464303261223b733a33323a226230616463383662626239373961343562666664633365336463666162343034223b733a33323a223437346434396661666330336133386634393530656134336638326437356265223b733a33323a223332616639356666633062646231343563323339333236616436663334656239223b733a33323a226636396337333230336262366264653238386132346561626239303634393839223b733a33323a226636356365356539383838323135373036386466376334386532346262323735223b733a33323a223531653266323361663834646330346430636536343632653464336664323838223b733a33323a223235626662323038633861643631356334343761373961643235353466366131223b733a33323a226635396633643532346265356264383161356362373035663162623332306465223b7d733a343a2268617368223b733a36353a2266353966336435323462653562643831613563623730356631626233323064652d3235626662323038633861643631356334343761373961643235353466366131223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f7265736f7572636574656d706c617465666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3437313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a323a7b733a33323a223932333762626165623333383531386632653863653166396665666339366230223b733a33323a223439623764643663303937383039346661626163396532373037633535333437223b733a33323a223931346133306634396234333564663236633434306465353331343838323131223b733a33323a226130323831303363373363613436396634633030386664643964636533666263223b7d733a343a2268617368223b733a36353a2261303238313033633733636134363966346330303866646439646365336662632d3931346133306634396234333564663236633434306465353331343838323131223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d, 1604866676),
-('j7gtuh5c02vvmecbjgaqme7jlk', 0x5f5f4c616d696e61737c613a383a7b733a32303a225f524551554553545f4143434553535f54494d45223b643a313630353030353930322e3136363232383b733a363a225f56414c4944223b613a313a7b733a32383a224c616d696e61735c53657373696f6e5c56616c696461746f725c4964223b733a32363a22756f333770686d63333666667071646130616b32326a676f6370223b7d733a34323a224c616d696e61735f56616c696461746f725f437372665f73616c745f6c6f67696e666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630353030333835313b7d733a35333a224c616d696e61735f56616c696461746f725f437372665f73616c745f7265736f7572636574656d706c617465666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630353030353331353b7d733a34343a224c616d696e61735f56616c696461746f725f437372665f73616c745f636f6e6669726d666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630353030393037393b7d733a33323a224c616d696e61735f56616c696461746f725f437372665f73616c745f63737266223b613a313a7b733a363a22455850495245223b693a313630353030373330353b7d733a35393a224c616d696e61735f56616c696461746f725f437372665f73616c745f7265736f7572636574656d706c617465696d706f7274666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630353030383330373b7d733a34373a224c616d696e61735f56616c696461746f725f437372665f73616c745f766f636162756c617279666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630353030383138353b7d7d72656469726563745f75726c7c733a33343a22687474703a2f2f6c6f63616c686f73742f6c64772f6f6d656b612d732f61646d696e223b4c616d696e61735f56616c696461746f725f437372665f73616c745f6c6f67696e666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3339313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a313a7b733a33323a226562326632646639363039303564366636653464663762653161326337356433223b733a33323a226433316437623339383438373738653235376162616466383930656463343663223b7d733a343a2268617368223b733a36353a2264333164376233393834383737386532353761626164663839306564633436632d6562326632646639363039303564366636653464663762653161326337356433223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f417574687c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3230353a7b613a343a7b733a373a2273746f72616765223b613a303a7b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4f6d656b614d657373656e6765727c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3237313a7b613a343a7b733a373a2273746f72616765223b613a313a7b733a383a226d65737361676573223b613a313a7b693a313b613a313a7b693a303b733a32333a225375636365737366756c6c79206c6f67676564206f7574223b7d7d7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f7265736f7572636574656d706c617465666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3339313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a313a7b733a33323a223939636433396661316331376630333365653465346265383733333732323736223b733a33323a223330386561623930346330396263326437393833643535643966306535633632223b7d733a343a2268617368223b733a36353a2233303865616239303463303962633264373938336435356439663065356336322d3939636433396661316331376630333365653465346265383733333732323736223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f636f6e6669726d666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3633313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a343a7b733a33323a223062336565333935303238643434386166616136393532626331363130653637223b733a33323a223832363335663261306639386638363362303638636165303039333532373964223b733a33323a223437313366333831623035336638386561656436396132313837646264623036223b733a33323a226366303632626465636435353939626236666134366534623363333834313038223b733a33323a223534613439643837396335306535303838333330653532663835353037396266223b733a33323a223032623438636336336439306535396530316534646331663036326465333466223b733a33323a223333376530306635373035646533353438343631646465336433613863353132223b733a33323a226562373762663266396539333832613438653030333063663631633533623363223b7d733a343a2268617368223b733a36353a2265623737626632663965393338326134386530303330636636316335336233632d3333376530306635373035646533353438343631646465336433613863353132223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3339313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a313a7b733a33323a226134616565306639643165386661343132613530613262333833623233633330223b733a33323a223430653632656363643236336330376566343535393934326162343563323663223b7d733a343a2268617368223b733a36353a2234306536326563636432363363303765663435353939343261623435633236632d6134616565306639643165386661343132613530613262333833623233633330223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f7265736f7572636574656d706c617465696d706f7274666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3535313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a333a7b733a33323a223231313365663330383535613765316662663730376461393834306162373865223b733a33323a226137323832386463616666323363393131353366356332363362323531623637223b733a33323a223033366566393832396439383561623363646436363431643233643734306466223b733a33323a223066623763626261323735383364333664653936653962313866643231323638223b733a33323a226562643338326564616364363432323337303137643238383138393864366661223b733a33323a223635306231383431323234383362646661663539323966306630613564303738223b7d733a343a2268617368223b733a36353a2236353062313834313232343833626466616635393239663066306135643037382d6562643338326564616364363432323337303137643238383138393864366661223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f766f636162756c617279666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3339313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a313a7b733a33323a226133373131616334386363386432633463383463386365346136653536613762223b733a33323a226265386636613434386465383835366261386266333636613938633234623931223b7d733a343a2268617368223b733a36353a2262653866366134343864653838353662613862663336366139386332346239312d6133373131616334386363386432633463383463386365346136653536613762223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d, 1605005902),
-('pf6od3oq2nbss3k3b3ioai5oa2', 0x5f5f4c616d696e61737c613a353a7b733a32303a225f524551554553545f4143434553535f54494d45223b643a313630353031303739372e31363133363b733a363a225f56414c4944223b613a313a7b733a32383a224c616d696e61735c53657373696f6e5c56616c696461746f725c4964223b733a32363a2232377435306431336a65627162746f75393831316d6d6a333162223b7d733a34323a224c616d696e61735f56616c696461746f725f437372665f73616c745f6c6f67696e666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630353030393530393b7d733a33323a224c616d696e61735f56616c696461746f725f437372665f73616c745f63737266223b613a313a7b733a363a22455850495245223b693a313630353031343339373b7d733a34343a224c616d696e61735f56616c696461746f725f437372665f73616c745f636f6e6669726d666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630353031343339333b7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f6c6f67696e666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3437313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a323a7b733a33323a223230653532306632366162666139663364663731366633363230326461356631223b733a33323a226362303761313865633330393966336133303031663362303133343234653836223b733a33323a226238323931376335613363633730636632633232633962613561636439393530223b733a33323a226334343033643836656466313363613839313137326339653963393937366233223b7d733a343a2268617368223b733a36353a2263343430336438366564663133636138393131373263396539633939373662332d6238323931376335613363633730636632633232633962613561636439393530223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4f6d656b614d657373656e6765727c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3230353a7b613a343a7b733a373a2273746f72616765223b613a303a7b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f417574687c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3232333a7b613a343a7b733a373a2273746f72616765223b613a313a7b733a373a2273746f72616765223b693a313b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d72656469726563745f75726c7c4e3b4c616d696e61735f56616c696461746f725f437372665f73616c745f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3837313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a373a7b733a33323a226363643663373632653162326437626165616230653035326535326462636437223b733a33323a223537386432663333626638303266383537366238313832636562663235366333223b733a33323a226637643365356430313636626439383161663434646432636664326331383464223b733a33323a223261613666653734303032383762623365383766313166336566623230666232223b733a33323a223635313534353730366434323763383138343838386332363635656238643231223b733a33323a223238346363336365666466393134386439313734633566646633666163653330223b733a33323a226233346362393162343432623761663563373863633538393631386432636132223b733a33323a223638343031656265666433343066616366663861663665386533303439363332223b733a33323a223633373638313832303832373866346634323062333262393130653432393230223b733a33323a226262306335326530343463353239666364373339363964643766306666663135223b733a33323a226337343561363136343236666331656166343535353031626335633439383464223b733a33323a223135646161343730613062353838623261623732626166646465356636636363223b733a33323a226335313262613363386231383162326137643535336532313031376236623165223b733a33323a223266386236303931646164653166666331663961363261663737393766306230223b7d733a343a2268617368223b733a36353a2232663862363039316461646531666663316639613632616637373937663062302d6335313262613363386231383162326137643535336532313031376236623165223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f636f6e6669726d666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3437313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a323a7b733a33323a226165363733666332613837333363383431633965303639636261306636336639223b733a33323a223263393138653133333332323734313436383037303436386231386534396233223b733a33323a226663636464393134393539643764383361626265303366663261356261346538223b733a33323a223962386334386264356163376638386535353138613765396332326565353563223b7d733a343a2268617368223b733a36353a2239623863343862643561633766383865353531386137653963323265653535632d6663636464393134393539643764383361626265303366663261356261346538223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d, 1605010797);
+('9spp866vd14bsb71otp9s8pjr0', 0x5f5f4c616d696e61737c613a31303a7b733a32303a225f524551554553545f4143434553535f54494d45223b643a313630363539363834372e3335373435363b733a363a225f56414c4944223b613a313a7b733a32383a224c616d696e61735c53657373696f6e5c56616c696461746f725c4964223b733a32363a2268646b616837636a6f386d6836316b31686d3437393870326963223b7d733a34323a224c616d696e61735f56616c696461746f725f437372665f73616c745f6c6f67696e666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630363538323530353b7d733a34373a224c616d696e61735f56616c696461746f725f437372665f73616c745f766f636162756c617279666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630363538333133383b7d733a35333a224c616d696e61735f56616c696461746f725f437372665f73616c745f7265736f7572636574656d706c617465666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630363539393636323b7d733a34343a224c616d696e61735f56616c696461746f725f437372665f73616c745f636f6e6669726d666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630363630303434373b7d733a33323a224c616d696e61735f56616c696461746f725f437372665f73616c745f63737266223b613a313a7b733a363a22455850495245223b693a313630363630303431343b7d733a34353a224c616d696e61735f56616c696461746f725f437372665f73616c745f7369746570616765666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630363538363336383b7d733a33373a224c616d696e61735f56616c696461746f725f437372665f73616c745f666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630363538363339373b7d733a35303a224c616d696e61735f56616c696461746f725f437372665f73616c745f736974657265736f7572636573666f726d5f63737266223b613a313a7b733a363a22455850495245223b693a313630363538363338393b7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f6c6f67696e666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3339313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a313a7b733a33323a223332393533363938316337383130636235373462306539356437366263653962223b733a33323a223163393135303231353665396332396439376435623538346330323765363835223b7d733a343a2268617368223b733a36353a2231633931353032313536653963323964393764356235383463303237653638352d3332393533363938316337383130636235373462306539356437366263653962223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f417574687c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3232333a7b613a343a7b733a373a2273746f72616765223b613a313a7b733a373a2273746f72616765223b693a313b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4f6d656b614d657373656e6765727c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3230353a7b613a343a7b733a373a2273746f72616765223b613a303a7b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d72656469726563745f75726c7c4e3b4c616d696e61735f56616c696461746f725f437372665f73616c745f766f636162756c617279666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3535313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a333a7b733a33323a226237636461313232373862346363636263333535353639373832303434373838223b733a33323a223635336230393365333531396133636361616534346338383337326364396566223b733a33323a223761626338373132323864616635396137303037356239343335383233643761223b733a33323a226335303262323639383838336461396132393737623263303366666364333664223b733a33323a223263646635303035313338303537366437333166386163316231386136653934223b733a33323a223339613232333837636631363136623964313664653335343433373963616261223b7d733a343a2268617368223b733a36353a2233396132323338376366313631366239643136646533353434333739636162612d3263646635303035313338303537366437333166386163316231386136653934223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f7265736f7572636574656d706c617465666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3731313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a353a7b733a33323a223432366665303764356337663265663937333533313635363066396363346461223b733a33323a223534653830313432396339613263626466363735623564326237353834643338223b733a33323a226431343563373536653462643232333164363331313462633463346132346666223b733a33323a223730333739393835363831346534636536356533353032356130613037303130223b733a33323a223030613065623232303165666138386662393130373638633263666264393931223b733a33323a223630313832613738326430613237323965343334326264633863623030613432223b733a33323a223563383236306563396364643135616636653736643532386463653032326231223b733a33323a226663646538383330353262653632373534396130343062366661633737616437223b733a33323a223536306534326436643433636231353533643261633730396161626438393038223b733a33323a226533306537633334393334343134396461323632363532333464363437623535223b7d733a343a2268617368223b733a36353a2265333065376333343933343431343964613236323635323334643634376235352d3536306534326436643433636231353533643261633730396161626438393038223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f636f6e6669726d666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a363331323a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a37353a7b733a33323a226539326166346463346130326335343735383934333931383563373331393538223b733a33323a223065383466303261636138616232653038333638353334386261376338303566223b733a33323a223735616632623638613965306438366638653537643463653066656364626632223b733a33323a226465303732353439383361616631663335313366393837613731323262353635223b733a33323a223332643239636330313265663961626631343365336331356166313938386561223b733a33323a226566306438376132346362383534626139363535356231663632363232326130223b733a33323a226266393434663364313635656161373232346332386134646565316635653534223b733a33323a223438613634313432646638613133633463386531363232613232383062343334223b733a33323a223966613163306666663938343365613231643965323464373865306133646261223b733a33323a223834616262373238646630643932386663663766386635633863383932613737223b733a33323a223836303965643566333761343266336662383538313166646535366534366562223b733a33323a223061373461653332376162333864313332643834353238616466653331393639223b733a33323a226666343739616661663438303938336434396631363563663030636236373237223b733a33323a226462343438373936623066393038613766303564313030613938373434663165223b733a33323a226432636666616263306135383532626362393561636561343833373335633365223b733a33323a223462373030653130636232326665653364363937623439373964613634313362223b733a33323a226434393566383737633766636630326662613131373732386230633332333061223b733a33323a223438333762313237353966363465396666653130323263316632366236353165223b733a33323a223066353865363531333431353862646661373436373037323861613638393031223b733a33323a223539356563306138663036303963626130656231656131333462363366313631223b733a33323a223365656432316134383534366665366138303633316562313164333864393630223b733a33323a226130626339353763313962656164613637633535316334646263316164376234223b733a33323a223861626339663664663332653037363931393037636139653534636465646632223b733a33323a223839613861663563653130643432633930633638316137396162336637613633223b733a33323a223562323264306231343532373963303230653739666539356630666262393830223b733a33323a223963623761386365373361333033616131316237653939623130633933343339223b733a33323a223830366631316232313633323966633938393961316431613838666230343039223b733a33323a223234313265313236383032326439643166623562393763373064343338633633223b733a33323a223165316337663436393536316336393835366137376330373431336438333233223b733a33323a226536633736356662303436376662636535373833323137656630643732633466223b733a33323a223136313831656137643934616162383130356434626339656564376537303663223b733a33323a223330616463373161653064363039636663363032653736313735386232666238223b733a33323a223137306339356165313863653033336339623832346231653164643063633364223b733a33323a226330636361663531663434613531643563323765636137363965313162633261223b733a33323a226561613561313333326264323132616364343932643061613561316262643864223b733a33323a226261396538623633613237623639363337613634643965326536373539306334223b733a33323a226438383266663230303137323863343133303863313534636361353735303937223b733a33323a223238656162643066353435656237313764633132626564626637643332653961223b733a33323a226263356438353366663730326263643366626234306164383838356138326433223b733a33323a223231643531646439663064376639396630323330353864376662623538653462223b733a33323a223565653936653236656162323836656665386563613338663135623033393565223b733a33323a226661393337363461643830613739323865333636366262306131366233633261223b733a33323a223566656432633636623234313736633266666439663839313863656135376134223b733a33323a226266616336623432333138353230393562313162633864623432393032313631223b733a33323a226364636463623365616632356135633730653733613939663233376364306234223b733a33323a226563613235333464666631613561643931393166376161653334396432333061223b733a33323a223339656462613037393636663632326261396665653033343339333030373163223b733a33323a223366383037656561363261316532303336393931313835356366353237343065223b733a33323a226136376433333365316437383362396532376661346633643635386434326234223b733a33323a223136353830666430373432326531633634663661643961623466393963303035223b733a33323a223132343937666262376339626364663162633534363131393039396133636438223b733a33323a223030373138376365613236636437643065396233656237393839323634626337223b733a33323a223166303832653537663866336533303837336362613461346132656231653966223b733a33323a223238336662303535663038353930613430313533376532616637306138353661223b733a33323a226465663338353835643262343966393838373633333031393565653362636534223b733a33323a226664353833333762303262383763316638396134353331396363663233353934223b733a33323a223464366430613266306634663132383939656339646334346661616135313766223b733a33323a226334333862303730376536373634643738393761306161383961623066626663223b733a33323a223832303966363639663866386335643732656164386263393235666634363036223b733a33323a226137393066663966663065343062303265356364393563383734666530343962223b733a33323a223436343436373333616330356232666262383335386332396637643334313838223b733a33323a226662646164373838633265356533326139353534306339333639326333333934223b733a33323a223231346130333237323936373165333133383461383665653636356661663633223b733a33323a226365363966663433666564383230393730306261353137646534313831666532223b733a33323a223432396338643837386234656637373036386632613930386531643661323666223b733a33323a226132366336313334313964663962636630316435353563333636303164613266223b733a33323a226237386434333635393530373466393164343066313035656335393430336364223b733a33323a223236353764306664363431313363326438346332343163656630653531303363223b733a33323a226462333233333333306536623762353939613138653632636265373265643837223b733a33323a226132383966333363373865323233313835653838326461653538663833653734223b733a33323a223065653461663039306635366662323362656365636337626135636335666662223b733a33323a226630623931666130383236626461383332383038646663623864653761663961223b733a33323a223163303330366462313264383033343066303238653161656538643831343033223b733a33323a223266383932373639303563353632626433336237626432306337373466373261223b733a33323a226261616538356639386131326636386565356161326563383830623435323538223b733a33323a223538653630636331396332626533393235393231643563366331613066306334223b733a33323a226433333235366362616636383062393562663465643734373664343765336164223b733a33323a226130333663383738333932396237343430383934366466613761333930366531223b733a33323a223635313065306530633264623534666337323664373336363261633366646437223b733a33323a226335316432303537326430633830343530393966376534373665646333343666223b733a33323a226234373138353232386330346437666239346533643564643065626633346630223b733a33323a223931323364323166323362396336353334393766316464303033383862646633223b733a33323a226665303364306139323163656166623131373934383566306164303131356165223b733a33323a226232643339313039383734336265383364663331393432303532663961663731223b733a33323a223633316364333634613233396666383739376230646661326433333938313364223b733a33323a223661326237376361333065333537646430613939326537613861653536613665223b733a33323a226564353861633538323263303230323530313237656234613866626538663331223b733a33323a223536366531643262383365383535393263633530383638393962323132663232223b733a33323a226466623462396433623064313966613235626135626630323065383865653631223b733a33323a223637633165663437306639643561363236313665353663383263613236353733223b733a33323a226230626637653164336238383232663932386366623362363765376266313734223b733a33323a226138613661313163633339636633616138626139333164323939616538633962223b733a33323a226562393839353232326464393131336235613563383035366431643139346532223b733a33323a223934653666393661336530326131366238623966663865643834303263396563223b733a33323a223238323766313265303062336532653830663863663365633731313135633137223b733a33323a223966613738653731363337623434656661663363383830623336633466386135223b733a33323a223038386138333937656265363437613831303838353432356139333762386639223b733a33323a223336383930663431303536616632363034643961396635366530316336663763223b733a33323a226339356131393931356666376264633064663164346563333333393166343966223b733a33323a226662313430363766363234316137353431616433623134386661373133643038223b733a33323a223835353066633166623365353666663334373861343666366331363433636638223b733a33323a223734643933646164383164386531633866366361316231316636643235363339223b733a33323a226262326335633161623934653863656561383565303834633539393763653233223b733a33323a223638313736313036653333306435653839336331303835316433643166656130223b733a33323a226261343938363831366361366664666131613135623230326462343466346231223b733a33323a223633313738313763313134363230613864623530616361396561653039353062223b733a33323a223030353564636163666238393633363062313835383166663532393666383363223b733a33323a223161623838666533663661623433656133326339336664313431386335666365223b733a33323a223635633831356138393034333233626234356335383637373031303430626466223b733a33323a223664373033313834373835336531373932633035656233643338303933353265223b733a33323a226330386137636366306439343431366139333561363033373065393761323661223b733a33323a223732623132323864363531383435383661306165353635303366656334346263223b733a33323a223139643361353364313865303965623565316366653934643566636134343038223b733a33323a223939353166356134313836346338303734396466343231663262626136363133223b733a33323a223036396235653236383639623433313630356138326337356137303334623765223b733a33323a223631393165363537653735313263356338656463383461326665633034616266223b733a33323a226635623163353932363762396566613832396365623263326662366536653934223b733a33323a226331313230336161663165306437653936663466373863653932626465616463223b733a33323a226136613538633963386461363235663736613238313932313639383232643262223b733a33323a223539376364666633353463383231613966383134666462356330643633333436223b733a33323a223333643933336661343661633261313932393265336263653834353839373135223b733a33323a226364666531666332376531656134383736333462666161623262633635646630223b733a33323a226537313336383836393066636534316132633034363830646536343439363461223b733a33323a226439326432313438326563316334386139386135633532303836373462343530223b733a33323a223630663063643065343536373666646464363939313539626439356561313630223b733a33323a223035653136376363613437313663363361376434646466343236333435626434223b733a33323a223131663564333766333835353662633733663236666565613461616536656632223b733a33323a223232346239636136313565396363373337356364396265393739396632373836223b733a33323a223766616636353561353334363965613564346330326661626134663965326333223b733a33323a223532623534313865336439303231643835373366323438626164356139366639223b733a33323a226134383635303562343636396666376533343336326663383061333731343534223b733a33323a223238313335313331366164343232356561613839646631633934656336326639223b733a33323a223738306664316662323365333632613130663563343433323136643735323631223b733a33323a223366613937623534353166633532633133393336353662363635613363363632223b733a33323a226263653964626536643365346136373763396361323038663838333163616639223b733a33323a223235323439613863656439383538303835313966353230396439346237626531223b733a33323a223435373461363466323766616462653461376635646234326635623563653834223b733a33323a223935383131393235616362343831356235383764316233613531333633363065223b733a33323a226539363531303339363934656233646562623062303466656166393365366165223b733a33323a226434346133633162353835353963376663373033653234656364613130393330223b733a33323a223634656531313430363837623762353435303631396261633063353564633338223b733a33323a226231633838373963393161616236343563363235306464656534316462353235223b733a33323a223133376137316238393666623934653839383066343962383963393638616637223b733a33323a226464373265623833633632616437646164663263373538356639366261323363223b733a33323a223934653238656466636265616131396563623939653630663532623966376135223b733a33323a223630303132313265366637383336346465643864333433643234653337373061223b733a33323a226536373235623866663665613931353233306334396134656566346432396664223b733a33323a226437353133653466383461373065623336383361373936333466626261356333223b733a33323a226266343635653230313065663137663532396435373463653938666235613365223b733a33323a226635376163656265303665323931666564326162303661366434366564653535223b7d733a343a2268617368223b733a36353a2266353761636562653036653239316665643261623036613664343665646535352d6266343635653230313065663137663532396435373463653938666235613365223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a323633323a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a32393a7b733a33323a226539386366653538316464393337623239366562316433303430373464666239223b733a33323a223936356635353336363936666538653462333130356534616135616362363735223b733a33323a223431613662396532643434613935616266613433326665363039333963316438223b733a33323a223030393437313163313736353062336365633536363739316438376538633161223b733a33323a226462326165396638363036333138326562346133616439313035636161383863223b733a33323a226365656464343465613566653934326266363532633137623238353034346630223b733a33323a223634383239386431376335616362373830363534396566636339323536623439223b733a33323a223439643736316638383133343564303236363136323133633434383432393633223b733a33323a226666633035633463353665623533666331343762373765643833326466353561223b733a33323a226331326563666261656232633265323965373036333435626664346332343632223b733a33323a226130363662343963623365363433316131613263363031313139313038306137223b733a33323a223930323735623734303936353262393437643765306135646338313336623435223b733a33323a223830333232393431346239653165303935373832383266653837633863626334223b733a33323a223334396135336630323033626437373631303865343239376165616533376431223b733a33323a226165333735383565363330393663373662343938303738653962636537313231223b733a33323a226538666639656433666566656338333333663563646434383739313135633064223b733a33323a226530366136636631313032316534313130386531633031633730343531376132223b733a33323a226330373838346138613436366135353661393737656336623861613165653366223b733a33323a223634653764623432353936333937393338306530633265323632373639326262223b733a33323a223965653764366561366131313834393162323939333536326339386235613739223b733a33323a226238336164383333633865623531323963623632313035386539356364333666223b733a33323a226264303664663430656535333461333539333633366563376563383335373863223b733a33323a226536303830663233646332636466353363613433363962616164623761303536223b733a33323a223535366166383061623638386234383561303664643965333534653237363364223b733a33323a223861313333633033383965316237306233653035336639623965643839313630223b733a33323a226163633939343062386636373536336530333739666132366162313130313134223b733a33323a226237646436313639323434336639646339353239613734333633663438383035223b733a33323a226431336635633837393733383738333531653836396130353632626439336361223b733a33323a223830333032323764343832326233643963373939333032386136346635626161223b733a33323a226164373334633763616666613263336539306239386633663065633462623265223b733a33323a223830643637393835313739373534323964336439666165323464343563346665223b733a33323a223662306366633833316633643435653336363936333036633461663965353962223b733a33323a223338343630636633623361323633353231393463646166396361393434643464223b733a33323a223031366333316638633464616539356366656632303266326232663130343465223b733a33323a226632393235373531386234616130616666386137383732353330633435623134223b733a33323a226661353062626534646130386539316265396237646261613662613161643930223b733a33323a226330626165333232373737386339646537356538386438633930666362376530223b733a33323a226362623936366239303833393961653465306634616337666330343134393765223b733a33323a223133393231636433653233396530626465653936343139316662306634303030223b733a33323a223237376263663837626665666438313664383264393966333966613530613135223b733a33323a223562306230333633316138386434633631366463353531386635353637303535223b733a33323a223831376130643237333430623364383737383532623065613737323737613764223b733a33323a223835636262343064626232323832303035366366633466663635356534666165223b733a33323a223538666132393564313838346463336461326630323537356130353561323231223b733a33323a223365356165633537633832353064363565346363666336306336363366663538223b733a33323a223930313733303162373433313830626335326535643339396266636338353865223b733a33323a223463306461376536356635646136616630383266356461313931326434626132223b733a33323a223165353232333639346666343866653261653539663238633762666435313034223b733a33323a223436306635363137303039376461653264643731656461373234343563303237223b733a33323a223030303039346630636365373132653661373664626632663033343631643266223b733a33323a223138363634383737376663613362366361643735396431326637616631313637223b733a33323a223066336433303136396432366234623161323137363061653331303332333166223b733a33323a226664626463623737646661613836313665636264306231366262363833353766223b733a33323a226134333264353934343665383164363831623866636539313865363663353037223b733a33323a226330343862373338346238376165383538613932316430383762396139653363223b733a33323a223634323934316434373264363735346437303030653162383732333237656238223b733a33323a226137313862376232336538383562373561346335656162366166666538653535223b733a33323a226133363732393436333439636533316434613736653934393335326363646137223b7d733a343a2268617368223b733a36353a2261333637323934363334396365333164346137366539343933353263636461372d6137313862376232336538383562373561346335656162366166666538653535223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f7369746570616765666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3339313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a313a7b733a33323a223430353637353832616465643137326637373363393535386332363138663931223b733a33323a226436343564653530346230323835633564663666613638313233383933373266223b7d733a343a2268617368223b733a36353a2264363435646535303462303238356335646636666136383132333839333732662d3430353637353832616465643137326637373363393535386332363138663931223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3535313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a333a7b733a33323a223133633636663162643036353465643234333430313133623066353037386635223b733a33323a226265343534313561343530323334643938343365376239376234653936353462223b733a33323a226163336438316666626139616636663834666336336236656363613031626535223b733a33323a223638393965376165393334396664616563633963623333323634306138353264223b733a33323a226365353037356539336335383262653632326437326333353366313663633039223b733a33323a223961393565336435316138616666363964633134313365313538303836356138223b7d733a343a2268617368223b733a36353a2239613935653364353161386166663639646331343133653135383038363561382d6365353037356539336335383262653632326437326333353366313663633039223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d4c616d696e61735f56616c696461746f725f437372665f73616c745f736974657265736f7572636573666f726d5f637372667c433a32363a224c616d696e61735c5374646c69625c41727261794f626a656374223a3339313a7b613a343a7b733a373a2273746f72616765223b613a323a7b733a393a22746f6b656e4c697374223b613a313a7b733a33323a226339366639626339353435663165323131316239623134663566343233386531223b733a33323a223961386661653734616466386431316432323065656563613964353837363463223b7d733a343a2268617368223b733a36353a2239613866616537346164663864313164323230656565636139643538373634632d6339366639626339353435663165323131316239623134663566343233386531223b7d733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b733a31333a2241727261794974657261746f72223b733a31393a2270726f74656374656450726f70657274696573223b613a343a7b693a303b733a373a2273746f72616765223b693a313b733a343a22666c6167223b693a323b733a31333a226974657261746f72436c617373223b693a333b733a31393a2270726f74656374656450726f70657274696573223b7d7d7d, 1606596847);
 
 -- --------------------------------------------------------
 
@@ -880,11 +1201,9 @@ INSERT INTO `session` (`id`, `data`, `modified`) VALUES
 -- Structure de la table `setting`
 --
 
-DROP TABLE IF EXISTS `setting`;
-CREATE TABLE IF NOT EXISTS `setting` (
-  `id` varchar(190) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `value` longtext COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '(DC2Type:json_array)',
-  PRIMARY KEY (`id`)
+CREATE TABLE `setting` (
+  `id` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '(DC2Type:json_array)'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -892,13 +1211,13 @@ CREATE TABLE IF NOT EXISTS `setting` (
 --
 
 INSERT INTO `setting` (`id`, `value`) VALUES
-('administrator_email', '\"thierry.wen@laposte.net\"'),
+('administrator_email', '\"groupe2@gmail.com\"'),
 ('extension_whitelist', '[\"aac\",\"aif\",\"aiff\",\"asf\",\"asx\",\"avi\",\"bmp\",\"c\",\"cc\",\"class\",\"css\",\"divx\",\"doc\",\"docx\",\"exe\",\"gif\",\"gz\",\"gzip\",\"h\",\"ico\",\"j2k\",\"jp2\",\"jpe\",\"jpeg\",\"jpg\",\"m4a\",\"m4v\",\"mdb\",\"mid\",\"midi\",\"mov\",\"mp2\",\"mp3\",\"mp4\",\"mpa\",\"mpe\",\"mpeg\",\"mpg\",\"mpp\",\"odb\",\"odc\",\"odf\",\"odg\",\"odp\",\"ods\",\"odt\",\"ogg\",\"opus\",\"pdf\",\"png\",\"pot\",\"pps\",\"ppt\",\"pptx\",\"qt\",\"ra\",\"ram\",\"rtf\",\"rtx\",\"swf\",\"tar\",\"tif\",\"tiff\",\"txt\",\"wav\",\"wax\",\"webm\",\"wma\",\"wmv\",\"wmx\",\"wri\",\"xla\",\"xls\",\"xlsx\",\"xlt\",\"xlw\",\"zip\"]'),
-('installation_title', '\"Test\"'),
+('installation_title', '\"trombinoscope\"'),
 ('locale', '\"fr\"'),
 ('media_type_whitelist', '[\"application\\/msword\",\"application\\/ogg\",\"application\\/pdf\",\"application\\/rtf\",\"application\\/vnd.ms-access\",\"application\\/vnd.ms-excel\",\"application\\/vnd.ms-powerpoint\",\"application\\/vnd.ms-project\",\"application\\/vnd.ms-write\",\"application\\/vnd.oasis.opendocument.chart\",\"application\\/vnd.oasis.opendocument.database\",\"application\\/vnd.oasis.opendocument.formula\",\"application\\/vnd.oasis.opendocument.graphics\",\"application\\/vnd.oasis.opendocument.presentation\",\"application\\/vnd.oasis.opendocument.spreadsheet\",\"application\\/vnd.oasis.opendocument.text\",\"application\\/vnd.openxmlformats-officedocument.wordprocessingml.document\",\"application\\/vnd.openxmlformats-officedocument.presentationml.presentation\",\"application\\/vnd.openxmlformats-officedocument.spreadsheetml.sheet\",\"application\\/x-gzip\",\"application\\/x-ms-wmp\",\"application\\/x-msdownload\",\"application\\/x-shockwave-flash\",\"application\\/x-tar\",\"application\\/zip\",\"audio\\/midi\",\"audio\\/mp4\",\"audio\\/mpeg\",\"audio\\/ogg\",\"audio\\/x-aac\",\"audio\\/x-aiff\",\"audio\\/x-ms-wma\",\"audio\\/x-ms-wax\",\"audio\\/x-realaudio\",\"audio\\/x-wav\",\"image\\/bmp\",\"image\\/gif\",\"image\\/jp2\",\"image\\/jpeg\",\"image\\/pjpeg\",\"image\\/png\",\"image\\/tiff\",\"image\\/x-icon\",\"text\\/css\",\"text\\/plain\",\"text\\/richtext\",\"video\\/divx\",\"video\\/mp4\",\"video\\/mpeg\",\"video\\/ogg\",\"video\\/quicktime\",\"video\\/webm\",\"video\\/x-ms-asf,\",\"video\\/x-msvideo\",\"video\\/x-ms-wmv\"]'),
 ('pagination_per_page', '25'),
-('time_zone', '\"UTC\"'),
+('time_zone', '\"Europe\\/Paris\"'),
 ('version', '\"3.0.1\"'),
 ('version_notifications', '\"1\"');
 
@@ -908,33 +1227,28 @@ INSERT INTO `setting` (`id`, `value`) VALUES
 -- Structure de la table `site`
 --
 
-DROP TABLE IF EXISTS `site`;
-CREATE TABLE IF NOT EXISTS `site` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `homepage_id` int(11) DEFAULT NULL,
-  `owner_id` int(11) DEFAULT NULL,
-  `slug` varchar(190) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `theme` varchar(190) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `title` varchar(190) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `summary` longtext COLLATE utf8mb4_unicode_ci,
-  `navigation` longtext COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '(DC2Type:json_array)',
-  `item_pool` longtext COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '(DC2Type:json_array)',
+CREATE TABLE `site` (
+  `id` int NOT NULL,
+  `homepage_id` int DEFAULT NULL,
+  `owner_id` int DEFAULT NULL,
+  `slug` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `theme` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `summary` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `navigation` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '(DC2Type:json_array)',
+  `item_pool` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '(DC2Type:json_array)',
   `created` datetime NOT NULL,
   `modified` datetime DEFAULT NULL,
   `is_public` tinyint(1) NOT NULL,
-  `assign_new_items` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UNIQ_694309E4989D9B62` (`slug`),
-  UNIQUE KEY `UNIQ_694309E4571EDDA` (`homepage_id`),
-  KEY `IDX_694309E47E3C61F9` (`owner_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `assign_new_items` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `site`
 --
 
 INSERT INTO `site` (`id`, `homepage_id`, `owner_id`, `slug`, `theme`, `title`, `summary`, `navigation`, `item_pool`, `created`, `modified`, `is_public`, `assign_new_items`) VALUES
-(1, NULL, 1, 'trombino', 'default', 'Trombino', NULL, '[{\"type\":\"browse\",\"data\":{\"label\":\"Parcourir\",\"query\":\"\"},\"links\":[]}]', '[]', '2020-11-02 10:47:20', '2020-11-02 10:47:20', 1, 1);
+(1, NULL, 1, 'trombinoscope', 'default', 'Trombinoscope', NULL, '[{\"type\":\"browse\",\"data\":{\"label\":\"Parcourir\",\"query\":\"\"},\"links\":[]}]', '[]', '2020-11-28 16:59:03', '2020-11-28 16:59:03', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -942,19 +1256,13 @@ INSERT INTO `site` (`id`, `homepage_id`, `owner_id`, `slug`, `theme`, `title`, `
 -- Structure de la table `site_block_attachment`
 --
 
-DROP TABLE IF EXISTS `site_block_attachment`;
-CREATE TABLE IF NOT EXISTS `site_block_attachment` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `block_id` int(11) NOT NULL,
-  `item_id` int(11) DEFAULT NULL,
-  `media_id` int(11) DEFAULT NULL,
-  `caption` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `position` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `IDX_236473FEE9ED820C` (`block_id`),
-  KEY `IDX_236473FE126F525E` (`item_id`),
-  KEY `IDX_236473FEEA9FDD75` (`media_id`),
-  KEY `block_position` (`block_id`,`position`)
+CREATE TABLE `site_block_attachment` (
+  `id` int NOT NULL,
+  `block_id` int NOT NULL,
+  `item_id` int DEFAULT NULL,
+  `media_id` int DEFAULT NULL,
+  `caption` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `position` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -963,17 +1271,11 @@ CREATE TABLE IF NOT EXISTS `site_block_attachment` (
 -- Structure de la table `site_item_set`
 --
 
-DROP TABLE IF EXISTS `site_item_set`;
-CREATE TABLE IF NOT EXISTS `site_item_set` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `site_id` int(11) NOT NULL,
-  `item_set_id` int(11) NOT NULL,
-  `position` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UNIQ_D4CE134F6BD1646960278D7` (`site_id`,`item_set_id`),
-  KEY `IDX_D4CE134F6BD1646` (`site_id`),
-  KEY `IDX_D4CE134960278D7` (`item_set_id`),
-  KEY `position` (`position`)
+CREATE TABLE `site_item_set` (
+  `id` int NOT NULL,
+  `site_id` int NOT NULL,
+  `item_set_id` int NOT NULL,
+  `position` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -982,26 +1284,22 @@ CREATE TABLE IF NOT EXISTS `site_item_set` (
 -- Structure de la table `site_page`
 --
 
-DROP TABLE IF EXISTS `site_page`;
-CREATE TABLE IF NOT EXISTS `site_page` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `site_id` int(11) NOT NULL,
-  `slug` varchar(190) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `title` varchar(190) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE `site_page` (
+  `id` int NOT NULL,
+  `site_id` int NOT NULL,
+  `slug` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `is_public` tinyint(1) NOT NULL,
   `created` datetime NOT NULL,
-  `modified` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UNIQ_2F900BD9F6BD1646989D9B62` (`site_id`,`slug`),
-  KEY `IDX_2F900BD9F6BD1646` (`site_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `modified` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `site_page`
 --
 
 INSERT INTO `site_page` (`id`, `site_id`, `slug`, `title`, `is_public`, `created`, `modified`) VALUES
-(1, 1, 'welcome', 'Bienvenue', 1, '2020-11-02 10:47:20', '2020-11-02 10:47:20');
+(1, 1, 'welcome', 'Bienvenue', 1, '2020-11-28 16:59:03', '2020-11-28 16:59:03');
 
 -- --------------------------------------------------------
 
@@ -1009,17 +1307,13 @@ INSERT INTO `site_page` (`id`, `site_id`, `slug`, `title`, `is_public`, `created
 -- Structure de la table `site_page_block`
 --
 
-DROP TABLE IF EXISTS `site_page_block`;
-CREATE TABLE IF NOT EXISTS `site_page_block` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `page_id` int(11) NOT NULL,
-  `layout` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `data` longtext COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '(DC2Type:json_array)',
-  `position` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `IDX_C593E731C4663E4` (`page_id`),
-  KEY `page_position` (`page_id`,`position`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE `site_page_block` (
+  `id` int NOT NULL,
+  `page_id` int NOT NULL,
+  `layout` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '(DC2Type:json_array)',
+  `position` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `site_page_block`
@@ -1034,17 +1328,12 @@ INSERT INTO `site_page_block` (`id`, `page_id`, `layout`, `data`, `position`) VA
 -- Structure de la table `site_permission`
 --
 
-DROP TABLE IF EXISTS `site_permission`;
-CREATE TABLE IF NOT EXISTS `site_permission` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `site_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `role` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UNIQ_C0401D6FF6BD1646A76ED395` (`site_id`,`user_id`),
-  KEY `IDX_C0401D6FF6BD1646` (`site_id`),
-  KEY `IDX_C0401D6FA76ED395` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE `site_permission` (
+  `id` int NOT NULL,
+  `site_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `role` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `site_permission`
@@ -1059,28 +1348,11 @@ INSERT INTO `site_permission` (`id`, `site_id`, `user_id`, `role`) VALUES
 -- Structure de la table `site_setting`
 --
 
-DROP TABLE IF EXISTS `site_setting`;
-CREATE TABLE IF NOT EXISTS `site_setting` (
-  `id` varchar(190) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `site_id` int(11) NOT NULL,
-  `value` longtext COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '(DC2Type:json_array)',
-  PRIMARY KEY (`id`,`site_id`),
-  KEY `IDX_64D05A53F6BD1646` (`site_id`)
+CREATE TABLE `site_setting` (
+  `id` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `site_id` int NOT NULL,
+  `value` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '(DC2Type:json_array)'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `test`
---
-
-DROP TABLE IF EXISTS `test`;
-CREATE TABLE IF NOT EXISTS `test` (
-  `Test1` int(11) NOT NULL,
-  `Test2` int(11) NOT NULL,
-  `Test3` int(11) NOT NULL,
-  `Test4` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1088,26 +1360,23 @@ CREATE TABLE IF NOT EXISTS `test` (
 -- Structure de la table `user`
 --
 
-DROP TABLE IF EXISTS `user`;
-CREATE TABLE IF NOT EXISTS `user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `email` varchar(190) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(190) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE `user` (
+  `id` int NOT NULL,
+  `email` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created` datetime NOT NULL,
   `modified` datetime DEFAULT NULL,
-  `password_hash` varchar(60) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `role` varchar(190) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `is_active` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UNIQ_8D93D649E7927C74` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `password_hash` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `role` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `is_active` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `user`
 --
 
 INSERT INTO `user` (`id`, `email`, `name`, `created`, `modified`, `password_hash`, `role`, `is_active`) VALUES
-(1, 'thierry.wen@laposte.net', 'Yrrieth', '2020-11-02 10:26:21', '2020-11-02 10:26:21', '$2y$10$cqtc.vcT.i6dpwKHhiD/ke1.bkV8kQa/9Sn/Z..Rvi3.PEBFdhysa', 'global_admin', 1);
+(1, 'groupe2@gmail.com', 'trombinoscope', '2020-11-28 15:55:04', '2020-11-28 15:55:05', '$2y$10$nKg2UyjudWXjGOiyigW0tepFsPCTGjIFJXRRUPlGac0WA2xw1.leK', 'global_admin', 1);
 
 -- --------------------------------------------------------
 
@@ -1115,27 +1384,11 @@ INSERT INTO `user` (`id`, `email`, `name`, `created`, `modified`, `password_hash
 -- Structure de la table `user_setting`
 --
 
-DROP TABLE IF EXISTS `user_setting`;
-CREATE TABLE IF NOT EXISTS `user_setting` (
-  `id` varchar(190) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `value` longtext COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '(DC2Type:json_array)',
-  PRIMARY KEY (`id`,`user_id`),
-  KEY `IDX_C779A692A76ED395` (`user_id`)
+CREATE TABLE `user_setting` (
+  `id` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` int NOT NULL,
+  `value` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '(DC2Type:json_array)'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Déchargement des données de la table `user_setting`
---
-
-INSERT INTO `user_setting` (`id`, `user_id`, `value`) VALUES
-('csv_import_automap_check_names_alone', 1, 'false'),
-('csv_import_delimiter', 1, '\",\"'),
-('csv_import_enclosure', 1, '\"\\\"\"'),
-('csv_import_global_language', 1, '\"\"'),
-('csv_import_identifier_property', 1, '\"\"'),
-('csv_import_multivalue_separator', 1, '\",\"'),
-('csv_import_rows_by_batch', 1, '20');
 
 -- --------------------------------------------------------
 
@@ -1143,136 +1396,125 @@ INSERT INTO `user_setting` (`id`, `user_id`, `value`) VALUES
 -- Structure de la table `value`
 --
 
-DROP TABLE IF EXISTS `value`;
-CREATE TABLE IF NOT EXISTS `value` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `resource_id` int(11) NOT NULL,
-  `property_id` int(11) NOT NULL,
-  `value_resource_id` int(11) DEFAULT NULL,
-  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `lang` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `value` longtext COLLATE utf8mb4_unicode_ci,
-  `uri` longtext COLLATE utf8mb4_unicode_ci,
-  `is_public` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `IDX_1D77583489329D25` (`resource_id`),
-  KEY `IDX_1D775834549213EC` (`property_id`),
-  KEY `IDX_1D7758344BC72506` (`value_resource_id`),
-  KEY `value` (`value`(190)),
-  KEY `uri` (`uri`(190))
-) ENGINE=InnoDB AUTO_INCREMENT=179 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE `value` (
+  `id` int NOT NULL,
+  `resource_id` int NOT NULL,
+  `property_id` int NOT NULL,
+  `value_resource_id` int DEFAULT NULL,
+  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `lang` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `value` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `uri` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `is_public` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `value`
 --
 
 INSERT INTO `value` (`id`, `resource_id`, `property_id`, `value_resource_id`, `type`, `lang`, `value`, `uri`, `is_public`) VALUES
-(1, 1, 185, NULL, 'literal', '', 'WEN', NULL, 1),
-(2, 1, 186, NULL, 'literal', '', 'Thierry', NULL, 1),
-(3, 1, 188, NULL, 'literal', '', '16701702', NULL, 1),
-(4, 1, 187, NULL, 'literal', '', 'thierry.wen@laposte.net', NULL, 1),
-(5, 1, 201, NULL, 'literal', '', 'M2 THYP', NULL, 1),
-(6, 1, 189, NULL, 'literal', '', 'Yrrieth', NULL, 1),
-(79, 1, 194, NULL, 'literal', '', 'C', NULL, 1),
-(80, 1, 194, NULL, 'literal', '', 'Java', NULL, 1),
-(81, 18, 186, NULL, 'literal', '', 'Khoriushina', NULL, 1),
-(82, 18, 185, NULL, 'literal', '', 'Arseniia', NULL, 1),
-(83, 18, 188, NULL, 'literal', '', '20009013', NULL, 1),
-(84, 18, 187, NULL, 'literal', '', 'asya1isa@yahoo.com', NULL, 1),
-(85, 18, 201, NULL, 'literal', '', 'M1 CEN', NULL, 1),
-(86, 18, 189, NULL, 'literal', '', 'asyalisa', NULL, 1),
-(87, 18, 193, NULL, 'literal', '', 'Français, anglais', NULL, 1),
-(88, 1, 194, NULL, 'literal', '', 'C#', NULL, 1),
-(89, 18, 195, NULL, 'literal', '', 'Photoshop', NULL, 1),
-(90, 18, 199, NULL, 'literal', '', 'Intragram, Youtube', NULL, 1),
-(91, 18, 1, NULL, 'literal', '', 'Arseniia', NULL, 1),
-(92, 1, 194, NULL, 'literal', '', 'HTML', NULL, 1),
-(93, 19, 185, NULL, 'literal', '', 'Elisa', NULL, 1),
-(94, 19, 186, NULL, 'literal', '', 'DILLMAN', NULL, 1),
-(95, 19, 188, NULL, 'literal', '', '18904153', NULL, 1),
-(96, 19, 187, NULL, 'literal', '', 'dillmann.elisa@gmail.com\n', NULL, 1),
-(97, 19, 192, NULL, 'literal', '', 'Prestashop', NULL, 1),
-(98, 19, 189, NULL, 'literal', '', 'elisadlmn', NULL, 1),
-(99, 19, 193, NULL, 'literal', '', 'Français', NULL, 1),
-(100, 19, 193, NULL, 'literal', '', 'Anglais', NULL, 1),
-(101, 19, 195, NULL, 'literal', '', 'Photoshop', NULL, 1),
-(102, 19, 199, NULL, 'literal', '', 'Instagram', NULL, 1),
-(103, 19, 199, NULL, 'literal', '', 'Linkedin', NULL, 1),
-(104, 19, 199, NULL, 'literal', '', 'Youtube', NULL, 1),
-(105, 19, 1, NULL, 'literal', '', 'Elisa', NULL, 1),
-(106, 20, 186, NULL, 'literal', '', 'Bouchiha', NULL, 1),
-(107, 20, 185, NULL, 'literal', '', 'Abdelrahim', NULL, 1),
-(108, 20, 188, NULL, 'literal', '', '15608220', NULL, 1),
-(109, 20, 187, NULL, 'literal', '', 'a.bouchiha@outlook.fr', NULL, 1),
-(110, 20, 201, NULL, 'literal', '', 'M2 THYP', NULL, 1),
-(111, 20, 192, NULL, 'literal', '', 'Wordpress', NULL, 1),
-(112, 20, 189, NULL, 'literal', '', 'anas0dev', NULL, 1),
-(113, 20, 194, NULL, 'literal', '', 'C', NULL, 1),
-(114, 20, 194, NULL, 'literal', '', 'C++', NULL, 1),
-(115, 20, 194, NULL, 'literal', '', 'PHP', NULL, 1),
-(116, 20, 194, NULL, 'literal', '', 'Javascript', NULL, 1),
-(117, 20, 194, NULL, 'literal', '', 'Python', NULL, 1),
-(118, 20, 194, NULL, 'literal', '', 'HTML', NULL, 1),
-(119, 20, 194, NULL, 'literal', '', 'CSS', NULL, 1),
-(120, 20, 193, NULL, 'literal', '', 'Français', NULL, 1),
-(121, 20, 193, NULL, 'literal', '', 'Arabe', NULL, 1),
-(122, 20, 195, NULL, 'literal', '', 'Gimp', NULL, 1),
-(123, 20, 199, NULL, 'literal', '', 'Instagram', NULL, 1),
-(124, 20, 199, NULL, 'literal', '', 'Facebook', NULL, 1),
-(125, 20, 199, NULL, 'literal', '', 'Whatsapp', NULL, 1),
-(126, 20, 1, NULL, 'literal', '', 'Abdelrahim', NULL, 1),
-(127, 1, 194, NULL, 'literal', '', 'CSS', NULL, 1),
-(128, 1, 194, NULL, 'literal', '', 'Javascript', NULL, 1),
-(129, 1, 193, NULL, 'literal', '', 'Français', NULL, 1),
-(130, 1, 195, NULL, 'literal', '', 'Photoshop', NULL, 1),
-(131, 1, 199, NULL, 'literal', '', 'Discord', NULL, 1),
-(132, 21, 185, NULL, 'literal', '', 'Bastien', NULL, 1),
-(133, 21, 186, NULL, 'literal', '', 'Pelmard', NULL, 1),
-(134, 21, 188, NULL, 'literal', '', '16702682', NULL, 1),
-(135, 21, 187, NULL, 'literal', '', 'bastien.pelmard@gmail.com', NULL, 1),
-(136, 21, 201, NULL, 'literal', '', 'M2 THYP', NULL, 1),
-(137, 21, 192, NULL, 'literal', '', 'Wordpress', NULL, 1),
-(138, 21, 192, NULL, 'literal', '', 'Joomla', NULL, 1),
-(139, 21, 190, NULL, 'literal', '', '4G', NULL, 1),
-(140, 21, 190, NULL, 'literal', '', 'WIFI', NULL, 1),
-(141, 21, 190, NULL, 'literal', '', 'Ethernet', NULL, 1),
-(142, 21, 189, NULL, 'literal', '', 'Baste95', NULL, 1),
-(143, 21, 194, NULL, 'literal', '', 'C', NULL, 1),
-(144, 21, 194, NULL, 'literal', '', 'C++', NULL, 1),
-(145, 21, 194, NULL, 'literal', '', 'Javascript', NULL, 1),
-(146, 21, 194, NULL, 'literal', '', 'PHP', NULL, 1),
-(147, 21, 194, NULL, 'literal', '', 'HTML', NULL, 1),
-(148, 21, 194, NULL, 'literal', '', 'CSS', NULL, 1),
-(149, 21, 193, NULL, 'literal', '', 'Français', NULL, 1),
-(150, 21, 193, NULL, 'literal', '', 'Anglais', NULL, 1),
-(151, 21, 193, NULL, 'literal', '', 'Espagnol', NULL, 1),
-(152, 21, 195, NULL, 'literal', '', 'Unity', NULL, 1),
-(153, 21, 199, NULL, 'literal', '', 'Instagram', NULL, 1),
-(154, 21, 199, NULL, 'literal', '', 'Youtube', NULL, 1),
-(155, 21, 199, NULL, 'literal', '', 'Whatsapp', NULL, 1),
-(156, 22, 185, NULL, 'literal', '', 'Naushad-Ali', NULL, 1),
-(157, 22, 186, NULL, 'literal', '', 'SOOKUN', NULL, 1),
-(158, 22, 188, NULL, 'literal', '', '15602165', NULL, 1),
-(159, 22, 187, NULL, 'literal', '', 'nausha@hotmail.fr', NULL, 1),
-(160, 22, 201, NULL, 'literal', '', 'M2 THYP', NULL, 1),
-(161, 22, 190, NULL, 'literal', '', '4G', NULL, 1),
-(162, 22, 190, NULL, 'literal', '', 'WIFI', NULL, 1),
-(163, 22, 190, NULL, 'literal', '', 'Ethernet', NULL, 1),
-(164, 22, 189, NULL, 'literal', '', 'N-Ali', NULL, 1),
-(165, 22, 193, NULL, 'literal', '', 'Français', NULL, 1),
-(166, 22, 193, NULL, 'literal', '', 'Anglais', NULL, 1),
-(167, 22, 193, NULL, 'literal', '', 'Japonais', NULL, 1),
-(168, 22, 193, NULL, 'literal', '', 'Espagnol', NULL, 1),
-(169, 22, 199, NULL, 'literal', '', 'Linkedin', NULL, 1),
-(170, 22, 199, NULL, 'literal', '', 'Github', NULL, 1),
-(171, 22, 199, NULL, 'literal', '', 'Facebook', NULL, 1),
-(172, 22, 199, NULL, 'literal', '', 'Whatsapp', NULL, 1),
-(173, 22, 199, NULL, 'literal', '', 'Instagram', NULL, 1),
-(174, 22, 199, NULL, 'literal', '', 'Youtube', NULL, 1),
-(175, 22, 1, NULL, 'literal', '', 'Naushad-Ali', NULL, 1),
-(176, 21, 1, NULL, 'literal', '', 'Bastien', NULL, 1),
-(177, 1, 199, NULL, 'literal', '', 'Youtube', NULL, 1),
-(178, 1, 1, NULL, 'literal', '', 'Thierry', NULL, 1);
+(1, 1, 1, NULL, 'literal', '', 'Wordpress', NULL, 1),
+(2, 2, 1, NULL, 'literal', '', 'Alfresco', NULL, 1),
+(3, 3, 1, NULL, 'literal', '', 'Drupal', NULL, 1),
+(4, 4, 1, NULL, 'literal', '', 'Joomla', NULL, 1),
+(5, 5, 1, NULL, 'literal', '', 'Liste CMS', NULL, 1),
+(6, 6, 1, NULL, 'literal', '', 'LMS', NULL, 1),
+(7, 7, 1, NULL, 'literal', '', 'Moodle', NULL, 1),
+(8, 8, 1, NULL, 'literal', '', 'Omeka S', NULL, 1),
+(9, 9, 1, NULL, 'literal', '', 'Omeka Classique', NULL, 1),
+(10, 10, 1, NULL, 'literal', '', 'Presta Shop', NULL, 1),
+(11, 11, 1, NULL, 'literal', '', 'SPIP', NULL, 1),
+(12, 12, 1, NULL, 'literal', '', 'Sharepoint', NULL, 1),
+(13, 13, 1, NULL, 'literal', '', 'Liste d\'outils', NULL, 1),
+(14, 14, 1, NULL, 'literal', '', 'After Effect', NULL, 1),
+(15, 15, 1, NULL, 'literal', '', 'Balsamique', NULL, 1),
+(16, 16, 1, NULL, 'literal', '', 'Blender', NULL, 1),
+(17, 17, 1, NULL, 'literal', '', 'Bracket', NULL, 1),
+(18, 18, 1, NULL, 'literal', '', 'CRM entreprise', NULL, 1),
+(19, 19, 1, NULL, 'literal', '', 'Cordova', NULL, 1),
+(20, 20, 1, NULL, 'literal', '', 'Dreamweaver', NULL, 1),
+(21, 21, 1, NULL, 'literal', '', 'FTP', NULL, 1),
+(22, 22, 1, NULL, 'literal', '', 'Liste roseaux sociaux', NULL, 1),
+(23, 23, 1, NULL, 'literal', '', 'Blogs', NULL, 1),
+(24, 24, 1, NULL, 'literal', '', 'Facebook', NULL, 1),
+(25, 25, 1, NULL, 'literal', '', 'LinkedIn', NULL, 1),
+(26, 26, 1, NULL, 'literal', '', 'MSN', NULL, 1),
+(27, 27, 1, NULL, 'literal', '', 'Twitter', NULL, 1),
+(28, 28, 1, NULL, 'literal', '', 'Liste étudiant', NULL, 1),
+(29, 29, 138, NULL, 'literal', '', 'Bouchiha', NULL, 1),
+(30, 29, 139, NULL, 'literal', '', 'Abdelrahim', NULL, 1),
+(31, 29, 296, NULL, 'literal', '', 'anas@gmail.com', NULL, 1),
+(32, 29, 298, 34, 'resource:item', NULL, NULL, NULL, 1),
+(33, 29, 297, NULL, 'literal', '', '123456987', NULL, 1),
+(34, 29, 302, 8, 'resource', NULL, NULL, NULL, 1),
+(35, 29, 302, 46, 'resource:item', NULL, NULL, NULL, 1),
+(36, 29, 302, 44, 'resource', NULL, NULL, NULL, 1),
+(37, 29, 305, 21, 'resource', NULL, NULL, NULL, 1),
+(38, 29, 305, 10, 'resource', NULL, NULL, NULL, 1),
+(39, 29, 305, 20, 'resource', NULL, NULL, NULL, 1),
+(40, 29, 309, 24, 'resource', NULL, NULL, NULL, 1),
+(41, 29, 309, 23, 'resource', NULL, NULL, NULL, 1),
+(42, 30, 138, NULL, 'literal', '', 'Naushad', NULL, 1),
+(43, 30, 139, NULL, 'literal', '', 'Ali', NULL, 1),
+(44, 30, 296, NULL, 'literal', '', 'ali@gmail.com', NULL, 1),
+(45, 30, 298, 34, 'resource:item', NULL, NULL, NULL, 1),
+(46, 30, 297, NULL, 'literal', '', '45896317', NULL, 1),
+(47, 30, 302, 7, 'resource:item', NULL, NULL, NULL, 1),
+(48, 30, 305, 20, 'resource:item', NULL, NULL, NULL, 1),
+(49, 30, 305, 21, 'resource:item', NULL, NULL, NULL, 1),
+(50, 30, 309, 27, 'resource:item', NULL, NULL, NULL, 1),
+(51, 30, 309, 26, 'resource:item', NULL, NULL, NULL, 1),
+(52, 30, 309, 25, 'resource:item', NULL, NULL, NULL, 1),
+(53, 31, 138, NULL, 'literal', '', 'Pelmard', NULL, 1),
+(54, 31, 139, NULL, 'literal', '', 'Baste', NULL, 1),
+(55, 31, 296, NULL, 'literal', '', 'baste@gmail.fr', NULL, 1),
+(56, 31, 298, 34, 'resource:item', NULL, NULL, NULL, 1),
+(57, 31, 297, NULL, 'literal', '', '753698412', NULL, 1),
+(58, 31, 302, 18, 'resource:item', NULL, NULL, NULL, 1),
+(59, 31, 302, 10, 'resource:item', NULL, NULL, NULL, 1),
+(60, 31, 302, 11, 'resource:item', NULL, NULL, NULL, 1),
+(61, 31, 302, 19, 'resource:item', NULL, NULL, NULL, 1),
+(62, 31, 305, 17, 'resource:item', NULL, NULL, NULL, 1),
+(63, 31, 305, 16, 'resource:item', NULL, NULL, NULL, 1),
+(64, 31, 305, 15, 'resource:item', NULL, NULL, NULL, 1),
+(65, 31, 309, 27, 'resource:item', NULL, NULL, NULL, 1),
+(66, 31, 309, 26, 'resource:item', NULL, NULL, NULL, 1),
+(67, 32, 138, NULL, 'literal', '', 'Wen', NULL, 1),
+(68, 32, 139, NULL, 'literal', '', 'Theiry', NULL, 1),
+(69, 32, 296, NULL, 'literal', '', 'wen@gmail.com', NULL, 1),
+(70, 32, 298, 34, 'resource:item', NULL, NULL, NULL, 1),
+(71, 32, 297, NULL, 'literal', '', '156324789', NULL, 1),
+(72, 32, 302, 8, 'resource:item', NULL, NULL, NULL, 1),
+(73, 32, 302, 10, 'resource:item', NULL, NULL, NULL, 1),
+(74, 32, 305, 21, 'resource:item', NULL, NULL, NULL, 1),
+(75, 32, 305, 20, 'resource:item', NULL, NULL, NULL, 1),
+(76, 32, 309, 27, 'resource:item', NULL, NULL, NULL, 1),
+(77, 32, 309, 24, 'resource:item', NULL, NULL, NULL, 1),
+(78, 33, 1, NULL, 'literal', '', 'Liste de Parcours', NULL, 1),
+(79, 34, 1, NULL, 'literal', '', 'THYP', NULL, 1),
+(80, 35, 1, NULL, 'literal', '', 'NET', NULL, 1),
+(81, 36, 1, NULL, 'literal', '', 'CEN', NULL, 1),
+(82, 37, 1, NULL, 'literal', '', 'SGI', NULL, 1),
+(83, 38, 1, NULL, 'literal', '', 'Liste de choix', NULL, 1),
+(84, 39, 1, NULL, 'literal', '', 'je connais un peu', NULL, 1),
+(85, 40, 1, NULL, 'literal', '', 'je suis expert(e)', NULL, 1),
+(86, 41, 1, NULL, 'literal', '', 'je ne connais pas du tout', NULL, 1),
+(87, 42, 1, NULL, 'literal', '', 'je connais bien', NULL, 1),
+(88, 14, 4, 42, 'resource', NULL, NULL, NULL, 1),
+(89, 1, 4, 41, 'resource:item', NULL, NULL, NULL, 1),
+(90, 43, 1, NULL, 'literal', '', 'Wordpress', NULL, 1),
+(91, 43, 4, 42, 'resource:item', NULL, NULL, NULL, 1),
+(92, 44, 1, NULL, 'literal', '', 'Wordpress', NULL, 1),
+(93, 44, 4, 40, 'resource:item', NULL, NULL, NULL, 1),
+(94, 45, 1, NULL, 'literal', '', 'Wordpress', NULL, 1),
+(95, 45, 4, 39, 'resource:item', NULL, NULL, NULL, 1),
+(96, 46, 1, NULL, 'literal', '', 'LMS', NULL, 1),
+(97, 46, 4, 42, 'resource:item', NULL, NULL, NULL, 1),
+(98, 47, 1, NULL, 'literal', '', 'LMS', NULL, 1),
+(99, 47, 4, 41, 'resource:item', NULL, NULL, NULL, 1),
+(100, 48, 1, NULL, 'literal', '', 'LMS', NULL, 1),
+(101, 48, 4, 40, 'resource:item', NULL, NULL, NULL, 1),
+(102, 29, 309, 27, 'resource', NULL, NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -1280,19 +1522,14 @@ INSERT INTO `value` (`id`, `resource_id`, `property_id`, `value_resource_id`, `t
 -- Structure de la table `vocabulary`
 --
 
-DROP TABLE IF EXISTS `vocabulary`;
-CREATE TABLE IF NOT EXISTS `vocabulary` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `owner_id` int(11) DEFAULT NULL,
-  `namespace_uri` varchar(190) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `prefix` varchar(190) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `label` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `comment` longtext COLLATE utf8mb4_unicode_ci,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UNIQ_9099C97B9B267FDF` (`namespace_uri`),
-  UNIQUE KEY `UNIQ_9099C97B93B1868E` (`prefix`),
-  KEY `IDX_9099C97B7E3C61F9` (`owner_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE `vocabulary` (
+  `id` int NOT NULL,
+  `owner_id` int DEFAULT NULL,
+  `namespace_uri` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `prefix` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `label` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `comment` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `vocabulary`
@@ -1303,16 +1540,353 @@ INSERT INTO `vocabulary` (`id`, `owner_id`, `namespace_uri`, `prefix`, `label`, 
 (2, NULL, 'http://purl.org/dc/dcmitype/', 'dctype', 'Dublin Core Type', 'Basic resource types (DCMI Type Vocabulary)'),
 (3, NULL, 'http://purl.org/ontology/bibo/', 'bibo', 'Bibliographic Ontology', 'Bibliographic metadata (BIBO)'),
 (4, NULL, 'http://xmlns.com/foaf/0.1/', 'foaf', 'Friend of a Friend', 'Relationships between people and organizations (FOAF)'),
-(5, 1, 'https://duraspace.org/wp-content/uploads/2020/02/vivo.owl#Student', 'drsp', 'duraspace', '');
+(5, 1, 'http://vivoweb.org/ontology/core', 'dura', 'duraspace', ''),
+(6, 1, 'https://duraspace.org/wp-content/uploads/2020/02/vivo.owl#Student', 'etud', 'etudiant', '');
 
 --
 -- Index pour les tables déchargées
 --
 
 --
+-- Index pour la table `api_key`
+--
+ALTER TABLE `api_key`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_C912ED9D7E3C61F9` (`owner_id`);
+
+--
+-- Index pour la table `asset`
+--
+ALTER TABLE `asset`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UNIQ_2AF5A5C5CC5DB90` (`storage_id`),
+  ADD KEY `IDX_2AF5A5C7E3C61F9` (`owner_id`);
+
+--
 -- Index pour la table `fulltext_search`
 --
+ALTER TABLE `fulltext_search`
+  ADD PRIMARY KEY (`id`,`resource`),
+  ADD KEY `IDX_AA31FE4A7E3C61F9` (`owner_id`);
 ALTER TABLE `fulltext_search` ADD FULLTEXT KEY `IDX_AA31FE4A2B36786B3B8BA7C7` (`title`,`text`);
+
+--
+-- Index pour la table `item`
+--
+ALTER TABLE `item`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `item_item_set`
+--
+ALTER TABLE `item_item_set`
+  ADD PRIMARY KEY (`item_id`,`item_set_id`),
+  ADD KEY `IDX_6D0C9625126F525E` (`item_id`),
+  ADD KEY `IDX_6D0C9625960278D7` (`item_set_id`);
+
+--
+-- Index pour la table `item_set`
+--
+ALTER TABLE `item_set`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `item_site`
+--
+ALTER TABLE `item_site`
+  ADD PRIMARY KEY (`item_id`,`site_id`),
+  ADD KEY `IDX_A1734D1F126F525E` (`item_id`),
+  ADD KEY `IDX_A1734D1FF6BD1646` (`site_id`);
+
+--
+-- Index pour la table `job`
+--
+ALTER TABLE `job`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_FBD8E0F87E3C61F9` (`owner_id`);
+
+--
+-- Index pour la table `media`
+--
+ALTER TABLE `media`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UNIQ_6A2CA10C5CC5DB90` (`storage_id`),
+  ADD KEY `IDX_6A2CA10C126F525E` (`item_id`),
+  ADD KEY `item_position` (`item_id`,`position`);
+
+--
+-- Index pour la table `migration`
+--
+ALTER TABLE `migration`
+  ADD PRIMARY KEY (`version`);
+
+--
+-- Index pour la table `module`
+--
+ALTER TABLE `module`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `password_creation`
+--
+ALTER TABLE `password_creation`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UNIQ_C77917B4A76ED395` (`user_id`);
+
+--
+-- Index pour la table `property`
+--
+ALTER TABLE `property`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UNIQ_8BF21CDEAD0E05F6623C14D5` (`vocabulary_id`,`local_name`),
+  ADD KEY `IDX_8BF21CDE7E3C61F9` (`owner_id`),
+  ADD KEY `IDX_8BF21CDEAD0E05F6` (`vocabulary_id`);
+
+--
+-- Index pour la table `resource`
+--
+ALTER TABLE `resource`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_BC91F4167E3C61F9` (`owner_id`),
+  ADD KEY `IDX_BC91F416448CC1BD` (`resource_class_id`),
+  ADD KEY `IDX_BC91F41616131EA` (`resource_template_id`),
+  ADD KEY `IDX_BC91F416FDFF2E92` (`thumbnail_id`);
+
+--
+-- Index pour la table `resource_class`
+--
+ALTER TABLE `resource_class`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UNIQ_C6F063ADAD0E05F6623C14D5` (`vocabulary_id`,`local_name`),
+  ADD KEY `IDX_C6F063AD7E3C61F9` (`owner_id`),
+  ADD KEY `IDX_C6F063ADAD0E05F6` (`vocabulary_id`);
+
+--
+-- Index pour la table `resource_template`
+--
+ALTER TABLE `resource_template`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UNIQ_39ECD52EEA750E8` (`label`),
+  ADD KEY `IDX_39ECD52E7E3C61F9` (`owner_id`),
+  ADD KEY `IDX_39ECD52E448CC1BD` (`resource_class_id`),
+  ADD KEY `IDX_39ECD52E724734A3` (`title_property_id`),
+  ADD KEY `IDX_39ECD52EB84E0D1D` (`description_property_id`);
+
+--
+-- Index pour la table `resource_template_property`
+--
+ALTER TABLE `resource_template_property`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UNIQ_4689E2F116131EA549213EC` (`resource_template_id`,`property_id`),
+  ADD KEY `IDX_4689E2F116131EA` (`resource_template_id`),
+  ADD KEY `IDX_4689E2F1549213EC` (`property_id`);
+
+--
+-- Index pour la table `session`
+--
+ALTER TABLE `session`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `setting`
+--
+ALTER TABLE `setting`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `site`
+--
+ALTER TABLE `site`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UNIQ_694309E4989D9B62` (`slug`),
+  ADD UNIQUE KEY `UNIQ_694309E4571EDDA` (`homepage_id`),
+  ADD KEY `IDX_694309E47E3C61F9` (`owner_id`);
+
+--
+-- Index pour la table `site_block_attachment`
+--
+ALTER TABLE `site_block_attachment`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_236473FEE9ED820C` (`block_id`),
+  ADD KEY `IDX_236473FE126F525E` (`item_id`),
+  ADD KEY `IDX_236473FEEA9FDD75` (`media_id`),
+  ADD KEY `block_position` (`block_id`,`position`);
+
+--
+-- Index pour la table `site_item_set`
+--
+ALTER TABLE `site_item_set`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UNIQ_D4CE134F6BD1646960278D7` (`site_id`,`item_set_id`),
+  ADD KEY `IDX_D4CE134F6BD1646` (`site_id`),
+  ADD KEY `IDX_D4CE134960278D7` (`item_set_id`),
+  ADD KEY `position` (`position`);
+
+--
+-- Index pour la table `site_page`
+--
+ALTER TABLE `site_page`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UNIQ_2F900BD9F6BD1646989D9B62` (`site_id`,`slug`),
+  ADD KEY `IDX_2F900BD9F6BD1646` (`site_id`);
+
+--
+-- Index pour la table `site_page_block`
+--
+ALTER TABLE `site_page_block`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_C593E731C4663E4` (`page_id`),
+  ADD KEY `page_position` (`page_id`,`position`);
+
+--
+-- Index pour la table `site_permission`
+--
+ALTER TABLE `site_permission`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UNIQ_C0401D6FF6BD1646A76ED395` (`site_id`,`user_id`),
+  ADD KEY `IDX_C0401D6FF6BD1646` (`site_id`),
+  ADD KEY `IDX_C0401D6FA76ED395` (`user_id`);
+
+--
+-- Index pour la table `site_setting`
+--
+ALTER TABLE `site_setting`
+  ADD PRIMARY KEY (`id`,`site_id`),
+  ADD KEY `IDX_64D05A53F6BD1646` (`site_id`);
+
+--
+-- Index pour la table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UNIQ_8D93D649E7927C74` (`email`);
+
+--
+-- Index pour la table `user_setting`
+--
+ALTER TABLE `user_setting`
+  ADD PRIMARY KEY (`id`,`user_id`),
+  ADD KEY `IDX_C779A692A76ED395` (`user_id`);
+
+--
+-- Index pour la table `value`
+--
+ALTER TABLE `value`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_1D77583489329D25` (`resource_id`),
+  ADD KEY `IDX_1D775834549213EC` (`property_id`),
+  ADD KEY `IDX_1D7758344BC72506` (`value_resource_id`),
+  ADD KEY `value` (`value`(190)),
+  ADD KEY `uri` (`uri`(190));
+
+--
+-- Index pour la table `vocabulary`
+--
+ALTER TABLE `vocabulary`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UNIQ_9099C97B9B267FDF` (`namespace_uri`),
+  ADD UNIQUE KEY `UNIQ_9099C97B93B1868E` (`prefix`),
+  ADD KEY `IDX_9099C97B7E3C61F9` (`owner_id`);
+
+--
+-- AUTO_INCREMENT pour les tables déchargées
+--
+
+--
+-- AUTO_INCREMENT pour la table `asset`
+--
+ALTER TABLE `asset`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `job`
+--
+ALTER TABLE `job`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `property`
+--
+ALTER TABLE `property`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=311;
+
+--
+-- AUTO_INCREMENT pour la table `resource`
+--
+ALTER TABLE `resource`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+
+--
+-- AUTO_INCREMENT pour la table `resource_class`
+--
+ALTER TABLE `resource_class`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=253;
+
+--
+-- AUTO_INCREMENT pour la table `resource_template`
+--
+ALTER TABLE `resource_template`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT pour la table `resource_template_property`
+--
+ALTER TABLE `resource_template_property`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+
+--
+-- AUTO_INCREMENT pour la table `site`
+--
+ALTER TABLE `site`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT pour la table `site_block_attachment`
+--
+ALTER TABLE `site_block_attachment`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `site_item_set`
+--
+ALTER TABLE `site_item_set`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `site_page`
+--
+ALTER TABLE `site_page`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT pour la table `site_page_block`
+--
+ALTER TABLE `site_page_block`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT pour la table `site_permission`
+--
+ALTER TABLE `site_permission`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT pour la table `user`
+--
+ALTER TABLE `user`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT pour la table `value`
+--
+ALTER TABLE `value`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
+
+--
+-- AUTO_INCREMENT pour la table `vocabulary`
+--
+ALTER TABLE `vocabulary`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Contraintes pour les tables déchargées
@@ -1329,19 +1903,6 @@ ALTER TABLE `api_key`
 --
 ALTER TABLE `asset`
   ADD CONSTRAINT `FK_2AF5A5C7E3C61F9` FOREIGN KEY (`owner_id`) REFERENCES `user` (`id`) ON DELETE SET NULL;
-
---
--- Contraintes pour la table `csvimport_entity`
---
-ALTER TABLE `csvimport_entity`
-  ADD CONSTRAINT `FK_84D382F4BE04EA9` FOREIGN KEY (`job_id`) REFERENCES `job` (`id`);
-
---
--- Contraintes pour la table `csvimport_import`
---
-ALTER TABLE `csvimport_import`
-  ADD CONSTRAINT `FK_17B508814C276F75` FOREIGN KEY (`undo_job_id`) REFERENCES `job` (`id`),
-  ADD CONSTRAINT `FK_17B50881BE04EA9` FOREIGN KEY (`job_id`) REFERENCES `job` (`id`);
 
 --
 -- Contraintes pour la table `fulltext_search`
