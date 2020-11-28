@@ -1,8 +1,10 @@
-Besoin,Titre,Url
-GET,liste etudiant,/api/items?item_set_id=3
-GET, etudiant (loïc),/api/items/9
-GET, etudiant (habib),/api/items/8
-GET, etudiant (theiry),/api/items/7
-GET, etudiant (baste),/api/items/6
-GET, etudiant (Ali),/api/items/5
-GET, etudiant (abdelrahim),/api/items/4
+Titre,Url
+GET liste etudiant,/api/items?item_set_id=28
+GET Liste de choix,/api/items?item_set_id=38
+GET Liste de Parcours,/api/items?item_set_id=33
+GET Liste roseaux sociaux,/api/items?item_set_id=22
+GET liste Liste d'outils,/api/items?item_set_id=13
+GET liste Liste CMS,/api/items?item_set_id=5
+GET etudiant (theiry),/api/items/32
+GET CMS (Wordpress),/api/items/45
+
