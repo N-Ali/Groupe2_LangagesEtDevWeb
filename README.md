@@ -8,7 +8,7 @@ Le groupe est composé de:
   
   # Lien
   Lien du projet : https://n-ali.github.io/Groupe2_LangagesEtDevWeb  
-  Lien du template : https://n-ali.github.io/Groupe2_LangagesEtDevWeb/template/
+  Lien du template : https://n-ali.github.io/Groupe2_LangagesEtDevWeb/template/index.html
 
 # Nouvelles Fonctionnalitées
 ### Infine Scroll
