@@ -33,7 +33,8 @@
             
             let studentItems = new dataStudent({
                 cont: "#studentItems",
-                apiUrl: "https://jardindesconnaissances.univ-paris8.fr/THYP/20-21/g2/omk/api/"
+                //apiUrl: "../data/items.json"
+                apiUrl: "https://jardindesconnaissances.univ-paris8.fr/THYP/20-21/g2/omk/api/items?item_set_id=28"
             })
 
             studentItems.getData();
@@ -41,7 +42,8 @@
 
             let cardStudentItem = new dataStudent({
                 cont: "#studentItem",
-                apiUrl: "https://jardindesconnaissances.univ-paris8.fr/THYP/20-21/g2/omk/api/"
+                //apiUrl: "../data/item.json"
+                apiUrl: "https://jardindesconnaissances.univ-paris8.fr/THYP/20-21/g2/omk/api/items/32"
             })
 
             cardStudentItem.getData();
