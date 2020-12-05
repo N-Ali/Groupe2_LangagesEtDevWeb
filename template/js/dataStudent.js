@@ -13,6 +13,14 @@ class dataStudent {
             ,'o:Item':['@id','o:id','o:title','o:resource_class','properties']
         };
 
+        function GetImage(img){
+            let url = new URL(img);
+            let urlParam = new URLSearchParams(url.search);
+            let id = urlParam.get('id');
+            let urlTof = "https://drive.google.com/uc?id="+id;                        
+            return urlTof; 
+        }
+
         function createItems(data) {
 
             if (data[0].length > 1) {
@@ -29,71 +37,89 @@ class dataStudent {
                 .data(dataItems)
                 .enter()
                 .append("div")
-                .attr("class","card w-25 m-3 d-inline-block text-center border-success");
+                .attr("class","card w-25 m-3 d-inline-block");
 
             var cardHeader = cards.append("div")
-                .attr("class", "card-header bg-dark text-white")
+                .attr("class", "card-header bg-dark text-white text-center")
                 .html(d => {
-                    return d["o:title"];
+                    if(!d["foaf:img"]){
+                        return d["o:title"];
+                    }
+
+                    else{
+                        console.log(GetImage(d["foaf:img"][0]["@id"]));
+                        return d["o:title"] + "<img class='profil-img' src='" + GetImage(d["foaf:img"][0]["@id"] + "'>"); 
+                    }
+                    
                 });
+
+
             var cardBody = cards.append("div")
-                .attr("class", "card-body p-0");
-            cardBody.append("h5")
-                .attr("class", "card-text text-center bg-success py-4 my-0")
+                .attr("class", "card-body p-2");
+
+            cardBody.append("p")
+                //.attr("class", "card-text text-center bg-success py-4 my-0")
                 .html(d => {
-                    return d["foaf:firstName"][0]["@value"] + " " + d["foaf:name"][0]["@value"];
+                    return "<i class='fa fa-id-card'></i> " + d["foaf:firstName"][0]["@value"] + " " + d["foaf:name"][0]["@value"].toUpperCase()+ " <span class='number'>" + d["etud:Studentstudent_number"][0]["@value"]+ "</span>";
                 });
 
             cardBody.append("p")
-                .attr("class", "border border-secondary py-0 my-0")
+                //.attr("class", "border border-secondary py-0 my-0")
                 .html(d => {
-                    return d["etud:Studentstudent_class"][0]["display_title"];
+                    return "<i class='fa fa-envelope'></i> <a href='mailto:" +  d["etud:Studentemail"][0]["@value"] + "'>" + d["etud:Studentemail"][0]["@value"] + "</a>";
                 });
 
             cardBody.append("p")
-            .attr("class", "border border-secondary py-0 my-0")
-            .html(d => {
-                    return d["etud:Studentstudent_number"][0]["@value"];
+                //.attr("class", "border border-secondary py-0 my-0")
+                .html(d => {
+                    return "<i class='fa fa-graduation-cap'></i> " + d["etud:Studentstudent_class"][0]["display_title"];
                 });
 
             cardBody.append("p")
-                .attr("class", "border border-secondary py-0 my-0")
+                //.attr("class", "border border-secondary py-0 my-0")
                 .html(d => {
-                    return d["etud:Studentemail"][0]["@value"];
+                    if(d["etud:Studentgithub"])
+                        return "<i class='fa fa-github'></i> <a target='_blank' href='" +  d["etud:Studentgithub"][0]["@id"] + "'>" + d["etud:Studentgithub"][0]["@id"] + "</a>";
                 });
 
-            cardBody.append("div")
-                .attr("class", "border border-secondary py-0 my-0")
+
+           
+
+            cardBody.append("p")
+                //.attr("class", "border border-secondary py-0 my-0")
+                .html("<i class='fa fa-users'></i> ")
                 .each(function(d){ // each() pour accéder aux valeurs d'un array de array
-                    d3.select(this).selectAll("p")
+                    d3.select(this).selectAll("span")
                         .data(d["etud:Studentnetwork"])
                         .enter()
-                        .append("p")
+                        .append("span")
                         .html(d => {
-                            return d["display_title"];
+                            return d["display_title"] + " ";
                         })
                 });
             
-            cardBody.append("div")
-                .attr("class", "border border-secondary py-0 my-0")
+            cardBody.append("p")
+                //.attr("class", "border border-secondary py-0 my-0")
+                .html("<i class='fa fa-tasks'></i> ")
                 .each(function(d){ 
-                    d3.select(this).selectAll("p")
+                    d3.select(this).selectAll("span")
                         .data(d["etud:Studentcms"])
                         .enter()
-                        .append("p")
+                        .append("span")
                         .html(d => {
-                            return d["display_title"];
+                            return d["display_title"] + " ";
                         })
                 });
-            cardBody.append("div")
-                .attr("class", "border border-secondary py-0 my-0")
+            cardBody.append("p")
+                //.attr("class", "border border-secondary py-0 my-0")
+                .html("<i class='fa fa-spinner'></i> ")
                 .each(function(d){ 
-                    d3.select(this).selectAll("p")
+                    d3.select(this).selectAll("span")
                         .data(d["etud:Studenttools"])
                         .enter()
-                        .append("p")
+                        .append("span")
                         .html(d => {
-                            return d["display_title"];
+                            return d["display_title"] + " ";
                         })
                 });
         }
@@ -103,7 +129,9 @@ class dataStudent {
             .defer(d3.json, me.apiUrl)
             .awaitAll(function(error, results) {
                 if (error) throw error;
+                console.log(results);
                 createItems(results);    
+
             });
         }
 
